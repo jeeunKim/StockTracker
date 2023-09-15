@@ -23,7 +23,9 @@ import java.util.List;
 public class LoginController {
 	
 	private final LoginService loginService;
-	
+	/*
+	 * 마지막수정 09/15 16시 41분
+	 * */
     @GetMapping("/sign_up")
     public String sign_up(@ModelAttribute("member") Member member ){
     	
@@ -33,9 +35,9 @@ public class LoginController {
     	log.info("phone={}",member.getPhone());
     	log.info("email ={}",member.getEmail());
     	
-    	loginService.signUp(member);
-
-        return "s";
+    	String success = loginService.signUp(member);
+    	
+        return success;
     }
     
     

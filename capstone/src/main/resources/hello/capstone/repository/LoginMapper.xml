@@ -4,7 +4,11 @@
 <mapper namespace="hello.capstone.repository.LoginMapper">
    
    <insert id = "save">
-      insert into member(id, pw, name, phone, email, role, redate) values(#{id}, #{pw}, #{name}, #{phone}, #{email}, #{role}, #{redate})
+      insert into member(id, pw, name, nickname,phone, email, address, role, redate) values(#{id}, #{pw}, #{name}, #{nickname},#{phone}, #{email},#{address}, #{role}, #{redate})
    </insert>
+
+	<select id="findbyid" resultType ="Member">
+		select * from member where id = #{id} Limit 1;
+	</select>
 
 </mapper>
