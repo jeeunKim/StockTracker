@@ -15,7 +15,7 @@ public class MemberRepository {
 
    public final LoginMapper loginMapper;
    /*
-    * 회원정보저장 마지막수정 09/15 16시 41분
+    * 회원정보저장 
     */
    public Member save(Member member) {
       
@@ -23,14 +23,15 @@ public class MemberRepository {
       return member;
    }
    /*
-    * 아이디로 회원 검색 마지막수정 09/15 16시 41분
+    * 아이디로 회원 검색 
     * */
    public Member findById(String Id) {
 	   Member findMember = loginMapper.findbyid(Id);
 	   
 	   return findMember;
    }
-   
+ 
+  
    
    
    
