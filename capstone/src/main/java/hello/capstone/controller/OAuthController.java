@@ -17,7 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import hello.capstone.dto.Member;
+import hello.capstone.dto.NaverOauthParams;
 import hello.capstone.service.LoginService;
 import hello.capstone.service.OAuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,17 +74,16 @@ public class OAuthController {
     	log.info("name = {}", member.getName());
     	log.info("id = {}", member.getId());
     	
-    	if(loginService.kakaoSignUp(member) == false) {
-     		//이미 가입되어 있는 멤버 -> 바로 로그인
-    		HttpSession session = request.getSession();
-    		session.setAttribute("id", member.getId());
-    		session.setAttribute("name", member.getName());
-    		session.setAttribute("nickname", member.getNickname());
+    	loginService.kakaoSignUp(member);
+    	
+    	
+    	HttpSession session = request.getSession();
+    	session.setAttribute("id", member.getId());
+    	session.setAttribute("name", member.getName());
+    	session.setAttribute("nickname", member.getNickname());
     		
-    		return "/home_user";
-    	}
-    	 	
-    	return "/login";
+    		
+    	return "/home_user";
     	
     }
     
@@ -86,31 +92,25 @@ public class OAuthController {
      */
     
     @GetMapping("/login/oauth2/Naver_loading2")
-    public String naverOAuthRedirect(@RequestParam String code, @RequestParam String state) {
-        // RestTemplate 인스턴스 생성
-        RestTemplate rt = new RestTemplate();
-
-        HttpHeaders accessTokenHeaders = new HttpHeaders();
-        accessTokenHeaders.add("Content-type", "application/x-www-form-urlencoded");
-
-        MultiValueMap<String, String> accessTokenParams = new LinkedMultiValueMap<>();
-        accessTokenParams.add("grant_type", "authorization_code");
-        accessTokenParams.add("client_id", "rmptq4twehWBueMreZ2L");
-        accessTokenParams.add("client_secret", "Vr7_Qu_Nhs");
-        accessTokenParams.add("code" , code);   // 응답으로 받은 코드
-        accessTokenParams.add("state" , state); // 응답으로 받은 상태
-
-        HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(accessTokenParams, accessTokenHeaders);
-
-        ResponseEntity<String> accessTokenResponse = rt.exchange(
-                "https://nid.naver.com/oauth2.0/token",
-                HttpMethod.POST,
-                accessTokenRequest,
-                String.class
-        );
-        
-        log.info("accessTokenResponse.getBody() ={} ",accessTokenResponse.getBody());
-        return "accessToken: " + accessTokenResponse.getBody();
+    public String naverOAuthRedirect(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
+       
+    	ResponseEntity<String> accessTokenResponse = oauthService.getNaverAccessToken(code, state);
+    	log.info("accessToken={}", accessTokenResponse.getBody());
+    	HashMap<String, Object> naverInfo = oauthService.getNaverInfo(accessTokenResponse);
+    	
+    	Member naverMember = new Member();
+    	naverMember.setId((String)naverInfo.get("id"));
+    	naverMember.setName((String)naverInfo.get("name"));
+    	naverMember.setPhone((String)naverInfo.get("phone"));
+    	
+    	loginService.naverSignUp(naverMember);
+    	    	
+    	HttpSession session = request.getSession();
+    	session.setAttribute("id", naverMember.getId());
+    	session.setAttribute("name", naverMember.getName());
+    	session.setAttribute("nickname", naverMember.getNickname());
+    		
+    	return "/home_user";   
     }
     
     

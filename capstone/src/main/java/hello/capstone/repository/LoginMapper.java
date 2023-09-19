@@ -1,6 +1,9 @@
 package hello.capstone.repository;
 
+import java.util.HashMap;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import hello.capstone.dto.Member;
 
@@ -9,8 +12,9 @@ public interface LoginMapper {
 
    void save(Member member);
    
-   void saveKakao(Member member);
+   void saveSocial(Member member);
    
-   Member findbyid(String id); 
+   Member findbyid(@Param("id") String id, @Param("social") String social);  
+    
    
 }

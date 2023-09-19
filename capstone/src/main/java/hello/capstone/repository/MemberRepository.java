@@ -1,6 +1,7 @@
 package hello.capstone.repository;
 
 import java.sql.Date;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +27,9 @@ public class MemberRepository {
    /*
     * 카카오회원정보저장
     */
-   public boolean saveKakao(Member member) {
+   public boolean saveSocial(Member member) {
       
-      loginMapper.saveKakao(member);
+      loginMapper.saveSocial(member);
       return true;
    }
    
@@ -36,11 +37,14 @@ public class MemberRepository {
    /*
     * 아이디로 회원 검색 
     * */
-   public Member findById(String Id) {
-	   Member findMember = loginMapper.findbyid(Id);
+   public Member findById(String id, String social) {
+	   Member findMember = loginMapper.findbyid(id, social);
 	   
 	   return findMember;
    }
+   
+ 
+  
  
   
    

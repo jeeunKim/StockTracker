@@ -40,10 +40,7 @@ public class LoginController {
     	
     	boolean success = loginService.signUp(member);
     	
-    	if(success == false) {
-    		log.info("SignUp Fail !");
-    		return "/sign_up";
-    	}
+    	
     	log.info("SignUp Success !");
 		return "/login";
     }
@@ -59,10 +56,7 @@ public class LoginController {
     	Member userMember = loginService.login(id, pw);
     	HttpSession session = request.getSession();
     	
-    	if(userMember == null) {
-    		log.info("login = {}", "fail");
-			return "fail";
-		}
+    	
     	
     	session.setAttribute("id", userMember.getId());
     	session.setAttribute("name", userMember.getName());

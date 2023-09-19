@@ -7,13 +7,16 @@
       insert into member(id, pw, name, nickname,phone, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname},#{phone}, #{social}, #{role}, #{redate})
    </insert>
    
-   <insert id = "saveKakao">
+   <insert id = "saveSocial">
       insert into member(id, pw, name, nickname, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname}, #{social}, #{role}, #{redate})
    </insert>
 
 	<select id="findbyid" resultType ="Member">
-		select * from member where id = #{id} Limit 1;
+		select * from member where id = #{id} and social = #{social} Limit 1;
 	</select>
+	
+	
+	
 	
 	
 
