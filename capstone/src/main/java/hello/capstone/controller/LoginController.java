@@ -30,31 +30,22 @@ public class LoginController {
 	 * 마지막수정 09/15 16시 41분
 	 * */
     @PostMapping("/join")
-    public String signUp(@RequestBody HashMap<String, Object> signUpMap, HttpServletResponse response){
+    public String signUp(@RequestBody Member member){
     	
-    	log.info("id ={}",signUpMap.get("id"));
-    	log.info("pw={}",signUpMap.get("pw"));
-    	log.info("name ={}",signUpMap.get("name"));
-    	log.info("phone={}",signUpMap.get("phone"));
-    	log.info("role={}",signUpMap.get("role"));
+    	log.info("id ={}",member.getId());
+    	log.info("pw={}",member.getPw());
+    	log.info("name ={}",member.getName());
+    	log.info("phone={}",member.getPhone());
+    	log.info("role={}",member.getRole());
     	
-    	Member member = new Member();
-    	member.setId((String)signUpMap.get("id"));
-    	member.setPw((String)signUpMap.get("pw"));
-    	member.setName((String)signUpMap.get("name"));
-    	member.setPhone((String)signUpMap.get("phone"));
-    	member.setRole((String)signUpMap.get("role"));
+    	boolean success = loginService.signUp(member);
     	
-    	
-    	
-    	if(loginService.signUp(member).equals("success")) {
-    		log.info("SignUp Success");
-    		return "redirect:/home_user";
-    	    //301은 영구적, 302는 일시적
+    	if(success == false) {
+    		log.info("SignUp Fail !");
+    		return "/sign_up";
     	}
-    	response.setHeader("Location", "localhost:3000/sign_up;charset=UTF-8");
-	    response.setStatus(302);
-	    return "sign_up";
+    	log.info("SignUp Success !");
+		return "/login";
     }
     
     @PostMapping("/login_attempt")
@@ -80,7 +71,7 @@ public class LoginController {
     	log.info("loginId={}",userMember.getId());
     	log.info("loginName={}",userMember.getName());
     	
-    	return "/home_user";
+    	return "home_user";
     }
     
     

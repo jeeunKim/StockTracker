@@ -6,6 +6,10 @@
    <insert id = "save">
       insert into member(id, pw, name, nickname,phone, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname},#{phone}, #{social}, #{role}, #{redate})
    </insert>
+   
+   <insert id = "saveKakao">
+      insert into member(id, pw, name, nickname, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname}, #{social}, #{role}, #{redate})
+   </insert>
 
 	<select id="findbyid" resultType ="Member">
 		select * from member where id = #{id} Limit 1;

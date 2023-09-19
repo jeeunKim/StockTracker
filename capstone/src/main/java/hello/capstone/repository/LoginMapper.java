@@ -9,6 +9,8 @@ public interface LoginMapper {
 
    void save(Member member);
    
+   void saveKakao(Member member);
+   
    Member findbyid(String id); 
    
 }
