@@ -2,10 +2,7 @@ package hello.capstone.controller;
 
 import java.util.HashMap;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +12,6 @@ import hello.capstone.dto.Member;
 import hello.capstone.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,8 +23,8 @@ public class LoginController {
 	
 	private final LoginService loginService;
 	/*
-	 * 마지막수정 09/15 16시 41분
-	 * */
+	 * 일반 회원 회원가입
+	 */
     @PostMapping("/join")
     public String signUp(@RequestBody Member member){
     	
@@ -45,7 +41,10 @@ public class LoginController {
 		return "/login";
     }
     
-    @PostMapping("/login_attempt")
+    /*
+     * 일반 회원 로그인
+     */
+    @PostMapping("/login")
     public String login(@RequestBody HashMap<String, Object> loginMap, HttpServletRequest request) {
     	String id = (String) loginMap.get("id");
     	String pw = (String) loginMap.get("pw");
@@ -58,9 +57,7 @@ public class LoginController {
     	
     	
     	
-    	session.setAttribute("id", userMember.getId());
-    	session.setAttribute("name", userMember.getName());
-    	session.setAttribute("nickname", userMember.getNickname());
+    	session.setAttribute("member", userMember);
     	
     	log.info("loginId={}",userMember.getId());
     	log.info("loginName={}",userMember.getName());
@@ -69,6 +66,19 @@ public class LoginController {
     }
     
     
+    @GetMapping("/getSessionMember")
+    public Member getSessionMember(HttpSession session) {
+    	
+    	log.info("member = {}", (Member)session.getAttribute("member"));
+    	return (Member)session.getAttribute("member");
+    }
+    
+    @GetMapping("/SessionLogout")
+    public void SessionLogout(HttpSession session) {
+    	
+    	session.removeAttribute("member");
+    	log.info("로그아웃 성공. 현재 멤버 세션 = {}", session.getAttribute("member"));
+    }
     
 }
 

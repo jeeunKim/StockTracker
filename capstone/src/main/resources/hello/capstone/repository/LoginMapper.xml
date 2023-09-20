@@ -15,7 +15,9 @@
 		select * from member where id = #{id} and social = #{social} Limit 1;
 	</select>
 	
-	
+	<select id="getMeberIdx">
+		select memberidx from member where id = #{id} and social = #{social};
+	</select>
 	
 	
 	

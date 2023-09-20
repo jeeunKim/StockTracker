@@ -16,5 +16,5 @@ public interface LoginMapper {
    
    Member findbyid(@Param("id") String id, @Param("social") String social);  
     
-   
+   int getMeberIdx(Member member);
 }

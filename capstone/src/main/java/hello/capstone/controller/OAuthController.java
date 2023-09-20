@@ -1,30 +1,16 @@
 package hello.capstone.controller;
 
 import java.util.HashMap;
-import java.util.Objects;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-
-import com.google.gson.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import hello.capstone.dto.Member;
-import hello.capstone.dto.NaverOauthParams;
 import hello.capstone.service.LoginService;
 import hello.capstone.service.OAuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,7 +53,7 @@ public class OAuthController {
     
     
     /*
-     * 받은 정보로 비회원이라면 회원가입
+     * 카카오 - 받은 정보로 비회원이라면 회원가입
      */
     @PostMapping("/kakao/oauth/signUp")
     public String kakaoSignUp(@RequestBody Member member , HttpServletRequest request) {
@@ -78,22 +64,23 @@ public class OAuthController {
     	
     	
     	HttpSession session = request.getSession();
-    	session.setAttribute("id", member.getId());
-    	session.setAttribute("name", member.getName());
-    	session.setAttribute("nickname", member.getNickname());
-    		
+    	session.setAttribute("member", member);
     		
     	return "/home_user";
     	
     }
     
     /*
-     * 네이버
+     * 네이버 토큰받고 로그인시도 - DB에 정보가 없는 회원이라면 회원가입 후 로그인 처리
      */
     
-    @GetMapping("/login/oauth2/Naver_loading2")
-    public String naverOAuthRedirect(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
-       
+    @PostMapping("/login/oauth2/Naver_loading2")
+    public String naverOAuthRedirect(@RequestBody Map<String, String> codeMap, HttpServletRequest request) {
+        String code = (String)codeMap.get("code");
+        String state =  (String)codeMap.get("state");
+        log.info("code = {}", code);
+        log.info("state = {}", state);
+        
     	ResponseEntity<String> accessTokenResponse = oauthService.getNaverAccessToken(code, state);
     	log.info("accessToken={}", accessTokenResponse.getBody());
     	HashMap<String, Object> naverInfo = oauthService.getNaverInfo(accessTokenResponse);
@@ -106,9 +93,7 @@ public class OAuthController {
     	loginService.naverSignUp(naverMember);
     	    	
     	HttpSession session = request.getSession();
-    	session.setAttribute("id", naverMember.getId());
-    	session.setAttribute("name", naverMember.getName());
-    	session.setAttribute("nickname", naverMember.getNickname());
+    	session.setAttribute("member", naverMember);
     		
     	return "/home_user";   
     }

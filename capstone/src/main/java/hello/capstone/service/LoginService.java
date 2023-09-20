@@ -3,19 +3,13 @@ package hello.capstone.service;
 
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import hello.capstone.dto.Member;
 import hello.capstone.exception.LogInException;

@@ -1,15 +1,11 @@
 package hello.capstone.repository;
 
-import java.sql.Date;
-import java.util.HashMap;
 
 import org.springframework.stereotype.Repository;
 
 import hello.capstone.dto.Member;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
@@ -44,8 +40,14 @@ public class MemberRepository {
    }
    
  
+   /*
+    * 회원 인덱스
+    */
+   public int getMeberIdx(Member member) {
+	   int idx = loginMapper.getMeberIdx(member);
   
- 
+	   return idx;
+   }
   
    
    
