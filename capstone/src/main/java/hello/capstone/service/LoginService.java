@@ -51,7 +51,7 @@ public class LoginService {
 	/*
 	 * 카카오 회원가입 - 
 	 * */
-	public boolean kakaoSignUp(Member member) {
+	public Member kakaoSignUp(Member member) {
 		
 		
 		Member findMember = memberRepository.findById(member.getId(),"kakao");
@@ -71,13 +71,13 @@ public class LoginService {
 			
 			return memberRepository.saveSocial(member);
 		}
-		return true;
+		return findMember;
     	
 	}
 	/*
 	 * 카카오 회원가입 - 
 	 * */
-	public boolean naverSignUp(Member member) {
+	public Member naverSignUp(Member member) {
 		
 		
 		Member findMember = memberRepository.findById(member.getId(),"naver");
@@ -97,9 +97,10 @@ public class LoginService {
 			
 			
 			log.info("member ={}", member);
+			
 			return memberRepository.saveSocial(member);
 		}
-		return true;
+		return findMember;
     	
 	}
 	

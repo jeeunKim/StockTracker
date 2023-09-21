@@ -30,6 +30,10 @@ public class ShopService {
 		long miliseconds = System.currentTimeMillis();
 		Date registrationDate = new Date(miliseconds);
 		shop.setRegistrationDate(registrationDate);
+		shop.setOwnerIdx(1);
+		shop.setShopAddress("a");
+		
+		log.info("ShopService - shop = {}", shop);
 		
 		return shopRepository.saveShop(shop);
 	}

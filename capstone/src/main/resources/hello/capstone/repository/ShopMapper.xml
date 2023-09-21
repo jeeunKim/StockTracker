@@ -5,11 +5,11 @@
     
 
 	<select id="findByAddress" resultType ="Shop">
-		select * from Shop where shopaddress = #{address} Limit 1;
+		select * from shop where shopaddress = #{address} Limit 1;
 	</select>
 	
 	<insert id="saveShop">
-      insert into shop(shopname, shopaddress, owneridx	,shoptel, shopwebsite, imagefilename, promotionText, registrationDate) values( #{shopname}, #{shopaddress}, #{owneridx},#{shoptel}, #{shopwebsite}, #{imageFilename} #{promotionText}, #{registrationDate})
+      insert into shop(shopname, shopaddress, owneridx	,shoptel, shopwebsite, imagefilename, promotionText, registrationDate) values( #{shopName}, #{shopAddress}, #{ownerIdx},#{shopTel}, #{shopWebsite}, #{imageFilename} #{promotionText}, #{registrationDate});
 	</insert>
 
 </mapper>

@@ -4,7 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ShopRepository {
@@ -25,6 +26,7 @@ public class ShopRepository {
 	 * 매장 등록
 	 */
 	public boolean saveShop(Shop shop) {
+		log.info("reposotiry shop = {}", shop);
 		shopMapper.saveShop(shop);
 		return true;
 	}

@@ -60,7 +60,7 @@ public class OAuthController {
     	log.info("name = {}", member.getName());
     	log.info("id = {}", member.getId());
     	
-    	loginService.kakaoSignUp(member);
+    	member = loginService.kakaoSignUp(member);
     	
     	
     	HttpSession session = request.getSession();
@@ -90,7 +90,7 @@ public class OAuthController {
     	naverMember.setName((String)naverInfo.get("name"));
     	naverMember.setPhone((String)naverInfo.get("phone"));
     	
-    	loginService.naverSignUp(naverMember);
+    	naverMember = loginService.naverSignUp(naverMember);
     	    	
     	HttpSession session = request.getSession();
     	session.setAttribute("member", naverMember);

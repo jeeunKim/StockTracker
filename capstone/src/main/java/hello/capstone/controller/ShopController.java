@@ -30,12 +30,23 @@ public class ShopController {
 	private String fileDir;
 	
 	@PostMapping("/shopRegistration")
-	public String shopRegistration(@RequestBody Shop shop, @RequestBody MultipartFile Image,HttpSession session) throws IllegalStateException, IOException {
+	public String shopRegistration(@RequestParam("imageFilename") MultipartFile Image,
+			  					   @RequestParam("shopName") String shopName,
+			  					   @RequestParam("shopTel") String shopTel,
+			  					   @RequestParam("shopAddress") String shopAddress,
+			  					   @RequestParam("promotionText") String promotionText,
+			  					   @RequestParam("shopWebsite") String shopWebsite,
+			  					   HttpSession session) throws IllegalStateException, IOException {
 		
-		Member ownerMember = (Member)session.getAttribute("member");
-		int ownerIdx = memberService.getMeberIdx(ownerMember);
-		
-		shop.setOwnerIdx(ownerIdx);
+		//Member ownerMember = (Member)session.getAttribute("member");
+		//int ownerIdx = memberService.getMeberIdx(ownerMember);
+		Shop shop = new Shop();
+		shop.setShopName(shopName);
+		shop.setShopTel(shopTel);
+		shop.setPromotionText(promotionText);
+		shop.setShopAddress(shopAddress);
+		shop.setShopWebsite(shopWebsite);
+		//shop.setOwnerIdx(ownerIdx);
 		
 		if(!Image.isEmpty()) {
 			String fullPath = fileDir + Image.getOriginalFilename();
@@ -43,6 +54,8 @@ public class ShopController {
 			Image.transferTo(new File(fullPath));
 		}
 		shop.setImageFilename(Image.getOriginalFilename());
+		log.info("가게 파라미터={}",shop);
+		log.info("파일 파라미터={}",Image);
 		shopService.saveShop(shop);
 		
 		

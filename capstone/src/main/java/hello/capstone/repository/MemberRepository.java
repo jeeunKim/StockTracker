@@ -23,10 +23,11 @@ public class MemberRepository {
    /*
     * 카카오회원정보저장
     */
-   public boolean saveSocial(Member member) {
+   public Member saveSocial(Member member) {
       
       loginMapper.saveSocial(member);
-      return true;
+      Member findMember = findById(member.getId(), member.getSocial());
+      return findMember;
    }
    
    
