@@ -9,7 +9,7 @@
 	</select>
 	
 	<insert id="saveShop">
-      insert into shop(shopname, shopaddress, owneridx	,shoptel, shopwebsite, imagefilename, promotionText, registrationDate) values( #{shopName}, #{shopAddress}, #{ownerIdx},#{shopTel}, #{shopWebsite}, #{imageFilename} #{promotionText}, #{registrationDate});
+      insert into shop(shopname, shopaddress, owneridx	,shoptel, shopwebsite, imagefilename, promotionText, registrationDate) values( #{shopName}, #{shopAddress}, #{ownerIdx},#{shopTel}, #{shopWebsite}, #{imageFilename}, #{promotionText}, #{registrationDate});
 	</insert>
 
 </mapper>

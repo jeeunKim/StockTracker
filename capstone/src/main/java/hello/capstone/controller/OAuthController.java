@@ -78,8 +78,6 @@ public class OAuthController {
     public String naverOAuthRedirect(@RequestBody Map<String, String> codeMap, HttpServletRequest request) {
         String code = (String)codeMap.get("code");
         String state =  (String)codeMap.get("state");
-        log.info("code = {}", code);
-        log.info("state = {}", state);
         
     	ResponseEntity<String> accessTokenResponse = oauthService.getNaverAccessToken(code, state);
     	log.info("accessToken={}", accessTokenResponse.getBody());

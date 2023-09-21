@@ -8,7 +8,7 @@
    </insert>
    
    <insert id = "saveSocial">
-      insert into member(id, pw, name, nickname, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname}, #{social}, #{role}, #{redate})
+      insert into member(id, pw, name, nickname,phone, social,  role, redate) values(#{id}, #{pw}, #{name}, #{nickname}, #{phone},#{social}, #{role}, #{redate})
    </insert>
 
 	<select id="findbyid" resultType ="Member">

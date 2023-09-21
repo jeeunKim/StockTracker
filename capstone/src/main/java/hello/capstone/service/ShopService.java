@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.ShopRepository;
@@ -20,20 +21,17 @@ public class ShopService {
 	private final ShopRepository shopRepository;
 	
 	public boolean saveShop(Shop shop) {
-		
+		shop.setShopAddress("c");
 		//.ifPresent()는 memberRepository.findById 실행 시 오류 던져주기 위함
 		Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
 			.ifPresent(user->{
-				throw new SignUpException(ErrorCode.DUPLICATED_SHOP,null);
+				throw new SaveShopException(ErrorCode.DUPLICATED_SHOP,null);
 			});
 		
 		long miliseconds = System.currentTimeMillis();
 		Date registrationDate = new Date(miliseconds);
 		shop.setRegistrationDate(registrationDate);
-		shop.setOwnerIdx(1);
-		shop.setShopAddress("a");
 		
-		log.info("ShopService - shop = {}", shop);
 		
 		return shopRepository.saveShop(shop);
 	}

@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ShopRepository {
 	
-	public final ShopMapper shopMapper;
+	private final ShopMapper shopMapper;
 	
 	
 	/*
@@ -26,7 +26,6 @@ public class ShopRepository {
 	 * 매장 등록
 	 */
 	public boolean saveShop(Shop shop) {
-		log.info("reposotiry shop = {}", shop);
 		shopMapper.saveShop(shop);
 		return true;
 	}

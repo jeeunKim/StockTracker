@@ -69,7 +69,6 @@ public class LoginController {
     @GetMapping("/getSessionMember")
     public Member getSessionMember(HttpSession session) {
     	
-    	log.info("member = {}", (Member)session.getAttribute("member"));
     	return (Member)session.getAttribute("member");
     }
     
