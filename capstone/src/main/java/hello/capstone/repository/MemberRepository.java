@@ -1,16 +1,20 @@
 package hello.capstone.repository;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import hello.capstone.dto.Member;
+import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
 
-   public final LoginMapper loginMapper;
+   private final LoginMapper loginMapper;
+   private final MemberMapper memberMapper;
    /*
     * 회원정보저장 마지막수정 09/18 23시 20분
     */
@@ -48,6 +52,22 @@ public class MemberRepository {
 	   int idx = loginMapper.getMeberIdx(member);
   
 	   return idx;
+   }
+   
+   /*
+    * 즐겨찾기한 가게찾기
+    */
+   public List<Shop> getMyBookmarkedShop(int memberidx) {
+	   
+	   return memberMapper.getMyBookmarkedShop(memberidx); 
+   }
+   
+   /*
+    * 즐겨찾기 등록
+    */
+   public void bookmarkRegistraion(int memberIdx, int shopIdx) {
+	   
+	   memberMapper.bookmarkRegistraion(memberIdx, shopIdx);
    }
   
    

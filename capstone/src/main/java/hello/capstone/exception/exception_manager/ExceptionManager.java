@@ -9,7 +9,7 @@ import hello.capstone.dto.Response;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SignUpException;
-
+import hello.capstone.exception.AlreadyBookmarkedShopException;
 //예외처리하게 되면 해당 예외에 맞는 기능이 동작됨
 //유저는 어떤 에러가 발생한지 모르기 때문에 여기서 예외처리에 맞는 에러 값을 유저에게 알려주는 공간
 @RestControllerAdvice
@@ -42,4 +42,17 @@ public class ExceptionManager {
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
+	
+	//(5) 기존에 만들어둔 에러(AlreadyBookmarkedShopException)가 발생시 동작
+	@ExceptionHandler(AlreadyBookmarkedShopException.class)
+	public ResponseEntity<?> AlreadyBookmarkedShopExceptionHandler(AlreadyBookmarkedShopException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
 }
+
+
+
+
+
+

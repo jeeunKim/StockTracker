@@ -1,10 +1,12 @@
 package hello.capstone.service;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SignUpException;
@@ -35,6 +37,13 @@ public class ShopService {
 		
 		return shopRepository.saveShop(shop);
 	}
+	
+	public int getShopIdx(Shop shop) {
+		int idx = shopRepository.getShopIdx(shop);
+		return idx;
+	}
+	
+	
 }
 
 

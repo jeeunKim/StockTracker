@@ -1,7 +1,10 @@
 package hello.capstone.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,18 @@ public class ShopRepository {
 		shopMapper.saveShop(shop);
 		return true;
 	}
+	
+	/*
+	 * shop 인덱스조회
+	 */
+	public int getShopIdx(Shop shop) {
+		   int idx = shopMapper.getShopIdx(shop);
+	  
+		   return idx;
+	}
+	
+	
+	
 }
 
 
