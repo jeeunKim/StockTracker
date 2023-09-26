@@ -3,6 +3,7 @@ package hello.capstone.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
@@ -53,4 +54,28 @@ public class MemberService {
 		
 		return memberRepository.getMyBookmarkedShop(memberIdx);
 	}
+	
+	
+	/*
+	 * 닉네임 변경
+	 */
+	@Transactional
+	public Member updateNickname(Member member, String nickname) {
+		memberRepository.updateNickname(member, nickname);
+		member.setNickname(nickname);
+		
+		return member;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+

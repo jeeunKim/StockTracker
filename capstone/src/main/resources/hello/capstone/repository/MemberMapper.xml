@@ -7,15 +7,19 @@
 		insert into bookmarks(memberidx, shopidx) values( #{memberidx}, #{shopidx} );
 	</insert>
 	
-	<select id ="getMyBookmarkedShop" resultType ="Shop">
-		select * 
-		from shop
-		where shopidx = (
-			select shopidx 
-			from bookmarks 
-			where memberidx = #{memberidx} 
-		)
+	<select id ="getMyBookmarkedShop" resultType ="hashmap">
+		SELECT s.*
+		FROM bookmarks b
+		JOIN shop s ON b.shopidx = s.shopidx
+		WHERE b.memberidx = #{memberidx};
 	</select>
 	
+	<update id = "updateNickname">
+		update member
+
+		set nickname = #{nickname}
+		
+		where id = #{member.id,jdbcType=VARCHAR} and pw = #{member.pw,jdbcType=VARCHAR};
+	</update>
 
 </mapper>

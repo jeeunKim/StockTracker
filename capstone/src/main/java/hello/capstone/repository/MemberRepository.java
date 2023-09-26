@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
@@ -58,7 +60,6 @@ public class MemberRepository {
     * 즐겨찾기한 가게찾기
     */
    public List<Shop> getMyBookmarkedShop(int memberidx) {
-	   
 	   return memberMapper.getMyBookmarkedShop(memberidx); 
    }
    
@@ -70,6 +71,13 @@ public class MemberRepository {
 	   memberMapper.bookmarkRegistraion(memberIdx, shopIdx);
    }
   
+   /*
+    * 닉네임 변경
+    */
+   public void updateNickname(Member member, String nickname) {
+	   log.info("member, nickname = {} {} ", member, nickname);
+	   memberMapper.updateNickname(member, nickname);
+   }
    
    
    

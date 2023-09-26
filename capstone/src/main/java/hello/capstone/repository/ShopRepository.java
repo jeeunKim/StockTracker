@@ -31,7 +31,7 @@ public class ShopRepository {
 	public boolean saveShop(Shop shop) {
 		shopMapper.saveShop(shop);
 		return true;
-	}
+	}	
 	
 	/*
 	 * shop 인덱스조회

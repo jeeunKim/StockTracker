@@ -34,7 +34,7 @@ public class LoginController {
     	log.info("phone={}",member.getPhone());
     	log.info("role={}",member.getRole());
     	
-    	boolean success = loginService.signUp(member);
+    	loginService.signUp(member);
     	
     	
     	log.info("SignUp Success !");
