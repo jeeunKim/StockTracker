@@ -18,6 +18,11 @@ import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -112,18 +117,30 @@ public class LoginService {
 		
 		
 		Member userMember = memberRepository.findById(id,"normal");
-		boolean pwCheck = passwordCheck(userMember, pw);
-		//여기도 Exception 처리하는게 좋을듯
+		passwordCheck(userMember, pw);
 		
-		if(pwCheck == false) {
-			log.info("fail");
-			return null;
-		}
-		//false 에러를 어떻게 처리할지 모르갰음
+		
 		return userMember;
 	}
 	
-	
+	/*
+	 * 인증 메시지
+	 */
+	public SingleMessageSentResponse sendMessage(String phone, String code) {
+		
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCS9UG2XED3DLI5I", "TZKJX9RAOQBJO4AW3AWH1HJII4FVV83S", "https://api.coolsms.co.kr");
+		
+		Message message = new Message();
+        // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
+        message.setFrom("01077359350");
+        message.setTo(phone);
+        message.setText("[재고30]인증번호 " + code + "를 입력하세요.");
+
+        SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
+        log.info("sendMessageResponse={}", response);
+
+        return response;
+	}
 	
 	
 	
@@ -134,13 +151,12 @@ public class LoginService {
  */
 	
 	//비밀번호 일치 확인
-	private boolean passwordCheck(Member userMember, String pw) {
+	private void passwordCheck(Member userMember, String pw) {
 		boolean pwCheck = true;
 		if(!(userMember.getPw().equals(pw))) {
 	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
 	      }
-		
-		return pwCheck;
+	
 	}
 	
 	//중복회원 검사
@@ -149,7 +165,7 @@ public class LoginService {
 		
 		return findMember;
 	}
-	//닉네임 임의 random String
+	//닉네임 임의의 random String
 	private String createRandomNickname() {
 		int randomNicknameLen = 8;
 		boolean useLetters = true;
@@ -160,6 +176,7 @@ public class LoginService {
 			
 		return randomNick;
 	}
+	
 }
 
 

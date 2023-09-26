@@ -94,7 +94,21 @@ public class MemberRepository {
 	public void updateMember(Member oldMember, Member newMember) {
 		memberMapper.updateMember(oldMember, newMember);
 	}
-   
+	
+   /*
+    * 비밀번호 업데이트
+    */
+	public void updatepw(String id, String pw, String social) {
+		   loginMapper.updatepw(id, pw, social);
+	}
+	 /*
+    *  이름으로 회원 검색
+    */
+   public Member findByName_Phone(String name, String phone, String social) {
+	   Member findMember = loginMapper.findbyname_phone(name, phone, social);
+	   
+	   return findMember; 
+   }
 }
 
 

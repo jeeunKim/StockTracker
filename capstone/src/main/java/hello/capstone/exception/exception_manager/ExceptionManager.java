@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import hello.capstone.dto.Response;
 import hello.capstone.exception.LogInException;
+import hello.capstone.exception.NicknameException;
 import hello.capstone.exception.SaveShopException;
+import hello.capstone.exception.SendMessageException;
+//import hello.capstone.exception.SendMessageException;
 import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
+import hello.capstone.exception.CodeVerificationException;
+import hello.capstone.exception.FindPwException;
+//import hello.capstone.exception.CodeVerificationException;
+//import hello.capstone.exception.FindPwException;
 //예외처리하게 되면 해당 예외에 맞는 기능이 동작됨
 //유저는 어떤 에러가 발생한지 모르기 때문에 여기서 예외처리에 맞는 에러 값을 유저에게 알려주는 공간
 @RestControllerAdvice
@@ -48,6 +55,32 @@ public class ExceptionManager {
 	public ResponseEntity<?> AlreadyBookmarkedShopExceptionHandler(AlreadyBookmarkedShopException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	
+	//(6) 기존에 만들어둔 에러(NicknameException)가 발생시 동작
+	@ExceptionHandler(NicknameException.class)
+	public ResponseEntity<?> NicknameExceptionHandler(NicknameException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(7) 기존에 만들어둔 에러(FindPwException)가 발생시 동작
+		@ExceptionHandler(FindPwException.class)
+		public ResponseEntity<?> FindPwExceptionHandler(FindPwException e){
+		   return ResponseEntity.status(e.getErrorCode().getStatus())
+		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+		}
+		
+	//(8) 기존에 만들어둔 에러(SendMessageException)가 발생시 동작
+	@ExceptionHandler(SendMessageException.class)
+	public ResponseEntity<?> SendMessageExceptionHandler(SendMessageException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(9) 기존에 만들어둔 에러(CodeVerificationException)가 발생시 동작
+		@ExceptionHandler(CodeVerificationException.class)
+		public ResponseEntity<?> CodeVerificationExceptionHandler(CodeVerificationException e){
+		   return ResponseEntity.status(e.getErrorCode().getStatus())
+		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
 }
 

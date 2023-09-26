@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.LogInException;
+import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.MemberService;
 import hello.capstone.service.ShopService;
 import jakarta.servlet.http.HttpSession;
@@ -109,7 +111,18 @@ public class MemberController {
 		return "login";
 	}
 	
+	/*
+	 * 비밀번호 일치 확인
+	 */
+	@GetMapping("/info/pwcheck")
+	public void passwordCheck(HttpSession session, @RequestParam("pw") String pw) {
+		
+		String realPw = ((Member)session.getAttribute("member")).getPw();
+		if(!(realPw.equals(pw))) {
+	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
+	      }
 	
+	}
 }
 
 
