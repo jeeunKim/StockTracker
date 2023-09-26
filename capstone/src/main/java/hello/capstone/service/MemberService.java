@@ -67,6 +67,28 @@ public class MemberService {
 		return member;
 	}
 	
+	/*
+	 * 회원 탈퇴
+	 */
+	@Transactional
+	public void deleteMember(Member member) {
+		memberRepository.deleteMember(member);
+	}
+	
+	
+	/*
+	 * 회원정보 수정
+	 */
+	@Transactional
+	public Member updateMember(Member oldMember, Member newMember) {
+		
+		memberRepository.updateMember(oldMember, newMember);
+		oldMember.setNickname(newMember.getNickname());
+		oldMember.setPw(newMember.getPw());
+		oldMember.setPhone(newMember.getPhone());
+		
+		return oldMember;
+	}
 }
 
 

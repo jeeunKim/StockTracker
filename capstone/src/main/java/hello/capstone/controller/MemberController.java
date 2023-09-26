@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,7 +68,7 @@ public class MemberController {
 	/*
 	 * 닉네임 변경
 	 */
-	@PutMapping("/update-nickname")
+	@PutMapping("/update/nickname")
 	public String updateNickname(@RequestBody HashMap<String,String> nick, HttpSession session) {
 		log.info("닉네임 ={} ", nick.get("nickname"));
 		String nickname = nick.get("nickname");
@@ -86,9 +84,12 @@ public class MemberController {
 	/*
 	 * 회원정보 수정
 	 */
-	@PutMapping("/update-info")
-	public String updateInfo(@RequestBody Member newInfo, HttpSession session) {
+	@PutMapping("/update/info")
+	public String updateInfo(@RequestBody Member newMember, HttpSession session) {
+		Member oldMember = (Member) session.getAttribute("member");
+		newMember = memberService.updateMember(oldMember, newMember);
 		
+		session.setAttribute("member", newMember);
 		
 		return "home_user";
 	}
@@ -97,9 +98,13 @@ public class MemberController {
 	/*
 	 * 회원 탈퇴
 	 */
-	@DeleteMapping("/update-info")
-	public String deleteMember(@RequestParam String id, @RequestParam String pw, HttpSession session) {
+	@DeleteMapping("/delete")
+	public String deleteMember(HttpSession session) {
+
+		Member member = (Member) session.getAttribute("member");
+		memberService.deleteMember(member);
 		
+		session.removeAttribute("member");
 		
 		return "login";
 	}

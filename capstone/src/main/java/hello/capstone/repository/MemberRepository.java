@@ -80,6 +80,37 @@ public class MemberRepository {
    }
    
    
+   /*
+    * 회원 탈퇴
+    */
+   public void deleteMember(Member member) {
+	   memberMapper.deleteMember(member);
+   }
    
+   
+   /*
+    * 회원정보수정
+    */
+	public void updateMember(Member oldMember, Member newMember) {
+		memberMapper.updateMember(oldMember, newMember);
+	}
    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
