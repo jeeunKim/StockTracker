@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import hello.capstone.dto.Response;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
+import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SendMessageException;
 //import hello.capstone.exception.SendMessageException;
 import hello.capstone.exception.SignUpException;
+import hello.capstone.exception.TimeSettingException;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.CodeVerificationException;
 import hello.capstone.exception.FindPwException;
@@ -79,6 +81,18 @@ public class ExceptionManager {
 	//(9) 기존에 만들어둔 에러(CodeVerificationException)가 발생시 동작
 		@ExceptionHandler(CodeVerificationException.class)
 		public ResponseEntity<?> CodeVerificationExceptionHandler(CodeVerificationException e){
+		   return ResponseEntity.status(e.getErrorCode().getStatus())
+		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(10) 기존에 만들어둔 에러(SaveItemException)가 발생시 동작
+	@ExceptionHandler(SaveItemException.class)
+	public ResponseEntity<?> SaveItemExceptionHandler(SaveItemException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(11) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+		@ExceptionHandler(TimeSettingException.class)
+		public ResponseEntity<?> TimeSettingExceptionHandler(TimeSettingException e){
 		   return ResponseEntity.status(e.getErrorCode().getStatus())
 		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}

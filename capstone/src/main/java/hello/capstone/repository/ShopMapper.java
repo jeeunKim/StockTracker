@@ -18,4 +18,9 @@ public interface ShopMapper {
   
    int getShopIdx(Shop shop);
    
+   //shop mark 테스트용
+   List<Shop> getShops();
+   
+   List<Shop> getShopByMember(@Param("memberidx") int memberidx);
+
 }

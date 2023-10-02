@@ -30,6 +30,7 @@ public class ShopRepository {
 	 */
 	public boolean saveShop(Shop shop) {
 		shopMapper.saveShop(shop);
+		log.info("repository shop = {}", shop);
 		return true;
 	}	
 	
@@ -42,8 +43,19 @@ public class ShopRepository {
 		   return idx;
 	}
 	
+	/*
+	 * shop Mark표시 테스트 (모든 가게)
+	 */
+	public List<Shop> getShops(){
+		return shopMapper.getShops();
+	}
 	
-	
+	/*
+	 * 상업자 본인이 올린 가게
+	 */
+	public List<Shop> getShopByMember(int memberidx){
+		return shopMapper.getShopByMember(memberidx);
+	}
 }
 
 
