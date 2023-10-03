@@ -2,8 +2,12 @@ package hello.capstone.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -30,80 +34,87 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ItemController {
 
-	private final ItemService itemService;
-	private final ShopService shopService;
-	
-	@Value("${itemfile.dir}")
-	private String fileDir;
-	
-	/*
-	 * 아이템 등록
-	 */
-	@PostMapping("/register")
-	public String ItemRegistration(@RequestParam("image") MultipartFile Image,
-								   @RequestParam("shopidx") int shopidx,
-								   @RequestParam("itemname") String itemname,
-								   @RequestParam("cost") int cost,
-								   @RequestParam("salecost") int salecost,
-								   @RequestParam("quantity") int quantity,
-								   @RequestParam("category") String category,
-								   @RequestParam("itemnotice") String itemnotice,
-								   @RequestParam("endtime") LocalDateTime endtime
-								   ) throws IllegalStateException, IOException {
-		
-		Item item = new Item();
-		item.setShopidx(shopidx);
-		item.setItemname(itemname);
-		item.setItemNotice(itemnotice);
-		item.setCost(cost);
-		item.setSalecost(salecost);
-		item.setQuantity(quantity);
-		item.setCategory(category);
-
-		LocalDateTime now = LocalDateTime.now();
-		item.setStartTime(now);
-		item.setEndTime(endtime);
-		
-		if(!Image.isEmpty()) {
-			String fullPath = fileDir + Image.getOriginalFilename();
-			Image.transferTo(new File(fullPath));
-		}
-		log.info("item = {}", item);
-		item.setImage(Image.getOriginalFilename());
-		
-		itemService.itemsave(item);
-		
-		
-		return "/owner";
-	}
-	
-	/*
-	 * 아이템 정보가져오기
-	 */
-	@PostMapping("/getItems")
-	public List<Item> getItems(@RequestBody Shop shop) {
-		int shopIdx = shopService.getShopIdx(shop);
-		log.info("shop = {} ", shop);
-		List<Item> items = itemService.getItems(shopIdx);
-		
-		log.info("items = {} ", items);
-		return items;
-	}
-	
-	/*
-	 * 1분마다 실행되는 cron표현식 item들에 endtime을 확인하여 시간이 지나면 자동 삭제
-	 */
-	@Scheduled(cron ="0 0/1 * * * *")
-	public void deleteItemEndtime() {
-		LocalDateTime now = LocalDateTime.now();
-
-        // 현재 시간보다 이전인 튜플 삭제
-		itemService.deleteItemEndtime(now);
-		log.info("삭제");
-	}
+   private final ItemService itemService;
+   private final ShopService shopService;
+   
+   @Value("${itemfile.dir}")
+   private String fileDir;
+   
+   /*
+    * 아이템 등록
+    */
+   @PostMapping("/register")
+   public Item ItemRegistration(@RequestParam("image") MultipartFile Image,
+                           @RequestParam("shopidx") String sid,
+                           @RequestParam("itemName") String itemname,
+                           @RequestParam("cost") String ct,
+                           @RequestParam("salecost") String sct,
+                           @RequestParam("quantity") String qt,
+                           @RequestParam("category") String category,
+                           @RequestParam("itemnotice") String itemnotice,
+                           @RequestParam("endtime") String et,
+                           @RequestParam("starttime") String st
+                           ) throws IllegalStateException, IOException, ParseException {
+      
+      log.info("shopidx = {}", sid);
+      
+     int shopidx = Integer.parseInt(sid);
+     int cost = Integer.parseInt(ct);
+     int salecost = Integer.parseInt(sct);
+     int quantity = Integer.parseInt(qt);
+      
+      Item item = new Item();
+      item.setShopidx(shopidx);
+      item.setItemname(itemname);
+      item.setItemnotice(itemnotice);
+      item.setCost(cost);
+      item.setSalecost(salecost);
+      item.setQuantity(quantity);
+      item.setCategory(category);
+      
+      Timestamp starttime = convertStringToTimestamp(st);
+      Timestamp endtime = convertStringToTimestamp(et);
+      
+      item.setStarttime(starttime);
+      item.setEndtime(endtime);
+      
+      if(!Image.isEmpty()) {
+         String fullPath = fileDir + Image.getOriginalFilename();
+         Image.transferTo(new File(fullPath));
+      }
+      item.setImage(Image.getOriginalFilename());
+      
+      log.info("item = {}", item);
+      
+      itemService.itemsave(item);
+        
+      return item;
+   }
+   
+   /*
+    * 아이템 정보가져오기
+    */
+   @PostMapping("/getItems")
+   public List<Item> getItems(@RequestBody Shop shop) {
+      log.info("shop = {} ", shop);
+      int shopIdx = shopService.getShopIdx(shop);
+      
+      log.info("shop = {} ", shop);
+      List<Item> items = itemService.getItems(shopIdx);
+      
+      log.info("items = {} ", items);
+      return items;
+   }
+   
+   /*
+    * String을 Timestamp로 변환하는 함수
+    */
+   public Timestamp convertStringToTimestamp(String dateString) throws ParseException {
+       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       Date parsedDate = dateFormat.parse(dateString);
+       return new Timestamp(parsedDate.getTime());
+   }
 }
-
-
 
 
 

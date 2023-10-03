@@ -1,5 +1,6 @@
 package hello.capstone.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +16,11 @@ public class Item {
 	private int cost;
 	private int salecost;
 	private int quantity;
-	private String itemNotice;
+	private String itemnotice;
 	private String image;
 	private String category;
-	private LocalDateTime  startTime;
-	private LocalDateTime  endTime;
+	private Timestamp  starttime;
+	private Timestamp  endtime;
 	
 	public Item() {}
 	

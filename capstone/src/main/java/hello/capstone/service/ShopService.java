@@ -95,9 +95,11 @@ public class ShopService {
     }
 	
 	/*
-	 * shop mark 표시 테스트용
+	 * shop mark 표시 (아이템 등록된 가게만 가져오기)
 	 */
 	public List<Shop> getShops(){
+		
+		
 		return shopRepository.getShops();
 	}
 	

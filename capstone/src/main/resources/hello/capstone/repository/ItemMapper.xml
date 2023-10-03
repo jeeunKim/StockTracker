@@ -4,8 +4,9 @@
 <mapper namespace="hello.capstone.repository.ItemMapper">
 
 	<insert id="saveitem">
-		insert into item(shopidx, itemname, cost, salecost, quantity, image, category, starttime, endtime) values(#{shopidx},#{itemname},#{cost},#{salecost},#{quantity},#{image},#{category}, #{starttime}, #{endtime});
-	</insert>
+      insert into item(shopidx, itemname, itemnotice, cost, salecost, quantity, image, category, starttime, endtime) 
+      values(#{shopidx},#{itemname}, #{itemnotice}, #{cost},#{salecost},#{quantity},#{image},#{category}, #{starttime}, #{endtime});
+   </insert>
 
 	<select id="findByShopIdx_itemname" resultType="item">
 		select * from item where shopidx = #{shopidx} and itemname = #{itemname};
@@ -17,10 +18,10 @@
 		where shopidx = #{shopidx};
 	</select>
 	
-	<delete id="deleteItemEndtime" parameterType="java.time.LocalDateTime">
-        DELETE FROM item
-        WHERE endtime &lt;= #{now}
-    </delete>
+	<delete id="deleteItemEndtime" >
+	    DELETE FROM item
+	    WHERE endtime &lt;= #{time};
+	</delete>
 	
 	
 </mapper>

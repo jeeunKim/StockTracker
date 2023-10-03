@@ -1,5 +1,7 @@
 package hello.capstone.repository;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,8 +47,10 @@ public class ItemRepository {
 	/*
 	 * 아이템 삭제
 	 */
-	public void deleteItemEndtime(LocalDateTime now) {
-		itemMapper.deleteItemEndtime(now);
+	public void deleteItemEndtime(Timestamp now) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(now);
+		itemMapper.deleteItemEndtime(time);
 	}
 	
 	

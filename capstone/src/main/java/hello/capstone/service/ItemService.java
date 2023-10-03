@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import hello.capstone.dto.Item;
 import hello.capstone.exception.SaveItemException;
@@ -33,8 +35,8 @@ public class ItemService {
 				throw new SaveItemException(ErrorCode.DUPLICATED_ITEM,null);
 			});
 		
-		LocalDateTime startTime = item.getStartTime();
-		LocalDateTime endtime = item.getEndTime();
+		Timestamp startTime = item.getStarttime();
+		Timestamp endtime = item.getEndtime();
 		
 		int timeOut = startTime.compareTo(endtime);
 		if(timeOut >= 0) {
@@ -59,10 +61,18 @@ public class ItemService {
 	}
 	
 	
-	public void deleteItemEndtime(LocalDateTime now) {
+	/*
+	 * 1분마다 실행되는 cron표현식 item들에 endtime을 확인하여 시간이 지나면 자동 삭제
+	 */
+	
+	@Scheduled(cron ="0 * * * * *")
+	public void deleteItemEndtime() {
+		log.info("@Scheduled 실행");
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
 
-        // 현재 시간보다 이전인 튜플 삭제
-		itemRepository.deleteItemEndtime(now);
+        // 현재 시간보다 이전인 아이템 삭제
+		itemRepository.deleteItemEndtime(timestamp);
 	}
 	
 	

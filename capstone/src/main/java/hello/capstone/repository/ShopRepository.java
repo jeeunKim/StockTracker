@@ -38,9 +38,9 @@ public class ShopRepository {
 	 * shop 인덱스조회
 	 */
 	public int getShopIdx(Shop shop) {
-		   int idx = shopMapper.getShopIdx(shop);
-	  
-		   return idx;
+	   int idx = shopMapper.getShopIdx(shop);
+  
+	   return idx;
 	}
 	
 	/*

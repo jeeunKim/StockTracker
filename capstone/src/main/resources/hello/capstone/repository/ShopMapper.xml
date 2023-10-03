@@ -13,11 +13,13 @@
 	</insert>
 	
 	<select id="getShopIdx">
-		select shopidx from shop where shopname = #{id} and shopaddress = #{shopaddress};
+		select shopidx from shop where shopname = #{shopName} and shopaddress = #{shopAddress};
 	</select>
 	
 	<select id = "getShops" resultType = "hashmap">
-		select shopname, longitude, latitude from shop;
+		select s.*
+		from shop s
+		inner join item i ON s.shopidx = i.shopidx;
 	</select>
 	
 	<select id = "getShopByMember" resultType = "hashmap">

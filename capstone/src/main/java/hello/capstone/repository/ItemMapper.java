@@ -1,5 +1,6 @@
 package hello.capstone.repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface ItemMapper {
 	
 	List<Item> getItems(@Param("shopidx") int shopidx);
 	
-	void deleteItemEndtime(@Param("now") LocalDateTime now);
+	void deleteItemEndtime(@Param("time") String time);
 }

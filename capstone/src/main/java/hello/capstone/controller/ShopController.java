@@ -85,7 +85,6 @@ public class ShopController {
 		
 		List<Shop> shops = shopService.getShopByMember(memberService.getMeberIdx(member));
 		
-		log.info("shops = {} ", shops);
 		return shops;
 	}
 	
