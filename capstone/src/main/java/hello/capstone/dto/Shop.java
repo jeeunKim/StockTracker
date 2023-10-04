@@ -4,11 +4,14 @@ package hello.capstone.dto;
 
 import java.sql.Date;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Shop {
-	
+	private int shopidx; 
 	private String shopName;
 	private int ownerIdx;
 	private String imageFilename;
@@ -24,19 +27,6 @@ public class Shop {
 		
 	}
 
-	public Shop(String shopName, int ownerIdx, String imageFilename,
-			String shopAddress, String shopTel, String shopWebsite, String promotionText, Date registrationDate,
-			String longitude, String latitude) {
-		this.shopName = shopName;
-		this.ownerIdx = ownerIdx;
-		this.imageFilename = imageFilename;
-		this.shopAddress = shopAddress;
-		this.shopTel = shopTel;
-		this.shopWebsite = shopWebsite;
-		this.promotionText = promotionText;
-		this.registrationDate = registrationDate;
-		this.longitude = longitude;
-		this.latitude = latitude;
-	}
+	
 	
 }

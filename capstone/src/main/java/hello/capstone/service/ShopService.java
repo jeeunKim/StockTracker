@@ -37,18 +37,21 @@ public class ShopService {
 	String kakaoLocalKey;
 	String uri = "https://dapi.kakao.com/v2/local/search/address.json";
 	
-	public boolean saveShop(Shop shop) {
+	public boolean saveShop(Shop shop, String method) {
 		
 		log.info("saveShop Start");
-		//.ifPresent()는 memberRepository.findById 실행 시 오류 던져주기 위함
-		Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
-			.ifPresent(user->{
-				throw new SaveShopException(ErrorCode.DUPLICATED_SHOP,null);
-			});
 		
-		long miliseconds = System.currentTimeMillis();
-		Date registrationDate = new Date(miliseconds);
-		shop.setRegistrationDate(registrationDate);
+		if(method.equals("register")) {
+			//.ifPresent()는 memberRepository.findById 실행 시 오류 던져주기 위함
+			Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
+				.ifPresent(user->{
+					throw new SaveShopException(ErrorCode.DUPLICATED_SHOP,null);
+				});
+			
+			long miliseconds = System.currentTimeMillis();
+			Date registrationDate = new Date(miliseconds);
+			shop.setRegistrationDate(registrationDate);
+		}
 
 		log.info("saveShop Middle");
 		
@@ -60,16 +63,23 @@ public class ShopService {
 		
 		log.info("shop info = {}", shop);
 		
-		return shopRepository.saveShop(shop);
+		return shopRepository.saveShop(shop,method);
 	}
 	
+	/*
+	 * 가격 필터가 적용된 가게 조회
+	 */
+	public List<Shop> runPriceFilter(int price){
+		 List<Shop> filteredShops = shopRepository.runPriceFilter(price);
+		 return filteredShops;
+	}
 	/*
 	 * 거리필터가 적용된 가게 조회, 좌표 간 계산식 참고 출처 https://frontmaster.tistory.com/135
 	 */
 	public List<Shop> runDistanceFilter(double latitude, double longitude, double distance, String unit){
 		
 		List<Shop> shops = shopRepository.getShops();
-		log.info("shops = {}", shops);
+		
 		List<Shop> filteredShops = new ArrayList<Shop>();
 		for (Shop shop : shops) {
 			double shopLatitude = Double.parseDouble(shop.getLatitude());

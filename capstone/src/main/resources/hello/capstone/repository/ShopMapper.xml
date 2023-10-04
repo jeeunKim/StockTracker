@@ -27,4 +27,16 @@
 		from shop
 		where owneridx = #{memberidx};
 	</select>
+	
+	<update id="modifyShop">
+		update shop set shopname = #{shopName}, shopaddress = #{shopAddress}, owneridx = #{ownerIdx}, shoptel = #{shopTel}, shopwebsite = #{shopWebsite}, imagefilename = #{imageFilename}, promotionText = #{promotionText}, longitude = #{longitude}, latitude = #{latitude}
+		where shopidx = #{shopidx}
+		 
+	</update>
+	
+	<select id = "runPriceFilter" resultType = "Shop">
+		select * from shop where shopidx in (
+			select distinct shopidx from item where salecost &lt;= #{price}
+		);
+	</select>
 </mapper>

@@ -28,11 +28,16 @@ public class ShopRepository {
 	/*
 	 * 매장 등록
 	 */
-	public boolean saveShop(Shop shop) {
-		shopMapper.saveShop(shop);
+	public boolean saveShop(Shop shop, String method) {
+		if(method.equals("register")) {
+			shopMapper.saveShop(shop);
+		}
+		else {
+			shopMapper.modifyShop(shop);
+		}
 		log.info("repository shop = {}", shop);
 		return true;
-	}	
+	}
 	
 	/*
 	 * shop 인덱스조회
@@ -56,6 +61,12 @@ public class ShopRepository {
 	 */
 	public List<Shop> getShopByMember(int memberidx){
 		return shopMapper.getShopByMember(memberidx);
+	}
+	/*
+	 * 가격 필터에 해당되는 가게 조회
+	 */
+	public List<Shop> runPriceFilter(int price){
+		return shopMapper.runPriceFilter(price);
 	}
 }
 

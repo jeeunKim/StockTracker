@@ -104,7 +104,7 @@ public class ExceptionManager {
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
-	//(12) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+	//(13) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
 	@ExceptionHandler(InvalidEmailException.class)
 	public ResponseEntity<?> InvalidEmailExceptionHandler(InvalidEmailException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
