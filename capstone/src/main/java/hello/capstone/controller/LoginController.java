@@ -35,16 +35,9 @@ public class LoginController {
     @PostMapping("/join")
     public String signUp(@RequestBody Member member){
     	
-    	log.info("id ={}",member.getId());
-    	log.info("pw={}",member.getPw());
-    	log.info("name ={}",member.getName());
-    	log.info("phone={}",member.getPhone());
-    	log.info("role={}",member.getRole());
-    	
     	loginService.signUp(member);
     	
     	
-    	log.info("SignUp Success !");
 		return "/login";
     }
     

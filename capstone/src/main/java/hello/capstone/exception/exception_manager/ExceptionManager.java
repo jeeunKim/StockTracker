@@ -17,6 +17,8 @@ import hello.capstone.exception.TimeSettingException;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.CodeVerificationException;
 import hello.capstone.exception.FindPwException;
+import hello.capstone.exception.InvalidEmailException;
+import hello.capstone.exception.InvalidPhoneNumberException;
 //import hello.capstone.exception.CodeVerificationException;
 //import hello.capstone.exception.FindPwException;
 //예외처리하게 되면 해당 예외에 맞는 기능이 동작됨
@@ -66,11 +68,11 @@ public class ExceptionManager {
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
 	//(7) 기존에 만들어둔 에러(FindPwException)가 발생시 동작
-		@ExceptionHandler(FindPwException.class)
-		public ResponseEntity<?> FindPwExceptionHandler(FindPwException e){
-		   return ResponseEntity.status(e.getErrorCode().getStatus())
-		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
-		}
+	@ExceptionHandler(FindPwException.class)
+	public ResponseEntity<?> FindPwExceptionHandler(FindPwException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
 		
 	//(8) 기존에 만들어둔 에러(SendMessageException)가 발생시 동작
 	@ExceptionHandler(SendMessageException.class)
@@ -79,10 +81,10 @@ public class ExceptionManager {
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
 	//(9) 기존에 만들어둔 에러(CodeVerificationException)가 발생시 동작
-		@ExceptionHandler(CodeVerificationException.class)
-		public ResponseEntity<?> CodeVerificationExceptionHandler(CodeVerificationException e){
-		   return ResponseEntity.status(e.getErrorCode().getStatus())
-		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	@ExceptionHandler(CodeVerificationException.class)
+	public ResponseEntity<?> CodeVerificationExceptionHandler(CodeVerificationException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
 	//(10) 기존에 만들어둔 에러(SaveItemException)가 발생시 동작
 	@ExceptionHandler(SaveItemException.class)
@@ -91,11 +93,26 @@ public class ExceptionManager {
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
 	//(11) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
-		@ExceptionHandler(TimeSettingException.class)
-		public ResponseEntity<?> TimeSettingExceptionHandler(TimeSettingException e){
-		   return ResponseEntity.status(e.getErrorCode().getStatus())
-		           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	@ExceptionHandler(TimeSettingException.class)
+	public ResponseEntity<?> TimeSettingExceptionHandler(TimeSettingException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
+	//(12) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+	@ExceptionHandler(InvalidPhoneNumberException.class)
+	public ResponseEntity<?> InvalidPhoneNumberExceptionHandler(InvalidPhoneNumberException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(12) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+	@ExceptionHandler(InvalidEmailException.class)
+	public ResponseEntity<?> InvalidEmailExceptionHandler(InvalidEmailException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}	
+			
+		
+		
 }
 
 

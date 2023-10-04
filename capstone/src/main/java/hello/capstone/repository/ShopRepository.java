@@ -50,6 +50,7 @@ public class ShopRepository {
 		return shopMapper.getShops();
 	}
 	
+	
 	/*
 	 * 상업자 본인이 올린 가게
 	 */

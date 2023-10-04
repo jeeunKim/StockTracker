@@ -96,20 +96,19 @@ public class ItemController {
     */
    @PostMapping("/getItems")
    public List<Item> getItems(@RequestBody Shop shop) {
-      log.info("shop = {} ", shop);
+      
       int shopIdx = shopService.getShopIdx(shop);
       
-      log.info("shop = {} ", shop);
       List<Item> items = itemService.getItems(shopIdx);
       
-      log.info("items = {} ", items);
+      
       return items;
    }
    
    /*
     * String을 Timestamp로 변환하는 함수
     */
-   public Timestamp convertStringToTimestamp(String dateString) throws ParseException {
+   private Timestamp convertStringToTimestamp(String dateString) throws ParseException {
        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
        Date parsedDate = dateFormat.parse(dateString);
        return new Timestamp(parsedDate.getTime());

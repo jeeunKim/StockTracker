@@ -51,7 +51,7 @@ public class MemberController {
 	}
 	
 	/*
-	 * 즐겨찾기 조회
+	 * 즐겨찾기 목록 조회
 	 */
 	@GetMapping("/bookmark/check")
 	public List<Shop> bookmarkCheck(HttpSession session) {
@@ -72,7 +72,7 @@ public class MemberController {
 	 */
 	@PutMapping("/update/nickname")
 	public String updateNickname(@RequestBody HashMap<String,String> nick, HttpSession session) {
-		log.info("닉네임 ={} ", nick.get("nickname"));
+		
 		String nickname = nick.get("nickname");
 		Member member = (Member) session.getAttribute("member");
 		
@@ -81,6 +81,22 @@ public class MemberController {
 		log.info("member = {}", member);
 		
 		return "home_user";
+	}
+	
+	/*
+	 * 비밀번호 수정
+	 */
+	@PutMapping("/update/pw")
+	public String updatePw(@RequestBody HashMap<String,String> pwMap, HttpSession session) {
+		String oldPw = pwMap.get("oldpw");
+		String newPw = pwMap.get("newpw");
+		Member member = (Member)session.getAttribute("member");
+		memberService.pwCheck(member, oldPw);
+		
+		Member newMember = memberService.updatePwOnPurpose(member, newPw);
+		session.setAttribute("member", newMember);
+		
+		return "/";
 	}
 	
 	/*
@@ -101,9 +117,10 @@ public class MemberController {
 	 * 회원 탈퇴
 	 */
 	@DeleteMapping("/delete")
-	public String deleteMember(HttpSession session) {
-
+	public String deleteMember(HttpSession session, String pw) {
+		
 		Member member = (Member) session.getAttribute("member");
+		memberService.pwCheck(member, pw);
 		memberService.deleteMember(member);
 		
 		session.removeAttribute("member");
@@ -111,18 +128,7 @@ public class MemberController {
 		return "login";
 	}
 	
-	/*
-	 * 비밀번호 일치 확인
-	 */
-	@GetMapping("/info/pwcheck")
-	public void passwordCheck(HttpSession session, @RequestParam("pw") String pw) {
-		
-		String realPw = ((Member)session.getAttribute("member")).getPw();
-		if(!(realPw.equals(pw))) {
-	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
-	      }
 	
-	}
 }
 
 

@@ -194,9 +194,12 @@ public class OAuthService{
    		 String email = properties.getAsJsonObject().get("email").getAsString();
    		 String phone = properties.getAsJsonObject().get("mobile").getAsString();
           
+         phone.replace("-", "");
+         
          log.info("name={}",name);
          log.info("email={}",email);
          log.info("phone={}",phone);
+         
          
          HashMap<String, Object> naverInfo = new HashMap<String, Object>();
          naverInfo.put("name", name);

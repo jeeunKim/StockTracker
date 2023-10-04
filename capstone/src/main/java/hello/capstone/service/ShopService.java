@@ -1,6 +1,7 @@
 package hello.capstone.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,51 @@ public class ShopService {
 		
 		return shopRepository.saveShop(shop);
 	}
+	
+	/*
+	 * 거리필터가 적용된 가게 조회, 좌표 간 계산식 참고 출처 https://frontmaster.tistory.com/135
+	 */
+	public List<Shop> runDistanceFilter(double latitude, double longitude, double distance, String unit){
+		
+		List<Shop> shops = shopRepository.getShops();
+		log.info("shops = {}", shops);
+		List<Shop> filteredShops = new ArrayList<Shop>();
+		for (Shop shop : shops) {
+			double shopLatitude = Double.parseDouble(shop.getLatitude());
+			double shopLongitude = Double.parseDouble(shop.getLongitude());
+			
+			double theta = longitude - shopLongitude;
+	        double dist = Math.sin(deg2rad(latitude)) * Math.sin(deg2rad(shopLatitude)) + Math.cos(deg2rad(latitude)) * Math.cos(deg2rad(shopLatitude)) * Math.cos(deg2rad(theta));
+	         
+	        dist = Math.acos(dist);
+	        dist = rad2deg(dist);
+	        dist = dist * 60 * 1.1515;
+	        
+	        if (unit.equals("km")) {
+	            dist = dist * 1.609344;
+	        } else if(unit.equals("m")){
+	            dist = dist * 1609.344;
+	        }
+	        if(dist <= distance) {
+	        	filteredShops.add(shop);
+	        }
+		}
+		
+		return filteredShops;
+	}
+	
+	/*
+	 * decimal degrees -> radian
+	 * radian -> decimal degrees
+	 * 변환
+	 */
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+     
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
 	
 	/*
 	 *  주소를 경도, 위도로 반환

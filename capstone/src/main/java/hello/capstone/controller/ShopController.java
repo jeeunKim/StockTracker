@@ -2,6 +2,7 @@ package hello.capstone.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class ShopController {
 	 * 지도 shop marker 표시 테스트용 (모든 shop)
 	 */
 	@GetMapping("/ShopMarker")
-	public List<Shop> ShopAdress(){
+	public List<Shop> ShopAddress(){
 		List<Shop> shops = shopService.getShops();
 		return shops;
 	} 
@@ -88,13 +89,27 @@ public class ShopController {
 		return shops;
 	}
 	
+	/*
+	 * 거리 필터를 적용한 가게 조회
+	 */
+	@GetMapping("/getShop/filter/distance")
+	public List<Shop> getShopFilterDistance(@RequestParam("latitude") String myLatitude,
+											@RequestParam("longitude") String myLongitude,
+											@RequestParam("distance") String distance,
+											@RequestParam("unit") String unit){
+		
+		
+		double latitude = Double.parseDouble(myLatitude);
+		double longitude = Double.parseDouble(myLongitude);
+		
+		double dist = Double.parseDouble(distance);
+		
+		List<Shop> distanceFilteredShops = shopService.runDistanceFilter(latitude, longitude, dist, unit);
+		
+		log.info("distanceFilteredShops = {}", distanceFilteredShops);
+		
+		return distanceFilteredShops;
+	}
 	
-//	/*
-//	 * 가게 정보 가져오기(사용자 버전)
-//	 */
-//	@GetMapping("/getShop")
-//	public List<Shop> getShop(@RequestParam("")){
-//		List<Shop> shops = shopService.getShops();
-//		return shops;
-//	}
+
 }
