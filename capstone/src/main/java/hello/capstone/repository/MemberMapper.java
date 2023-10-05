@@ -21,4 +21,6 @@ public interface MemberMapper {
 	void deleteMember(Member member);
 	
 	void updateMember(@Param("oldMember") Member oldMember, @Param("newMember") Member newMember);
+	
+	
 }

@@ -59,8 +59,6 @@ public class LoginController {
     	
     	session.setAttribute("member", userMember);
     	
-    	log.info("loginId={}",userMember.getId());
-    	log.info("loginName={}",userMember.getName());
     	
     	return "home_user";
     }

@@ -16,6 +16,10 @@
 		select shopidx from shop where shopname = #{shopName} and shopaddress = #{shopAddress};
 	</select>
 	
+	<select id="getShopByIdx">
+		select * from shop where shopidx = #{shopidx};
+	</select>
+	
 	<select id = "getShops" resultType = "Shop">
 		select distinct s.*
 		from shop s

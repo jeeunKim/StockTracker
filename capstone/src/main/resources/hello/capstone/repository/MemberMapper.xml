@@ -37,5 +37,7 @@
 
 		where id = #{id} and pw = #{pw};
 	</delete>
-
+	
+	
+	
 </mapper>

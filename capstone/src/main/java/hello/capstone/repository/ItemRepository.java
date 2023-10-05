@@ -3,6 +3,8 @@ package hello.capstone.repository;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -52,6 +54,40 @@ public class ItemRepository {
         String time = sdf.format(now);
 		itemMapper.deleteItemEndtime(time);
 	}
+	
+
+	/*
+	 * 알림 등록
+	 */
+	public void pushAlarm(int shopidx) {
+		itemMapper.pushAlarm(shopidx);
+	}
+	
+	
+	/*
+	 * 알림 가져오기
+	 */
+	public List<Integer> getAlarm(int memberidx) {
+		List<Integer> shopidxes = new ArrayList<Integer>();
+		List<HashMap<String, Integer>> shopIdxList = itemMapper.getAlarm(memberidx);
+		for (HashMap<String, Integer> map : shopIdxList) {
+		    Integer shopIdx = map.get("shopidx");
+		    shopidxes.add(shopIdx);
+		}    
+		return shopidxes;
+		
+	}
+	
+	
+	
+	/*
+	 * 24시간이 지난 알림 삭제
+	 */
+	public void deleteTimeoutAlarm() {
+		itemMapper.deleteTimeoutAlarm();
+		
+	}
+	
 	
 	
 }

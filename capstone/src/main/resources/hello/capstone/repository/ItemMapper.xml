@@ -12,7 +12,7 @@
 		select * from item where shopidx = #{shopidx} and itemname = #{itemname};
 	</select>
 
-	<select id = "getItems" resultType = "hashmap">
+	<select id = "getItems" resultType = "Item">
 		select * 
 		from item 
 		where shopidx = #{shopidx};
@@ -23,5 +23,24 @@
 	    WHERE endtime &lt;= #{time};
 	</delete>
 	
+
+	<insert id="pushAlarm">
+        insert into alarm (memberidx, shopidx,regisdate)
+		select b.memberidx, b.shopidx,NOW() 
+		from bookmarks b
+		where b.shopidx = #{shopidx};
+   </insert>
+   
+   <delete id="deleteTimeoutAlarm">
+        select *
+		from alarm
+		where TIMESTAMPDIFF(hour, regisdate, NOW()) >= 24;
+   </delete>
 	
+	<select id = "getAlarm" resultType="HashMap">
+		Select distinct shopidx
+		from alarm
+		where memberidx = #{memberidx};
+	</select>
+
 </mapper>

@@ -109,6 +109,8 @@ public class MemberRepository {
 	   
 	   return findMember; 
    }
+   
+   
 }
 
 

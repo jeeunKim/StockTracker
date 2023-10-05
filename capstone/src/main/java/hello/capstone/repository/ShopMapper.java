@@ -27,4 +27,5 @@ public interface ShopMapper {
    
    void modifyShop(Shop shop);
 
+   Shop getShopByIdx(@Param("shopidx") int shopidx);
 }

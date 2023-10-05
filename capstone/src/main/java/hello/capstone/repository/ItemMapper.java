@@ -2,6 +2,7 @@ package hello.capstone.repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -19,4 +20,10 @@ public interface ItemMapper {
 	List<Item> getItems(@Param("shopidx") int shopidx);
 	
 	void deleteItemEndtime(@Param("time") String time);
+	
+	void pushAlarm(@Param("shopidx") int shopidx);
+	
+	void deleteTimeoutAlarm();
+	
+	List<HashMap<String, Integer>> getAlarm(@Param("memberidx") int memberidx);
 }

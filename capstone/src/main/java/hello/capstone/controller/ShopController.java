@@ -118,14 +118,15 @@ public class ShopController {
 	}
 	
 	/*
-	 * 필터를 적용한 가게 조회 거리, 가격
+	 * 필터를 적용한 가게 조회 거리, 가격, 마감시간
 	 */
 	@GetMapping("/getShop/filter")
 	public List<Shop> getShopFilterDistance(@RequestParam("latitude") String myLatitude,
 											@RequestParam("longitude") String myLongitude,
 											@RequestParam(value = "distance", defaultValue = "0") String distance,
 											@RequestParam(value = "unit", defaultValue = "m") String unit,
-											@RequestParam(value = "price", defaultValue = "0") String itemprice){
+											@RequestParam(value = "price", defaultValue = "0") String itemprice,
+											@RequestParam(value = "time", defaultValue = "0") String time){
 		
 
 		List<Shop> allShops = shopService.getShops();
@@ -135,6 +136,7 @@ public class ShopController {
 		double longitude = Double.parseDouble(myLongitude);
 		double dist = Double.parseDouble(distance);
 		int price = Integer.parseInt(itemprice);
+		long minute = Long.parseLong(time);
 		
 		if(dist != 0) {
 			List<Shop> distanceFilteredShops = shopService.runDistanceFilter(latitude, longitude, dist, unit);
@@ -148,6 +150,13 @@ public class ShopController {
 			if(priceFilteredShops != null) {	
 				allShops.retainAll(priceFilteredShops);
 				log.info("priceFilteredShops= {}", priceFilteredShops);	
+			}
+		}
+		if(minute != 0) {
+			List<Shop> deadlineFilteredShops = shopService.runDeadlineFilter(minute);	
+			if(deadlineFilteredShops != null) {	
+				allShops.retainAll(deadlineFilteredShops);
+				log.info("deadlineFilteredShops= {}", deadlineFilteredShops);	
 			}
 		}
 		

@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import hello.capstone.service.ItemService;
 import hello.capstone.service.ShopService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,15 +55,16 @@ public class ItemController {
                            @RequestParam("category") String category,
                            @RequestParam("itemnotice") String itemnotice,
                            @RequestParam("endtime") String et,
-                           @RequestParam("starttime") String st
+                           @RequestParam("starttime") String st,
+                           HttpSession session
                            ) throws IllegalStateException, IOException, ParseException {
       
       log.info("shopidx = {}", sid);
       
-     int shopidx = Integer.parseInt(sid);
-     int cost = Integer.parseInt(ct);
-     int salecost = Integer.parseInt(sct);
-     int quantity = Integer.parseInt(qt);
+      int shopidx = Integer.parseInt(sid);
+      int cost = Integer.parseInt(ct);
+      int salecost = Integer.parseInt(sct);
+      int quantity = Integer.parseInt(qt);
       
       Item item = new Item();
       item.setShopidx(shopidx);
@@ -77,16 +80,15 @@ public class ItemController {
       
       item.setStarttime(starttime);
       item.setEndtime(endtime);
-      
+      log.info("image = {} ",Image);
       if(!Image.isEmpty()) {
          String fullPath = fileDir + Image.getOriginalFilename();
          Image.transferTo(new File(fullPath));
       }
       item.setImage(Image.getOriginalFilename());
       
-      log.info("item = {}", item);
       
-      itemService.itemsave(item);
+      itemService.itemsave(item, (Member)session.getAttribute("member"));
         
       return item;
    }

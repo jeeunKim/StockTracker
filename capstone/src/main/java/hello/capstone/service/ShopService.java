@@ -1,6 +1,8 @@
 package hello.capstone.service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +20,11 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import hello.capstone.dto.Coordinates;
+import hello.capstone.dto.Item;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.SaveShopException;
-import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.errorcode.ErrorCode;
+import hello.capstone.repository.ItemRepository;
 import hello.capstone.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ShopService {
 	
 	private final ShopRepository shopRepository;
+	private final ItemRepository itemRepository;
 	
 	@Value("${kakao.local.key}")
 	String kakaoLocalKey;
@@ -71,6 +75,7 @@ public class ShopService {
 	 */
 	public List<Shop> runPriceFilter(int price){
 		 List<Shop> filteredShops = shopRepository.runPriceFilter(price);
+		 
 		 return filteredShops;
 	}
 	/*
@@ -79,8 +84,8 @@ public class ShopService {
 	public List<Shop> runDistanceFilter(double latitude, double longitude, double distance, String unit){
 		
 		List<Shop> shops = shopRepository.getShops();
-		
 		List<Shop> filteredShops = new ArrayList<Shop>();
+		
 		for (Shop shop : shops) {
 			double shopLatitude = Double.parseDouble(shop.getLatitude());
 			double shopLongitude = Double.parseDouble(shop.getLongitude());
@@ -100,6 +105,31 @@ public class ShopService {
 	        if(dist <= distance) {
 	        	filteredShops.add(shop);
 	        }
+		}
+		
+		return filteredShops;
+	}
+	
+	/*
+	 * 마감시간 필터가 적용된 가게 조회
+	 */
+	public List<Shop> runDeadlineFilter(long minute){
+		
+		List<Shop> shops = shopRepository.getShops();
+		List<Shop> filteredShops = new ArrayList<Shop>();
+		
+		for (Shop shop : shops) {
+			List<Item> items = itemRepository.getItems(shop.getShopidx());
+			for(Item item : items) {
+				LocalDateTime now = LocalDateTime.now();
+				Timestamp timestamp = Timestamp.valueOf(now);
+				long remainTime = (item.getEndtime().getTime() - timestamp.getTime()) /1000 /60; //분으로 계산
+				
+				if(remainTime > minute) {
+					filteredShops.add(shop);
+					break;
+				}
+			}
 		}
 		
 		return filteredShops;
@@ -162,6 +192,10 @@ public class ShopService {
 	public int getShopIdx(Shop shop) {
 		int idx = shopRepository.getShopIdx(shop);
 		return idx;
+	}
+	
+	public Shop getShopByIdx(int shopidx) {
+		return shopRepository.getShopByIdx(shopidx);
 	}
 	
 	
