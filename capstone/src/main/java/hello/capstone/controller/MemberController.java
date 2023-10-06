@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
+import hello.capstone.dto.Alarm;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.ItemService;
@@ -142,17 +143,28 @@ public class MemberController {
 		return "login";
 	}
 	
+	/*
+	 * 알람 가져오기
+	 */
 	@GetMapping("/getAlarm")
 	public List<Shop> getAlarm(HttpSession session){
 		Member member = (Member) session.getAttribute("member");
 		List<Shop> alarmShop = new ArrayList<Shop>();
 		
-		List<Integer> shopIdxes = itemService.getAlarm(memberService.getMeberIdx(member));
-		for (int idx : shopIdxes) {
-			alarmShop.add(shopService.getShopByIdx(idx));
+		List<Alarm> shopIdxes = itemService.getAlarm(memberService.getMeberIdx(member));
+		for (Alarm idx : shopIdxes) {
+			alarmShop.add(shopService.getShopByIdx(idx.getShopIdx()));
 		}
 		
 		return alarmShop;
+	}
+	
+	/*
+	 * 읽은 알람 삭제
+	 */
+	@DeleteMapping("deleteReadAlarm")
+	public void deleteReadAlarm(@RequestBody Shop shop, HttpSession session) {
+		itemService.deleteReadAlarm(shop, (Member)session.getAttribute("member"));
 	}
 	
 	

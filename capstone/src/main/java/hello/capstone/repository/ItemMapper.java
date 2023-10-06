@@ -8,7 +8,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import hello.capstone.dto.Alarm;
 import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
+import hello.capstone.dto.Shop;
 
 @Mapper
 public interface ItemMapper {
@@ -25,5 +28,7 @@ public interface ItemMapper {
 	
 	void deleteTimeoutAlarm();
 	
-	List<HashMap<String, Integer>> getAlarm(@Param("memberidx") int memberidx);
+	void deleteReadAlarm(@Param("shop") Shop shop, @Param("member") Member member);
+	
+	List<Alarm> getAlarm(@Param("memberidx") int memberidx);
 }

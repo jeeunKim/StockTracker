@@ -32,13 +32,19 @@
    </insert>
    
    <delete id="deleteTimeoutAlarm">
-        select *
+        delete 
 		from alarm
 		where TIMESTAMPDIFF(hour, regisdate, NOW()) >= 24;
    </delete>
+   
+   <delete id="deleteReadAlarm">
+        delete 
+		from alarm
+		where shopidx = #{shop.shopidx} and memberidx = #{member.memberidx}
+   </delete>
 	
-	<select id = "getAlarm" resultType="HashMap">
-		Select distinct shopidx
+	<select id = "getAlarm" resultType="Alarm">
+		Select *
 		from alarm
 		where memberidx = #{memberidx};
 	</select>

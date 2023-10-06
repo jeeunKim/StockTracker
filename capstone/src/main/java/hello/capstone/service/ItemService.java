@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import hello.capstone.dto.Alarm;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
+import hello.capstone.dto.Shop;
 import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.TimeSettingException;
@@ -75,9 +78,17 @@ public class ItemService {
 	/*
 	 * 알림 가져오기
 	 */
-	public List<Integer> getAlarm(int memberidx){
+	public List<Alarm> getAlarm(int memberidx){
 		return itemRepository.getAlarm(memberidx);
 	}
+	
+	/*
+	 * 읽은 알람 삭제
+	 */
+	public void deleteReadAlarm(Shop shop, Member member) {
+		itemRepository.deleteReadAlarm(shop, member);
+	}
+	
 	
 	
 	/*

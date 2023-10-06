@@ -9,7 +9,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import hello.capstone.dto.Alarm;
 import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
+import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,18 +70,19 @@ public class ItemRepository {
 	/*
 	 * 알림 가져오기
 	 */
-	public List<Integer> getAlarm(int memberidx) {
-		List<Integer> shopidxes = new ArrayList<Integer>();
-		List<HashMap<String, Integer>> shopIdxList = itemMapper.getAlarm(memberidx);
-		for (HashMap<String, Integer> map : shopIdxList) {
-		    Integer shopIdx = map.get("shopidx");
-		    shopidxes.add(shopIdx);
-		}    
-		return shopidxes;
+	public List<Alarm> getAlarm(int memberidx) {
 		
+		return itemMapper.getAlarm(memberidx);
+		   
 	}
 	
-	
+	/*
+	 * 읽은 알림 삭제
+	 */
+	public void deleteReadAlarm(Shop shop, Member member) {
+		itemMapper.deleteReadAlarm(shop, member);
+		
+	}
 	
 	/*
 	 * 24시간이 지난 알림 삭제
