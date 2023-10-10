@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.json.JSONArray;
@@ -21,10 +22,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import hello.capstone.dto.Coordinates;
 import hello.capstone.dto.Item;
+import hello.capstone.dto.Ratings;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.ItemRepository;
+import hello.capstone.repository.RatingsRepository;
 import hello.capstone.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +39,13 @@ public class ShopService {
 	
 	private final ShopRepository shopRepository;
 	private final ItemRepository itemRepository;
+	private final RatingsRepository ratingsRepository;
 	
 	@Value("${kakao.local.key}")
 	String kakaoLocalKey;
 	String uri = "https://dapi.kakao.com/v2/local/search/address.json";
 	
-	public boolean saveShop(Shop shop, String method) {
+public boolean saveShop(Shop shop, String method) {
 		
 		log.info("saveShop Start");
 		
@@ -206,4 +210,38 @@ public class ShopService {
 		return shopRepository.getShopByMember(memberidx);
 		
 	}
+	
+	 /*
+     * 별점 필터가 적용된 가게 조회
+     */
+    public List<Shop> runRatingFilter(double rating){
+   	 List<Shop> filteredShops = shopRepository.runRatingFilter(rating);
+   	 return filteredShops;
+    }
+    
+    /*
+     * 별점 추가하기
+     */
+    public boolean setRating(Ratings ratings) {
+   	 
+   	 int shopidx = ratings.getShopidx();
+   	 int memberidx = ratings.getMemberidx();
+   	 
+   	 if(ratingsRepository.existingRatings(shopidx, memberidx) == true) {
+   		 ratingsRepository.updateRatings(ratings);
+   	 }
+   	 else {
+   		 ratingsRepository.setRatings(ratings);
+   	 }
+   	 
+   	 Map ratings_info = ratingsRepository.getSumCount(shopidx);    	 
+   	 
+   	 Double sum = (Double) ratings_info.get("sum");
+   	 Double count = ((Long)ratings_info.get("count")).doubleValue();
+   	 
+   	 double tol_rating = sum / count;
+   	 
+   	 shopRepository.setRatings(shopidx,tol_rating);
+   	 return true;
+    }
 }

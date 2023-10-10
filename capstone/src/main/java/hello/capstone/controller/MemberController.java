@@ -55,6 +55,25 @@ public class MemberController {
 	}
 	
 	/*
+	 * 즐겨찾기 취소
+	 */
+	@DeleteMapping("/bookmark/delete")
+	public String bookmarkDelete(HttpSession session, @RequestBody Shop shop) {
+		Member member = (Member) session.getAttribute("member");
+		
+		log.info("member = {} ", member);
+		
+		int memberIdx = memberService.getMeberIdx(member);
+		int shopIdx = shopService.getShopIdx(shop);
+		
+		memberService.bookmarkDelete(memberIdx, shopIdx);
+		
+
+		return "/home_user";
+	}
+	
+	
+	/*
 	 * 즐겨찾기 목록 조회
 	 */
 	@GetMapping("/bookmark/check")

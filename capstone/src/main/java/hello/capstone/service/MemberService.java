@@ -55,6 +55,14 @@ public class MemberService {
 	}
 	
 	/*
+	 * 즐겨찾기 취소
+	 */
+	@Transactional
+	public void bookmarkDelete(int memberIdx, int shopIdx) {
+		memberRepository.bookmarkDelete(memberIdx, shopIdx);
+	}
+	
+	/*
 	 * 즐겨찾기한 가게들의 인덱스 조회 
 	 */
 	public List<Shop> getMyBookmarkedShop(int memberIdx) {

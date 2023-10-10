@@ -28,4 +28,8 @@ public interface ShopMapper {
    void modifyShop(Shop shop);
 
    Shop getShopByIdx(@Param("shopidx") int shopidx);
+   
+   List<Shop> runRatingFilter(double rating);
+   
+   void setRatings(@Param("shopidx") int shopidx, @Param("rating") double rating);
 }

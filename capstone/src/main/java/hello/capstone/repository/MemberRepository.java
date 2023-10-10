@@ -70,6 +70,14 @@ public class MemberRepository {
 	   
 	   memberMapper.bookmarkRegistraion(memberIdx, shopIdx);
    }
+   
+   /*
+    * 즐겨찾기 취소
+    */
+   public void bookmarkDelete(int memberIdx, int shopIdx) {
+	   
+	   memberMapper.bookmarkDelete(memberIdx, shopIdx);
+   }
   
    /*
     * 닉네임 변경

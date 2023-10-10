@@ -7,6 +7,14 @@
 		insert into bookmarks(memberidx, shopidx) values( #{memberidx}, #{shopidx} );
 	</insert>
 	
+	
+	<delete id="bookmarkDelete">
+		delete 
+		from bookmarks
+		where memberidx = #{memberidx} and shopidx = #{shopidx};
+	</delete>
+	
+	
 	<select id ="getMyBookmarkedShop" resultType ="hashmap">
 		SELECT s.*
 		FROM bookmarks b
