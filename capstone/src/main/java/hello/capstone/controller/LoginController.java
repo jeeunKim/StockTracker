@@ -126,6 +126,20 @@ public class LoginController {
     } 
     
     /*
+     * 아이디 찾기(이름, 휴대폰 인증 성공 후 실제로 아이디 정보 보여주기)
+     */
+    @GetMapping("/find_id")
+    public String showID(HttpServletRequest request) {
+       HttpSession session = request.getSession();
+       Member find_member = (Member)session.getAttribute("findid_member");
+       String id = find_member.getId();
+       log.info("find_member_ID = {}",id);
+       session.removeAttribute("findid_member");
+       return id;
+    }
+    
+    
+    /*
      * 비밀번호 찾기(인증 문자 확인)
      */
     @GetMapping("Pw_Code_verification")

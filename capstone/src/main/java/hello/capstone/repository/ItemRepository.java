@@ -71,7 +71,7 @@ public class ItemRepository {
 	 * 알림 가져오기
 	 */
 	public List<Alarm> getAlarm(int memberidx) {
-		
+		log.info("알람 = {} ", itemMapper.getAlarm(memberidx));
 		return itemMapper.getAlarm(memberidx);
 		   
 	}

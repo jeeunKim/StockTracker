@@ -47,17 +47,17 @@ public class ItemController {
     */
    @PostMapping("/register")
    public Item ItemRegistration(@RequestParam("image") MultipartFile Image,
-                           @RequestParam("shopidx") String sid,
-                           @RequestParam("itemName") String itemname,
-                           @RequestParam("cost") String ct,
-                           @RequestParam("salecost") String sct,
-                           @RequestParam("quantity") String qt,
-                           @RequestParam("category") String category,
-                           @RequestParam("itemnotice") String itemnotice,
-                           @RequestParam("endtime") String et,
-                           @RequestParam("starttime") String st,
-                           HttpSession session
-                           ) throws IllegalStateException, IOException, ParseException {
+	                           @RequestParam("shopidx") String sid,
+	                           @RequestParam("itemName") String itemname,
+	                           @RequestParam("cost") String ct,
+	                           @RequestParam("salecost") String sct,
+	                           @RequestParam("quantity") String qt,
+	                           @RequestParam("category") String category,
+	                           @RequestParam("itemnotice") String itemnotice,
+	                           @RequestParam("endtime") String et,
+	                           @RequestParam("starttime") String st,
+	                           HttpSession session
+	                           ) throws IllegalStateException, IOException, ParseException {
       
       log.info("shopidx = {}", sid);
       

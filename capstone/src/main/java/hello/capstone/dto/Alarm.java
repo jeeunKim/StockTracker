@@ -13,4 +13,9 @@ public class Alarm {
 	private int memberIdx;
 	private int shopIdx;
 	private Timestamp regisdate;
+
+	public Alarm() {
+		
+	}
 }
+

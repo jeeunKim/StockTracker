@@ -1,6 +1,10 @@
 package hello.capstone.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.tuple.Pair;
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
@@ -166,16 +171,29 @@ public class MemberController {
 	 * 알람 가져오기
 	 */
 	@GetMapping("/getAlarm")
-	public List<Shop> getAlarm(HttpSession session){
+	public List<Pair<Shop, Integer>> getAlarm(HttpSession session){
 		Member member = (Member) session.getAttribute("member");
-		List<Shop> alarmShop = new ArrayList<Shop>();
+		List<Pair<Shop, Integer>> alarmList = new ArrayList<Pair<Shop, Integer>>();
 		
-		List<Alarm> shopIdxes = itemService.getAlarm(memberService.getMeberIdx(member));
-		for (Alarm idx : shopIdxes) {
-			alarmShop.add(shopService.getShopByIdx(idx.getShopIdx()));
+		
+		List<Alarm> alarms = itemService.getAlarm(memberService.getMeberIdx(member));
+		for (Alarm alarm : alarms) {
+			Shop alarmShop = shopService.getShopByIdx(alarm.getShopIdx());
+			int before = getHowBefore(alarm.getRegisdate());
+			//<즐겨찾기한 가게>와 <아이템이 몇시간전에 올라왔는지> Pair
+			Pair<Shop, Integer> shopAndBefore = Pair.of(alarmShop, before);
+			alarmList.add(shopAndBefore);	
 		}
 		
-		return alarmShop;
+		// Integer 크기 순으로 오름차순 정렬
+	    Collections.sort(alarmList, new Comparator<Pair<Shop, Integer>>() {
+	        @Override
+	        public int compare(Pair<Shop, Integer> pair1, Pair<Shop, Integer> pair2) {
+	            return pair1.getRight().compareTo(pair2.getRight());
+	        }
+	    });
+		
+		return alarmList;
 	}
 	
 	/*
@@ -186,6 +204,24 @@ public class MemberController {
 		itemService.deleteReadAlarm(shop, (Member)session.getAttribute("member"));
 	}
 	
+	
+//----------------------------------------------------------------------------------------------------------
+	
+	
+	/*
+	 * 아이템등록시간과 현재 시간의 차이. (몇시간 전에 올라온 아이템인지)
+	 */
+	private int getHowBefore(Timestamp regisdate) {
+		//MySql의 Timestamp의 타임존을 반영
+		Timestamp newRegisdate = new Timestamp(regisdate.getTime() - (9 * 60 * 60 * 1000));
+
+		Date now = new Date();
+        Timestamp current = new Timestamp(now.getTime());
+        
+        long before = (current.getTime() - newRegisdate.getTime())/1000/60/60;
+        
+        return (int)before;
+	}
 	
 }
 

@@ -138,15 +138,15 @@ public class LoginService {
 	}
 	
 	/*
-	 * 인증 메시지
-	 */
-	public SingleMessageSentResponse sendMessage(String phone, String code) {
-		
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCS9UG2XED3DLI5I", "TZKJX9RAOQBJO4AW3AWH1HJII4FVV83S", "https://api.coolsms.co.kr");
-		
-		Message message = new Message();
+    * 인증 메시지
+    */
+   public SingleMessageSentResponse sendMessage(String phone, String code) {
+      
+      DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSRAEZQIIMYGVDM", "Z8VBFEFGTR9FIY47NF42GEK8UUKCKUKG", "https://api.coolsms.co.kr");
+      
+      Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01077359350");
+        message.setFrom("01092592260");
         message.setTo(phone);
         message.setText("[재고30]인증번호 " + code + "를 입력하세요.");
 
@@ -154,7 +154,7 @@ public class LoginService {
         log.info("sendMessageResponse={}", response);
 
         return response;
-	}
+   }
 	
 	
 	
