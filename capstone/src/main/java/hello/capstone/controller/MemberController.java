@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.lang3.tuple.Pair;
 
+import hello.capstone.dto.AlarmWithBefore;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import hello.capstone.dto.Alarm;
@@ -167,13 +168,14 @@ public class MemberController {
 		return "login";
 	}
 	
+	
 	/*
 	 * 알람 가져오기
 	 */
 	@GetMapping("/getAlarm")
-	public List<Pair<Shop, Integer>> getAlarm(HttpSession session){
+	public List<AlarmWithBefore> getAlarm(HttpSession session){
 		Member member = (Member) session.getAttribute("member");
-		List<Pair<Shop, Integer>> alarmList = new ArrayList<Pair<Shop, Integer>>();
+		List<AlarmWithBefore> alarmList = new ArrayList<AlarmWithBefore>();
 		
 		
 		List<Alarm> alarms = itemService.getAlarm(memberService.getMeberIdx(member));
@@ -181,20 +183,20 @@ public class MemberController {
 			Shop alarmShop = shopService.getShopByIdx(alarm.getShopIdx());
 			int before = getHowBefore(alarm.getRegisdate());
 			//<즐겨찾기한 가게>와 <아이템이 몇시간전에 올라왔는지> Pair
-			Pair<Shop, Integer> shopAndBefore = Pair.of(alarmShop, before);
-			alarmList.add(shopAndBefore);	
+			alarmList.add(new AlarmWithBefore(alarmShop, before));	
 		}
 		
 		// Integer 크기 순으로 오름차순 정렬
-	    Collections.sort(alarmList, new Comparator<Pair<Shop, Integer>>() {
-	        @Override
-	        public int compare(Pair<Shop, Integer> pair1, Pair<Shop, Integer> pair2) {
-	            return pair1.getRight().compareTo(pair2.getRight());
-	        }
-	    });
+        Collections.sort(alarmList, new Comparator<AlarmWithBefore>() {
+            @Override
+            public int compare(AlarmWithBefore shop1, AlarmWithBefore shop2) {
+                return Integer.compare(shop1.getBefore(), shop2.getBefore());
+            }
+        });
 		
 		return alarmList;
 	}
+	
 	
 	/*
 	 * 읽은 알람 삭제

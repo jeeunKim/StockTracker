@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import hello.capstone.dto.Response;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
+import hello.capstone.exception.NullContentException;
+import hello.capstone.exception.NullTitleException;
 import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SendMessageException;
@@ -98,18 +100,30 @@ public class ExceptionManager {
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
-	//(12) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+	//(12) 기존에 만들어둔 에러(InvalidPhoneNumberException)가 발생시 동작
 	@ExceptionHandler(InvalidPhoneNumberException.class)
 	public ResponseEntity<?> InvalidPhoneNumberExceptionHandler(InvalidPhoneNumberException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
-	//(13) 기존에 만들어둔 에러(TimeSettingException)가 발생시 동작
+	//(13) 기존에 만들어둔 에러(InvalidEmailException)가 발생시 동작
 	@ExceptionHandler(InvalidEmailException.class)
 	public ResponseEntity<?> InvalidEmailExceptionHandler(InvalidEmailException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
-	}	
+	}
+	//(12) 기존에 만들어둔 에러(NullTitleException)가 발생시 동작
+	@ExceptionHandler(NullTitleException.class)
+	public ResponseEntity<?> NullTitleExceptionHandler(NullTitleException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(13) 기존에 만들어둔 에러(NullContentException)가 발생시 동작
+	@ExceptionHandler(NullContentException.class)
+	public ResponseEntity<?> NullContentExceptionHandler(NullContentException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
 			
 		
 		
