@@ -10,6 +10,7 @@ import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
 import hello.capstone.exception.NullContentException;
 import hello.capstone.exception.NullTitleException;
+import hello.capstone.exception.QuantityException;
 import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.SendMessageException;
@@ -19,6 +20,7 @@ import hello.capstone.exception.TimeSettingException;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.CodeVerificationException;
 import hello.capstone.exception.FindPwException;
+import hello.capstone.exception.InquiryException;
 import hello.capstone.exception.InvalidEmailException;
 import hello.capstone.exception.InvalidPhoneNumberException;
 //import hello.capstone.exception.CodeVerificationException;
@@ -112,15 +114,27 @@ public class ExceptionManager {
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
-	//(12) 기존에 만들어둔 에러(NullTitleException)가 발생시 동작
+	//(14) 기존에 만들어둔 에러(NullTitleException)가 발생시 동작
 	@ExceptionHandler(NullTitleException.class)
 	public ResponseEntity<?> NullTitleExceptionHandler(NullTitleException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
-	//(13) 기존에 만들어둔 에러(NullContentException)가 발생시 동작
+	//(15) 기존에 만들어둔 에러(NullContentException)가 발생시 동작
 	@ExceptionHandler(NullContentException.class)
 	public ResponseEntity<?> NullContentExceptionHandler(NullContentException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(16) 기존에 만들어둔 에러(QuantityException)가 발생시 동작
+	@ExceptionHandler(QuantityException.class)
+	public ResponseEntity<?> QuantityExceptionHandler(QuantityException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}	
+	//(17) 기존에 만들어둔 에러(InquiryException)가 발생시 동작
+	@ExceptionHandler(InquiryException.class)
+	public ResponseEntity<?> InquiryExceptionHandler(InquiryException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}

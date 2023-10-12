@@ -22,7 +22,9 @@ public enum ErrorCode {
 	INVALID_PHONE_NUMBER(HttpStatus.CONFLICT, "휴대폰 번호는 '-'을 제외한 11자이어야 합니다."),
 	INVALID_EMAIL_ID(HttpStatus.CONFLICT, "올바르지 않은 이메일형식의 아이디입니다."),
 	NULL_TITLE(HttpStatus.CONFLICT, "제목을 입력하세요."),
-	NULL_CONTENT(HttpStatus.CONFLICT, "내용을 입력하세요.");
+	NULL_CONTENT(HttpStatus.CONFLICT, "내용을 입력하세요."),
+	EXCESS_QUANTITY(HttpStatus.CONFLICT, "예약하고자하는 양이 남아있는 수량을 초과하였습니다"),
+	EXIST_ANSWER(HttpStatus.CONFLICT, "답변이 존재하여 더 이상 수정 할 수 없습니다.");
 	
 	
 	private HttpStatus status;
