@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,6 +52,21 @@ public class ManagerRepository {
 	}
 	
 	
+	//-----------------------------------------------------------------------------
+	/*
+	 * 소셜 별 회원 수 조회
+	 */
+	public int getMemeberCountBySocial(String social) {
+		return managerMapper.getMemeberCountBySocial(social);
+	}
+	
+	/*
+	 * 별점 별 Shop 조회
+	 */
+	public List<Shop> getShopByRating(double rating){
+		
+		return managerMapper.getShopByRating(rating);
+	}
 	
 	
 }

@@ -43,4 +43,22 @@
 		
 		order by noticedate;
 	</select>
+	
+	
+	<select id = "getMemeberCountBySocial">
+		select count(*)
+		
+		from member
+		
+		where social = #{social};
+		
+	</select>
+	
+	<select id = "getShopByRating" resultType ="Shop">
+		select *
+		
+		from shop
+		
+		where #{rating} &lt;= rating and rating &lt; #{rating}+1 ; 
+	</select>
 </mapper>

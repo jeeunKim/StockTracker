@@ -187,16 +187,7 @@ public class ShopController {
        return allShops;
     }
     
-    /*
-     * 별점 추가
-     */
-//    @PostMapping("/setRating")
-//    public String setRating(@RequestBody Ratings ratings) {
-//    	
-//    	shopService.setRating(ratings);
-//    	return "";
-//    } 
-    
+  
     /*
      * 별점 추가
      */

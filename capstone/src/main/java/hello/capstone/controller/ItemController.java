@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -134,12 +135,12 @@ public class ItemController {
 		   					 @RequestParam("name") String name,
 		   					 @RequestParam("phone") String phone) {
 	   
-	   int memberidx = Integer.parseInt(mi);
-	   int shopidx = Integer.parseInt(si);
-	   int itemidx = Integer.parseInt(ii);
+	   int memberIdx = Integer.parseInt(mi);
+	   int shopIdx = Integer.parseInt(si);
+	   int itemIdx = Integer.parseInt(ii);
 	   int number = Integer.parseInt(num);
 	   
-	   Reservation reservation = new Reservation(0,memberidx,shopidx,itemidx,number,null,false);
+	   Reservation reservation = new Reservation(0,memberIdx,shopIdx,itemIdx,number,null,false);
 	   
 	   itemService.reservation(reservation, shopname, itemname, name, phone);
 	   return "";
@@ -151,9 +152,9 @@ public class ItemController {
    @PostMapping("/reservation/confirm")
    public String confirm(@RequestParam("reservationidx") String ridx) {
 	   
-	   int reservationidx = Integer.parseInt(ridx);
+	   int reservationIdx = Integer.parseInt(ridx);
 	   
-	   itemService.reservationConfirm(reservationidx);
+	   itemService.reservationConfirm(reservationIdx);
 	   
 	   return "";
    }
@@ -168,14 +169,43 @@ public class ItemController {
 		   				@RequestParam("itemidx") String iidx,
 		   				@RequestParam("number") String num) {
 	   
-	   int reservationidx = Integer.parseInt(ridx);
-	   int itemidx = Integer.parseInt(iidx);
+	   int reservationIdx = Integer.parseInt(ridx);
+	   int itemIdx = Integer.parseInt(iidx);
 	   int number = Integer.parseInt(num);
 	   
-	   itemService.reservationCancel(reservationidx, itemidx, number, name, phone);
+	   itemService.reservationCancel(reservationIdx, itemIdx, number, name, phone);
 	   
 	   return "";
    }
+   
+   
+   /*
+    *  예약 내역 확인
+    */
+   @GetMapping("/reservation/check")
+   public List<Pair<Shop, Item>> reservationCheck(@RequestParam("memberIdx") String memberidx){
+	   List<Pair<Shop, Item>> reservedShopAndItem = new ArrayList<Pair<Shop, Item>>();
+	   //Member member = (Member) session.getAttribute("member");		   
+	   int memberIdx = Integer.parseInt(memberidx);
+	   List<Item> items = itemService.getReservationItem(memberIdx);
+	   
+	   for (Item item : items) {
+		   
+		   Shop shop = shopService.getShopByItemIdx(item.getItemidx());
+		   Pair<Shop, Item> pair = Pair.of(shop, item);
+		   reservedShopAndItem.add(pair);
+		   
+	   }
+	   
+	   return reservedShopAndItem;
+   }
+   
+   
+   
+   
+   
+   
+   //---------------------------------------------------------------------------------------------------
    
    /*
     * String을 Timestamp로 변환하는 함수

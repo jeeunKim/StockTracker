@@ -3,6 +3,7 @@ package hello.capstone.controller;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.AlarmWithBefore;
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Shop;
 import hello.capstone.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +81,9 @@ public class ManagerController {
 		return managerService.noticeReadAll();
 	}
 	
-	
+	/*
+	 * 공지사항 알림 가져오기
+	 */
 	@GetMapping("/notice/getalarm")
 	public List<AlarmWithBefore> getNoticeAlarm(){
 		List<AlarmWithBefore> alarmNotices = new ArrayList<AlarmWithBefore>();
@@ -108,6 +112,51 @@ public class ManagerController {
 	
 	
 	//-----------------------------------------------------------------------------------------------
+	
+	/*
+	 * 소셜(kakao, naver), 일반 회원의 수 통계
+	 */
+	@GetMapping("/member/count")
+	public HashMap<String, Integer> memberCount(){
+		HashMap<String, Integer> numberOfMembersBySocial = new HashMap<String, Integer>();
+		
+		int kakao = managerService.getMemeberCountBySocial("kakao");
+		numberOfMembersBySocial.put("kakao", kakao);
+		
+		int naver = managerService.getMemeberCountBySocial("naver");
+		numberOfMembersBySocial.put("naver", naver);
+		
+		int normal = managerService.getMemeberCountBySocial("normal");
+		numberOfMembersBySocial.put("normal", normal);
+		
+		return numberOfMembersBySocial;
+				
+	}
+	
+	/*
+	 * 각 별점대별 shop 조회
+	 */
+	@GetMapping("/shop/count")
+	public HashMap<Integer, List<Shop>> ShopCount(){
+		HashMap<Integer, List<Shop>> numberOfShopsByRating = new HashMap<Integer, List<Shop>>();
+		
+		numberOfShopsByRating.put(0, managerService.getShopByRating(0));
+		
+		numberOfShopsByRating.put(1, managerService.getShopByRating(1));
+		
+		numberOfShopsByRating.put(2, managerService.getShopByRating(2));
+		
+		numberOfShopsByRating.put(3, managerService.getShopByRating(3));
+		
+		numberOfShopsByRating.put(4, managerService.getShopByRating(4));
+		
+		/*
+		 * 별점 5점 마이바티스 동적 ㅜ현하셈
+		 */
+		return numberOfShopsByRating;
+				
+	}
+	
 }
 
 

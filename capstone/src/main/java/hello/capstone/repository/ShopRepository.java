@@ -53,6 +53,10 @@ public class ShopRepository {
 		
 	}
 	
+	public Shop getShopByItemIdx(int itemidx) {
+		return shopMapper.getShopByItemIdx(itemidx);
+	}
+	
 	/*
 	 * shop Mark표시 테스트 (모든 가게)
 	 */

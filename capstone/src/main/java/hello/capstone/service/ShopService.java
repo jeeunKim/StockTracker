@@ -194,14 +194,16 @@ public class ShopService {
 	}
 	
 	public int getShopIdx(Shop shop) {
-		int idx = shopRepository.getShopIdx(shop);
-		return idx;
+		return shopRepository.getShopIdx(shop);
 	}
 	
 	public Shop getShopByIdx(int shopidx) {
 		return shopRepository.getShopByIdx(shopidx);
 	}
 	
+	public Shop getShopByItemIdx(int itemidx) {
+		return shopRepository.getShopByItemIdx(itemidx);
+	}
 	
 	/*
 	 * 상업자 버전

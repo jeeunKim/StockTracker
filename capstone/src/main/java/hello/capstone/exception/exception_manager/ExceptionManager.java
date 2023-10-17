@@ -9,6 +9,7 @@ import hello.capstone.dto.Response;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
 import hello.capstone.exception.NullContentException;
+import hello.capstone.exception.NullIdException;
 import hello.capstone.exception.NullTitleException;
 import hello.capstone.exception.QuantityException;
 import hello.capstone.exception.SaveItemException;
@@ -135,6 +136,12 @@ public class ExceptionManager {
 	//(17) 기존에 만들어둔 에러(InquiryException)가 발생시 동작
 	@ExceptionHandler(InquiryException.class)
 	public ResponseEntity<?> InquiryExceptionHandler(InquiryException e){
+	   return ResponseEntity.status(e.getErrorCode().getStatus())
+	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
+	}
+	//(18) 기존에 만들어둔 에러(NullIdException)가 발생시 동작
+	@ExceptionHandler(NullIdException.class)
+	public ResponseEntity<?> NullIdExceptionHandler(NullIdException e){
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}

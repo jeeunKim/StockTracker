@@ -20,6 +20,13 @@
 		select * from shop where shopidx = #{shopidx};
 	</select>
 	
+	<select id="getShopByItemIdx" resultType = "Shop">
+		select s.* 
+		from shop s
+		join item i on i.shopidx = s.shopidx
+		where i.itemidx = #{itemidx};
+	</select>
+	
 	<select id = "getShops" resultType = "Shop">
 		select distinct s.*
 		from shop s

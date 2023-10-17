@@ -137,6 +137,12 @@ public class ItemRepository {
 		itemMapper.checkTrust(time);
 	}
 	
+	/*
+	 * 예약 상품 조회
+	 */
+	public List<Item> getReservationItem(int memberIdx){
+		return itemMapper.getReservationItem(memberIdx);
+	}
 	
 	
 }

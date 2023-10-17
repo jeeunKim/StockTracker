@@ -2,10 +2,14 @@ package hello.capstone.dto;
 
 import java.sql.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Member {
+	
+	private int memberIdx;
 	private String id;
 	private String pw;
 	private String name;
@@ -20,18 +24,6 @@ public class Member {
 		
 	}
 
-	public Member(String id, String pw, String name, String nickname, String phone, String social, String role,
-			Date redate, String trust) {
-		super();
-		this.id = id;
-		this.pw = pw;
-		this.name = name;
-		this.nickname = nickname;
-		this.phone = phone;
-		this.social = social;
-		this.role = role;
-		this.redate = redate;
-		this.trust = trust;
-	}
+	
 	
 }

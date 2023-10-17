@@ -129,7 +129,7 @@ public class LoginService {
 	 */
 	public Member login(String id, String pw) {
 		
-		
+		idCheck(id);
 		Member userMember = memberRepository.findById(id,"normal");
 		passwordCheck(userMember, pw);
 		
@@ -163,10 +163,17 @@ public class LoginService {
  *private 메소드
  *----------------------------------------------------------------------------------------------------- 	
  */
-	
+   
+   //아이디 존재 duqn 확인
+ 	private void idCheck(String id) {
+ 		
+ 		if(Objects.isNull(memberRepository.findById(id, "normal"))) {
+ 	    	  throw new LogInException(ErrorCode.NULL_USER_ID, null);
+ 	      }
+ 	
+ 	}
 	//비밀번호 일치 확인
 	private void passwordCheck(Member userMember, String pw) {
-		boolean pwCheck = true;
 		if(!(userMember.getPw().equals(pw))) {
 	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
 	      }

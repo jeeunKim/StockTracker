@@ -142,6 +142,15 @@ public class ItemService {
 	}
 	
 	/*
+	 * 예약 상품 조회
+	 */
+	public List<Item> getReservationItem(int memberIdx) {
+		
+		return itemRepository.getReservationItem(memberIdx);
+	}
+	
+	
+	/*
 	 * 인증 메시지
 	 */
 	public SingleMessageSentResponse sendMessage(String phone, String content) {

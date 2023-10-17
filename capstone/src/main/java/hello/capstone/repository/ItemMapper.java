@@ -48,4 +48,6 @@ public interface ItemMapper {
 	void increaseQuantity(int itemidx, int number);
 	
 	void checkTrust(String time);
+	
+	List<Item> getReservationItem(@Param("memberIdx") int memberIdx);
 }

@@ -61,21 +61,20 @@ public class MemberController {
 	}
 	
 	/*
-	 * 즐겨찾기 취소
+	 * 즐겨찾기 삭제
 	 */
-	@DeleteMapping("/bookmark/delete")
-	public String bookmarkDelete(HttpSession session, @RequestBody Shop shop) {
+	@PostMapping("/bookmark/delete")
+	public List<Shop> bookmarkDelete(HttpSession session, @RequestBody List<Shop> shops) {
 		Member member = (Member) session.getAttribute("member");
 		
-		log.info("member = {} ", member);
 		
-		int memberIdx = memberService.getMeberIdx(member);
-		int shopIdx = shopService.getShopIdx(shop);
+		for (Shop shop : shops) {
+			log.info("Shop={}", shop);
+			memberService.bookmarkDelete(member.getMemberIdx(), shop.getShopidx());
+        }
 		
-		memberService.bookmarkDelete(memberIdx, shopIdx);
-		
-
-		return "/home_user";
+		List<Shop> MyBookmarkedShops = bookmarkCheck(session);
+		return MyBookmarkedShops;
 	}
 	
 	
@@ -86,12 +85,8 @@ public class MemberController {
 	public List<Shop> bookmarkCheck(HttpSession session) {
 		Member member = (Member) session.getAttribute("member");
 		
-		int memberIdx = memberService.getMeberIdx(member);
 		
-		List<Shop> MyBookmarkedShops = memberService.getMyBookmarkedShop(memberIdx);
-		log.info("MyBookmarkedShops = {} ", MyBookmarkedShops);
-		
-		
+		List<Shop> MyBookmarkedShops = memberService.getMyBookmarkedShop(member.getMemberIdx());
 		
 		return MyBookmarkedShops;
 	}

@@ -22,6 +22,7 @@ public class Shop {
 	private Date registrationDate;
 	private String longitude;
 	private String latitude;
+	private double rating;
 	
 	public Shop() {
 		

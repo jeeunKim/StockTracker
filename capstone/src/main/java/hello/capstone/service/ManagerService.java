@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Shop;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.NullContentException;
 import hello.capstone.exception.NullTitleException;
@@ -87,6 +88,25 @@ public class ManagerService {
 	public List<Notice> noticeReadAll(){
 		return managerRepository.noticeReadAll();
 	}
+	
+	//----------------------------------------------------------------------------
+	
+	/*
+	 * 소셜 별 회원 수
+	 */
+	public int getMemeberCountBySocial(String social) {
+		return managerRepository.getMemeberCountBySocial(social);
+	}
+	
+	
+	/*
+	 * 별점 별 Shop조회
+	 */
+	public List<Shop> getShopByRating(int rating){
+		double dRating = (double)rating;
+		return managerRepository.getShopByRating(dRating);
+	}
+	
 }
 
 

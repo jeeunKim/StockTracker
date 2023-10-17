@@ -97,5 +97,13 @@
      			 where i.endtime &lt;= #{time}) as c
 			 where c.confirm = false);
 	</update>
+	
+	<select id="getReservationItem" resultType ="Item">
+		select i.*
+		from item i
+		join reservation r on r.itemidx = i.itemidx
+		where r.memberidx = #{memberIdx};	
+	
+	</select>
 
 </mapper>

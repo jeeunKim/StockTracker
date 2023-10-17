@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Shop;
 
 @Mapper
 public interface ManagerMapper {
@@ -24,4 +25,9 @@ public interface ManagerMapper {
 
 	//모든공지사항 읽기
 	List<Notice> noticeReadAll();
+	
+	//카카오 회원 수 조회
+	int getMemeberCountBySocial(String social);
+
+	List<Shop> getShopByRating(double rating);
 }
