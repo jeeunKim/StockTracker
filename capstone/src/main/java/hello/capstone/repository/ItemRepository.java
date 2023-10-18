@@ -56,15 +56,6 @@ public class ItemRepository {
 		return itemMapper.getItems(shopidx); 
 	}
 	
-	/*
-	 * 아이템 삭제
-	 */
-	public void deleteItemEndtime(Timestamp now) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = sdf.format(now);
-		itemMapper.deleteItemEndtime(time);
-	}
-	
 
 	/*
 	 * 알림 등록
@@ -134,7 +125,8 @@ public class ItemRepository {
 	public void checkTrust(Timestamp now) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = sdf.format(now);
-		itemMapper.checkTrust(time);
+		itemMapper.decreaseTrust(time);
+		itemMapper.setConfirmToFalse(time);
 	}
 	
 	/*

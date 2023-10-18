@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +55,36 @@ public class ManagerRepository {
 	}
 	
 	
-	//-----------------------------------------------------------------------------
+	//사용자 관리-----------------------------------------------------------------------------
+	
+	/*
+	 * 역할 별 사용자 조회
+	 */
+	public List<Member> getMemberByRole(String role){
+		return managerMapper.getMemberByRole(role);
+	}
+	
+	/*
+	 * 실패한 예약 조회(신뢰도가 깎인 예약)
+	 */
+	public List<Reservation> getFailedReservation(int memberIdx){
+		return managerMapper.getFailedReservation(memberIdx);
+	}
+	
+	/*
+	 * 신뢰도가 깎인 가게에서 예약한 상품
+	 */
+	public List<Item> getFailedItems(int shopIdx){
+		return managerMapper.getFailedItems(shopIdx);
+	}
+	
+	
+	
+	//상업자 관리 ----------------------------------------------------------------------------
+	
+	
+	
+	//통계----------------------------------------------------------------------------------
 	/*
 	 * 소셜 별 회원 수 조회
 	 */

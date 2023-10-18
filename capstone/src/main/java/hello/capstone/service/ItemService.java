@@ -170,18 +170,17 @@ public class ItemService {
 	}
 	
 	/*
-	 * 1분마다 실행되는 cron표현식 item들에 마감시간을 확인하여 시간이 지나면 자동 삭제
+	 * 1분마다 실행되는 cron표현식 item들에 마감시간을 확인하여 member의 trust 변경
 	 */
 	@Scheduled(cron ="0 * * * * *")
-	public void deleteItemEndtime() {
-		log.info("item @Scheduled 실행");
-		LocalDateTime now = LocalDateTime.now();
-		Timestamp timestamp = Timestamp.valueOf(now);
+    public void checkItemEndtime() {
+       log.info("item @Scheduled 실행");
+       LocalDateTime now = LocalDateTime.now();
+       Timestamp timestamp = Timestamp.valueOf(now);
 
-		itemRepository.checkTrust(timestamp);
-        // 현재 시간보다 이전인 아이템 삭제
-		itemRepository.deleteItemEndtime(timestamp);
-	}
+       // 현재 시간보다 이전인 아이템 
+       itemRepository.checkTrust(timestamp);
+    }
 	
 	/*
 	 * 1분마다 실행되는 cron표현식 24시간만 유지되는 알림쪽지 

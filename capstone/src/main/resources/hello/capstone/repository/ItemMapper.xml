@@ -4,14 +4,14 @@
 <mapper namespace="hello.capstone.repository.ItemMapper">
 
 	<insert id="saveitem">
-      insert into item(shopidx, itemname, itemnotice, cost, salecost, quantity, image, category, starttime, endtime) 
-      values(#{shopidx},#{itemname}, #{itemnotice}, #{cost},#{salecost},#{quantity},#{image},#{category}, #{starttime}, #{endtime});
+        insert into item(shopidx, itemname, itemnotice, cost, salecost, quantity, image, category, starttime, endtime) 
+        values(#{shopidx},#{itemname}, #{itemnotice}, #{cost},#{salecost},#{quantity},#{image},#{category}, #{starttime}, #{endtime});
     </insert>
 
 
 	<update id="modifyItem">
-      update item set shopidx = #{shopidx}, itemname = #{itemname}, itemnotice = #{itemnotice}, cost = #{cost}, salecost = #{salecost}, quantity = #{quantity}, image = #{image}, category = #{category}, starttime = #{starttime}, endtime = #{endtime}
-      where itemidx = #{itemidx}   
+        update item set shopidx = #{shopidx}, itemname = #{itemname}, itemnotice = #{itemnotice}, cost = #{cost}, salecost = #{salecost}, quantity = #{quantity}, image = #{image}, category = #{category}, starttime = #{starttime}, endtime = #{endtime}
+        where itemidx = #{itemidx}   
     </update>
    
 	<select id="findByShopIdx_itemname" resultType="item">
@@ -19,15 +19,10 @@
 	</select>
 
 	<select id = "getItems" resultType = "Item">
-		select * 
-		from item 
-		where shopidx = #{shopidx};
-	</select>
-	
-	<delete id="deleteItemEndtime" >
-	    DELETE FROM item
-	    WHERE endtime &lt;= #{time};
-	</delete>
+        select * 
+        from item 
+        where shopidx = #{shopidx} and endtime &gt;= NOW();
+   </select>
 	
 
 	<insert id="pushAlarm">
@@ -72,7 +67,7 @@
 	</update>
 	
 	<update id = "reservationConfirm">
-		update reservation set confirm = true
+		update reservation set confirm = 'true'
 		where reservationidx = #{ridx};
 	</update>
 	
@@ -86,16 +81,22 @@
 		where itemidx = #{itemidx}; 
 	</update>
 	
-	<update id = "checkTrust">
-		update member as m
-		set trust = trust - 1
-		where m.memberidx in
-			(select memberidx from 
-				(select memberidx, confirm 
-	 			 from reservation as r left join item as i 
-     			 on r.itemidx = i.itemidx
-     			 where i.endtime &lt;= #{time}) as c
-			 where c.confirm = false);
+	<update id="decreaseTrust">
+	    UPDATE member
+	    SET trust = trust - 1
+	    WHERE memberidx IN (
+	        SELECT r.memberidx
+	        FROM reservation AS r
+	        LEFT JOIN item AS i ON r.itemidx = i.itemidx
+	        WHERE i.endtime &lt;= #{time} AND r.confirm = 'wait'
+	    );
+	</update>
+	
+	<update id="setConfirmToFalse">
+	    UPDATE reservation AS r
+	    INNER JOIN item AS i ON r.itemidx = i.itemidx
+	    SET r.confirm = 'false'
+	    WHERE i.endtime &lt;= #{time} AND r.confirm = 'wait';
 	</update>
 	
 	<select id="getReservationItem" resultType ="Item">

@@ -30,7 +30,8 @@
 	<select id = "getShops" resultType = "Shop">
 		select distinct s.*
 		from shop s
-		inner join item i ON s.shopidx = i.shopidx;
+		inner join item i ON s.shopidx = i.shopidx
+		where i.endtime &gt;= now();
 	</select>
 	
 	<select id = "getShopByMember" resultType = "hashmap">
@@ -46,8 +47,10 @@
 	</update>
 	
 	<select id = "runPriceFilter" resultType = "Shop">
-		select * from shop where shopidx in (
-			select distinct shopidx from item where salecost &lt;= #{price}
+		select * 
+		from shop 
+		where shopidx in (
+			select distinct shopidx from item where salecost &lt;= #{price} and endtime &lt;= #{now()}
 		);
 	</select>
 	

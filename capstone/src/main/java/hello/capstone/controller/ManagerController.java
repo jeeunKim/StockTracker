@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.AlarmWithBefore;
+import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
+import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import hello.capstone.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -111,8 +115,53 @@ public class ManagerController {
 	}
 	
 	
-	//-----------------------------------------------------------------------------------------------
+	// 사용자 관리------------------------------------------------------------------------------------------
 	
+	/*
+	 * 일반 사용자 조회
+	 */
+	@GetMapping("/member/user")
+	public List<Member> getUserMember(){
+		
+		return managerService.getMemberByRole("사용자");
+	}
+	
+	/*
+	 * 신뢰도를 깎은 가게와 예약 날짜 조회
+	 */
+	@GetMapping("/member/user/trustmanage")
+	public List<Pair<Shop, String>> trustManage(@RequestParam("memberIdx") String memberidx){
+		int memberIdx = Integer.parseInt(memberidx);
+		List<Pair<Shop, String>> ShopAndDate = managerService.getFailedReservation(memberIdx);
+		
+		return ShopAndDate;
+	}
+	
+	/*
+	 * 신뢰도를 깎은 가게에서 어떤 아이템을 예약했었는지 조회
+	 */
+	@GetMapping("/member/user/trustmanage/item")
+	public List<Item> failItem(@RequestParam("shopIdx") String shopidx){
+		int shopIdx = Integer.parseInt(shopidx);
+		
+		
+		return managerService.getFailedItems(shopIdx);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//상업자 관리---------------------------------------------------------------------------------------------
+	
+	
+	
+	
+	//통계------------------------------------------------------------------------------------------------
 	/*
 	 * 소셜(kakao, naver), 일반 회원의 수 통계
 	 */
@@ -150,12 +199,10 @@ public class ManagerController {
 		
 		numberOfShopsByRating.put(4, managerService.getShopByRating(4));
 		
-		/*
-		 * 별점 5점 마이바티스 동적 ㅜ현하셈
-		 */
-		return numberOfShopsByRating;
-				
+		return numberOfShopsByRating;		
 	}
+	
+	
 	
 }
 

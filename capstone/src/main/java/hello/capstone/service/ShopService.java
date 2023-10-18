@@ -47,8 +47,6 @@ public class ShopService {
 	
 	public boolean saveShop(Shop shop, String method) {
 		
-		log.info("saveShop Start");
-		
 		if(method.equals("register")) {
 			//.ifPresent()는 memberRepository.findById 실행 시 오류 던져주기 위함
 			Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
@@ -188,8 +186,6 @@ public class ShopService {
 	 * shop mark 표시 (아이템 등록된 가게만 가져오기)
 	 */
 	public List<Shop> getShops(){
-		
-		
 		return shopRepository.getShops();
 	}
 	

@@ -54,11 +54,49 @@
 		
 	</select>
 	
+	
 	<select id = "getShopByRating" resultType ="Shop">
 		select *
 		
 		from shop
 		
-		where #{rating} &lt;= rating and rating &lt; #{rating}+1 ; 
+		<where>
+			<choose>
+				<when test ="rating+1 == 5">
+					and #{rating} &lt;= rating and rating &lt;= #{rating}+1 ; 
+				</when>
+				
+				<otherwise>
+					and #{rating} &lt;= rating and rating &lt; #{rating}+1 ; 
+				</otherwise>
+			
+			</choose>
+		</where> 
 	</select>
+	
+	<select id="getMemberByRole">
+		select * 
+		from member
+		where role = #{role}
+		order by name, role asc;
+	</select>
+	
+	<select id="getFailedReservation" resultType = "Reservation">
+		select *
+		from reservation
+		where memberidx = #{memberIdx} and confirm = 'false';
+	</select>
+	
+	<select id = "getFailedItems" resultType = "Item">
+		select *
+		from item
+		where itemidx in 
+		(select itemidx from reservation where confirm = 'false' and shopidx = #{shopIdx});
+	</select>
+	
+	
+	
+	
+	
+	
 </mapper>

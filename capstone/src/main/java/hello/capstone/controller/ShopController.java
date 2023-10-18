@@ -110,7 +110,7 @@ public class ShopController {
 	
 	
 	/*
-	 * 지도 shop marker 표시 (모든 shop)
+	 * 지도 shop marker 표시 (상품이 등록되어있는 모든 shop)
 	 */
 	@GetMapping("/ShopMarker")
 	public List<Shop> ShopAddress(HttpSession session){

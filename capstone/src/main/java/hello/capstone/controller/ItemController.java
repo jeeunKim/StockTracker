@@ -140,7 +140,7 @@ public class ItemController {
 	   int itemIdx = Integer.parseInt(ii);
 	   int number = Integer.parseInt(num);
 	   
-	   Reservation reservation = new Reservation(0,memberIdx,shopIdx,itemIdx,number,null,false);
+	   Reservation reservation = new Reservation(0,memberIdx,shopIdx,itemIdx,number,null,"wait");
 	   
 	   itemService.reservation(reservation, shopname, itemname, name, phone);
 	   return "";
