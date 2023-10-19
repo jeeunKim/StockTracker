@@ -81,10 +81,11 @@
 		order by name, role asc;
 	</select>
 	
-	<select id="getFailedReservation" resultType = "Reservation">
-		select *
-		from reservation
-		where memberidx = #{memberIdx} and confirm = 'false';
+	<select id="getFailedReservation" resultType = "Map">
+		select s.*, r.redate
+		from shop s
+		join reservation r on s.shopidx = r.shopidx
+		where r.memberidx = 3 and r.confirm = 'false';
 	</select>
 	
 	<select id = "getFailedItems" resultType = "Item">
@@ -95,8 +96,78 @@
 	</select>
 	
 	
+	<select id = "getShopinfoByBusiness">
+   		select *
+   		from shop
+   		where owneridx = #{owneridx}
+   		order by shopname asc;
+   	</select>
+   	
+   	<select id = "getIteminfoByBusiness">
+   		select *
+   		from item
+   		where shopidx = #{shopidx}
+   		order by itemname asc;
+   	</select>
+   	
+   	<select id = "getShopinfo">
+   		select *
+   		from shop
+ 		order by shopname asc;
+   	</select>
+   	
+   	<select id="getIteminfo" resultType="map">
+        select i.*, sum(case when r.confirm &lt;&gt; 'false' then r.number else 0 end) as reservation_count from item as i
+        left join reservation as r
+        on i.itemidx = r.itemidx
+        where i.shopidx = #{shopidx}
+        group by i.itemidx
+        order by i.itemname asc;
+    </select>
+   	
+   	<select id="getReservationMember" resultType="Member">
+   		select m.* from member as m
+		left join reservation as r
+		on m.memberidx = r.memberidx
+		where r.shopidx = #{shopidx} and r.confirm = "true";
+   	</select>
 	
 	
+	<select id = "getItemAll" resultType ="Map">
+		select i.*, s.shopname
+		from item i
+		inner join shop s on i.shopidx = s.shopidx
+		order by i.itemname asc , i.starttime asc;
 	
+	</select>
+	
+	
+	<select id ="searchMemberByName">
+		select *
+		from member
+		where name like concat('%', #{name}, '%')
+		order by name asc, redate asc;
+	
+	</select>
+	
+	<select id="searchShopByName">
+		select s.*, m.name
+		from shop s
+		inner join member m
+		on s.owneridx = m.memberidx
+		where s.shopname like concat('%', #{shopName}, '%')
+		order by s.shopname asc, s.registrationDate asc;
+	
+	</select>
+	
+	<select id="searchItemByName">
+		select i.*, s.shopname
+		from item i
+		inner join shop s
+		on i.shopidx = s.shopidx
+		where i.itemname like concat('%', #{itemName}, '%')
+		order by i.itemname asc, i.starttime asc;
+	
+	</select>
 	
 </mapper>

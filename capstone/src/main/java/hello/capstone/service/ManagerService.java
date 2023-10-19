@@ -6,10 +6,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
@@ -109,23 +112,10 @@ public class ManagerService {
 	/*
 	 * 실패한 예약 조회(신뢰도가 깍인 예약)
 	 */
-	public List<Pair<Shop, String>> getFailedReservation(int memberIdx){
-		List<Pair<Shop, String>> shopAndDate = new ArrayList<Pair<Shop, String>>();
-		List<Reservation> failedReservations = managerRepository.getFailedReservation(memberIdx);
-		
-		//예약 내역에 있는 Shop가져오기, 예약 날짜 가져오기
-		for (Reservation fReservation : failedReservations) {
-			Shop shop = shopRepository.getShopByIdx(fReservation.getShopidx());
-			
-			Date reDate = fReservation.getRedate();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 날짜 형식 지정
-	        String reserveDate = sdf.format(reDate);
-	        
-	        Pair<Shop, String> pair = Pair.of(shop, reserveDate);
-			shopAndDate.add(pair);
-		}
-		
-		return shopAndDate;
+	public List<Map<String, Object>> getFailedReservation(int memberIdx){
+		List<Map<String, Object>> failedReservations = managerRepository.getFailedReservation(memberIdx);
+
+		return failedReservations;
 		
 	}
 	
@@ -138,12 +128,90 @@ public class ManagerService {
 	}
 	
 	
-	//사업자 관리----------------------------------------------------------------------------------
+	
+	//상업자 관리---------------------------------------------------------------------------------------
+	
+	/*
+	 *  해당 상업자의 가게 정보 조회
+	 */
+	public List<Shop> getShopinfoByBusiness(int owneridx){
+		return managerRepository.getShopinfoByBusiness(owneridx);
+	}
+	
+	/*
+	 * 해당 가게에 등록했던 상품 조회
+	 */
+	public List<Item> getIteminfoByBusiness(int shopidx){
+		return managerRepository.getIteminfoByBusiness(shopidx);
+	}
+	
+	//-----------------------------------------------------------------------------------------------
+	
+	
+	//가게 분석---------------------------------------------------------------------------------------
+
+	/*
+	 * 모든 가게 정보 조회
+	 */
+	public List<Shop> getShopinfo(){
+		return managerRepository.getShopinfo();
+	}
+	
+	/*
+	 * 해당 가게에 등록된 상품과 상품별 예약자 수 조회
+	 */
+	public List<Map<String, Object>> getIteminfo(int shopidx){
+		List<Map<String, Object>> iteminfo = managerRepository.getIteminfo(shopidx);
+		return iteminfo;
+	}
+
+	/*
+	 * 해당 가게에서 상품을 구매해간 고객 정보 
+	 */
+	public List<Member> getReservationMember(int shopidx){
+		return managerRepository.getReservationMember(shopidx);
+	}
+
+	
+	//검색---------------------------------------------------------------------------------------------------
+	
+	/*
+	 * 모든 아이템 나열
+	 */
+	public List<Map<String, Object>> getItemAll(){
+		
+		return managerRepository.getItemAll();
+	}
+	
+	
+	/*
+	 * 이름으로 회원검색 - 이름순, 날짜순
+	 */
+	public List<Member> searchMemberByName(String name){
+		return managerRepository.searchMemberByName(name);
+	}
+	
+	
+	/*
+	 * 이름으로 가게검색 - 이름순, 날짜순
+	 */
+	public List<Map<String, Object>> searchShopByName(String shopName){
+		return managerRepository.searchShopByName(shopName);
+	}
 	
 	
 	
-	
+	/*
+	 * 이름으로 아이템검색 - 이름순, 날짜순
+	 */
+	public List<Map<String, Object>> searchItemByName( String itemName){
+		
+		return managerRepository.searchItemByName(itemName);
+	}
+		
+		
 	//통계---------------------------------------------------------------------------------------
+	
 	/*
 	 * 소셜 별 회원 수
 	 */
