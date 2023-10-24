@@ -12,7 +12,9 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,6 +121,17 @@ public class ItemController {
    }
    
    /*
+    * 아이템 삭제
+    */
+   @DeleteMapping("/delete")
+   public void itemDelete(@ModelAttribute Item item) {
+	   itemService.itemDelete(item);
+   }
+   
+   
+   
+   
+   /*
     * 상품 예약
     */
    @PostMapping("/reservation")
@@ -139,6 +152,7 @@ public class ItemController {
 	   Reservation reservation = new Reservation(0,memberIdx,shopIdx,itemIdx,number,null,"wait");
 	   
 	   itemService.reservation(reservation, shopname, itemname, name, phone);
+	   
 	   return "";
    }
    

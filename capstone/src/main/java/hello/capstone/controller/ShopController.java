@@ -132,24 +132,23 @@ public class ShopController {
 	 */
 	@GetMapping("/getShop/filter")
     public List<Shop> getShopFilterDistance(@RequestParam("latitude") String myLatitude,
-                                  @RequestParam("longitude") String myLongitude,
-                                  @RequestParam(value = "distance", defaultValue = "0") String distance,
-                                  @RequestParam(value = "unit", defaultValue = "m") String unit,
-                                  @RequestParam(value = "price", defaultValue = "0") String itemprice,
-                                  @RequestParam(value = "time", defaultValue = "0") String time,
-                                  @RequestParam(value = "rating", defaultValue = "0") String shoprating){
+		                                    @RequestParam("longitude") String myLongitude,
+		                                    @RequestParam(value = "distance", defaultValue = "0") String distance,
+		                                    @RequestParam(value = "unit", defaultValue = "m") String unit,
+		                                    @RequestParam(value = "price", defaultValue = "0") String itemprice,
+		                                    @RequestParam(value = "time", defaultValue = "0") String time,
+		                                    @RequestParam(value = "rating", defaultValue = "0") String shoprating){
       
 
        List<Shop> allShops = shopService.getShops();
       
-       log.info("allShops = {}", allShops);
        double latitude = Double.parseDouble(myLatitude);
        double longitude = Double.parseDouble(myLongitude);
        double dist = Double.parseDouble(distance);
        int price = Integer.parseInt(itemprice);
        double rating = Double.parseDouble(shoprating);
-       long minute = Long.parseLong(time);
-
+       long minute = Long.parseLong(time) * 60;
+       
        
        if(dist != 0) {
           List<Shop> distanceFilteredShops = shopService.runDistanceFilter(latitude, longitude, dist, unit);
@@ -189,11 +188,9 @@ public class ShopController {
      */
     @GetMapping("/setRating")
     public String setRating(@RequestParam int shopidx,
-                      @RequestParam int memberidx,
-                      @RequestParam int rating) {
-       
-       
-       
+	                        @RequestParam int memberidx,
+	                        @RequestParam int rating) {
+
        Ratings ratings = new Ratings(0,shopidx,memberidx,rating);
        
        shopService.setRating(ratings);

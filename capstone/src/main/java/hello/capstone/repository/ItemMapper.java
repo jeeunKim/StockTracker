@@ -22,6 +22,10 @@ public interface ItemMapper {
 	
 	List<Item> getItems(@Param("shopidx") int shopidx);
 	
+	void itemDelete(Item item);
+	
+	int reservationCheck(Item item);
+	
 	void pushAlarm(@Param("shopidx") int shopidx);
 	
 	void deleteTimeoutAlarm();

@@ -24,6 +24,17 @@
         where shopidx = #{shopidx} and endtime &gt;= NOW();
    </select>
 	
+	<delete id ="itemDelete">
+		delete
+		from item
+		where itemidx = #{itemidx};
+	</delete>
+	<select id = "reservationCheck">
+		select count(*)
+		from reservation 
+		where itemidx = #{itemidx};
+	
+	</select>
 
 	<insert id="pushAlarm">
         insert into alarm (memberidx, shopidx,regisdate)

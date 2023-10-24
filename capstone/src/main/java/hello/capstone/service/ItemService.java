@@ -17,6 +17,7 @@ import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.ExistReservationException;
 import hello.capstone.exception.QuantityException;
 import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.TimeSettingException;
@@ -79,6 +80,19 @@ public class ItemService {
 		items = itemRepository.getItems(shopIdx);
 		
 		return items;
+		
+	}
+	
+	/*
+	 * 아이템 삭제
+	 */
+	public void itemDelete(Item item) {
+		// 아이템을 예약한 사람이 있는지 확인
+		if(itemRepository.reservationCheck(item) != 0){
+			throw new ExistReservationException(ErrorCode.EXIST_RESERVATION_PERSON,null);
+		}
+		itemRepository.itemDelete(item);
+		
 		
 	}
 	

@@ -112,6 +112,14 @@ public class ShopService {
 		return filteredShops;
 	}
 	
+	 /*
+     * 별점 필터가 적용된 가게 조회
+     */
+    public List<Shop> runRatingFilter(double rating){
+   	 	List<Shop> filteredShops = shopRepository.runRatingFilter(rating);
+   	 return filteredShops;
+    }
+    
 	/*
 	 * 마감시간 필터가 적용된 가게 조회
 	 */
@@ -209,13 +217,7 @@ public class ShopService {
 		
 	}
 	
-	 /*
-     * 별점 필터가 적용된 가게 조회
-     */
-    public List<Shop> runRatingFilter(double rating){
-   	 List<Shop> filteredShops = shopRepository.runRatingFilter(rating);
-   	 return filteredShops;
-    }
+	
     
     /*
      * 별점 추가하기

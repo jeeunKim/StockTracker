@@ -55,6 +55,20 @@ public class ItemRepository {
 	
 
 	/*
+	 * 아이템 삭제
+	 */
+	public void itemDelete(Item item) {
+		 itemMapper.itemDelete(item);
+	}
+	 
+    /*
+    * 예약자가 있는 상품인지 확인
+    */
+	public int reservationCheck(Item item) {
+		return itemMapper.reservationCheck(item);
+	}
+	 
+	/*
 	 * 알림 등록
 	 */
 	public void pushAlarm(int shopidx) {
