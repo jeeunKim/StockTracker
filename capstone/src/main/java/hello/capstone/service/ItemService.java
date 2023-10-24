@@ -152,20 +152,24 @@ public class ItemService {
 	/*
 	 * 상품 예약 취소
 	 */
-	public void reservationCancel(int ridx, int itemidx, int number, String name, String phone) {
-		itemRepository.reservationCancel(ridx, itemidx, number);
+	public void reservationCancel(List<Map<String, Object>> reservationinfo, String name, String phone) {
 		
+		for(Map<String, Object> info : reservationinfo) {
+			int ridx = (int)info.get("reservationidx");
+			int itemidx = (int)info.get("itemidx");
+			int number = (int)info.get("number");
+			itemRepository.reservationCancel(ridx, itemidx, number);
+		}
 		String content = "[재고30]\n" + name + "님 정상적으로 예약이 취소되었습니다.\n";
 		sendMessage(phone, content);
 	}
 	
-	/*
-	 * 예약 상품 조회
-	 */
-	public List<Item> getReservationItem(int memberIdx) {
-		
-		return itemRepository.getReservationItem(memberIdx);
-	}
+    /*
+     * 예약 상품 리스트 조회
+     */
+    public List<Map<String, Object>> getReservations(int memberidx){
+    	return itemRepository.getReservations(memberidx);
+    }
 	
 	
 	/*

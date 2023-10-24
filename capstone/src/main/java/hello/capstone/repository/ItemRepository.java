@@ -131,6 +131,13 @@ public class ItemRepository {
 	}
 	
 	/*
+     * 예약 상품 리스트 조회
+     */
+    public List<Map<String, Object>> getReservations(int memberidx){
+    	return itemMapper.getReservations(memberidx);
+    }
+    
+	/*
 	 * 예약자 실제 상품 결제 확인하여 신뢰점수 차감
 	 */
 	public void checkTrust(Timestamp now) {
@@ -140,12 +147,7 @@ public class ItemRepository {
 		itemMapper.setConfirmToFalse(time);
 	}
 	
-	/*
-	 * 예약 상품 조회
-	 */
-	public List<Item> getReservationItem(int memberIdx){
-		return itemMapper.getReservationItem(memberIdx);
-	}
+	
 	
 	
 }

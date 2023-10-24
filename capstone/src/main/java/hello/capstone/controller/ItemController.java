@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import hello.capstone.dto.Item;
+import hello.capstone.dto.Member;
 import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import hello.capstone.service.ItemService;
@@ -173,45 +175,33 @@ public class ItemController {
     * 상품 예약 취소
     */
    @PostMapping("/reservation/cancel")
-   public String cancel(@RequestParam("reservationidx") String ridx,
-		   				@RequestParam("name") String name,
-		   				@RequestParam("phone") String phone,
-		   				@RequestParam("itemidx") String iidx,
-		   				@RequestParam("number") String num) {
+   public String cancel(HttpSession session, @RequestBody List<Map<String, Object>> reservationinfo) {
 	   
-	   int reservationIdx = Integer.parseInt(ridx);
-	   int itemIdx = Integer.parseInt(iidx);
-	   int number = Integer.parseInt(num);
+	   log.info("reservationinfo = {}", reservationinfo);
 	   
-	   itemService.reservationCancel(reservationIdx, itemIdx, number, name, phone);
+	   for(Map<String, Object> info : reservationinfo) {
+		   log.info("reservationidx = {}",info.get("reservationidx"));
+	   }
 	   
+	   Member member = (Member) session.getAttribute("member");
+	   String phone = member.getPhone();
+	   String name = member.getName();
+	   
+	   log.info("phone = {}", phone);
+	   log.info("name = {}", name);
+	   
+	   itemService.reservationCancel(reservationinfo, name, phone);
 	   return "";
    }
    
-   
    /*
-    *  예약 내역 확인
+    * 예약 상품 리스트 조회
     */
-   @GetMapping("/reservation/check")
-   public List<Pair<Shop, Item>> reservationCheck(@RequestParam("memberIdx") String memberidx){
-	   List<Pair<Shop, Item>> reservedShopAndItem = new ArrayList<Pair<Shop, Item>>();
-	   //Member member = (Member) session.getAttribute("member");		   
-	   int memberIdx = Integer.parseInt(memberidx);
-	   List<Item> items = itemService.getReservationItem(memberIdx);
-	   
-	   for (Item item : items) {
-		   
-		   Shop shop = shopService.getShopByItemIdx(item.getItemidx());
-		   Pair<Shop, Item> pair = Pair.of(shop, item);
-		   reservedShopAndItem.add(pair);
-		   
-	   }
-	   
-	   return reservedShopAndItem;
+   @GetMapping("/reservation/getreservations")
+   public List<Map<String, Object>> getReservations(HttpSession session){
+	   Member member = (Member) session.getAttribute("member");
+	   return itemService.getReservations(member.getMemberIdx());
    }
-   
-   
-   
    
    
    

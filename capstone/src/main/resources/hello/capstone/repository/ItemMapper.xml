@@ -22,17 +22,18 @@
         select * 
         from item 
         where shopidx = #{shopidx} and endtime &gt;= NOW();
-   </select>
+    </select>
 	
 	<delete id ="itemDelete">
 		delete
 		from item
 		where itemidx = #{itemidx};
 	</delete>
+	
 	<select id = "reservationCheck">
 		select count(*)
 		from reservation 
-		where itemidx = #{itemidx};
+		where itemidx = #{itemidx} and confirm != 'true';
 	
 	</select>
 
@@ -88,6 +89,14 @@
 		delete from reservation
 		where reservationidx = #{ridx};
 	</delete>
+	
+	<select id="getReservations" resultType="map">
+		SELECT r.reservationidx, s.shopname, s.shopaddress, i.itemidx, i.itemname, i.image, r.number
+		FROM reservation r
+		JOIN shop s ON r.shopidx = s.shopidx
+		JOIN item i ON r.itemidx = i.itemidx
+		WHERE r.memberidx = #{memberidx} and r.confirm = "wait";
+	</select>
 	
 	<update id = "increaseQuantity">
 		update item set quantity = quantity + #{number}

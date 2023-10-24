@@ -134,7 +134,7 @@ public class ShopController {
     public List<Shop> getShopFilterDistance(@RequestParam("latitude") String myLatitude,
 		                                    @RequestParam("longitude") String myLongitude,
 		                                    @RequestParam(value = "distance", defaultValue = "0") String distance,
-		                                    @RequestParam(value = "unit", defaultValue = "m") String unit,
+		                                    @RequestParam(value = "unit", defaultValue = "km") String unit,
 		                                    @RequestParam(value = "price", defaultValue = "0") String itemprice,
 		                                    @RequestParam(value = "time", defaultValue = "0") String time,
 		                                    @RequestParam(value = "rating", defaultValue = "0") String shoprating){

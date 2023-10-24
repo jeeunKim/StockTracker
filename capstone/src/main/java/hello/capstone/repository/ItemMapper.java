@@ -44,7 +44,9 @@ public interface ItemMapper {
 	
 	void reservationDelete(int ridx);
 	
-	void increaseQuantity(int itemidx, int number);
+	List<Map<String, Object>> getReservations(int memberidx);
+	
+	void increaseQuantity(@Param("itemidx")int itemidx, @Param("number")int number);
 	
 	void decreaseTrust(String time);
 	
