@@ -4,17 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
-import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ManagerRepository {
@@ -54,6 +50,13 @@ public class ManagerRepository {
 	 */
 	public List<Notice> noticeReadAll(){
 		return managerMapper.noticeReadAll();
+	}
+	
+	/*
+	 * 공지사항 알림
+	 */
+	public List<Map<String, Object>> noticeGetAlarm(){
+		return managerMapper.noticeGetAlarm();
 	}
 	
 	

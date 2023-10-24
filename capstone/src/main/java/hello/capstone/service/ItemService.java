@@ -1,8 +1,9 @@
 package hello.capstone.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,19 +13,15 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import hello.capstone.dto.Alarm;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.QuantityException;
 import hello.capstone.exception.SaveItemException;
-import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.TimeSettingException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.ItemRepository;
-import hello.capstone.repository.MemberRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -39,7 +36,6 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 public class ItemService {
 
 	private final ItemRepository itemRepository;
-	private final MemberRepository memberRepository;
 	
 	/*
 	 * 아이템 등록
@@ -89,11 +85,19 @@ public class ItemService {
 	/*
 	 * 알림 가져오기
 	 */
-	public List<Alarm> getAlarm(int memberidx){
-		return itemRepository.getAlarm(memberidx);
+	public List<Map<String, Object>> getAlarm(int memberidx){
+		List<Map<String, Object>> alarms = itemRepository.getAlarm(memberidx);
+		
+		for (Map<String, Object> alarm : alarms) {
+			int howBefore = getHowBefore((Timestamp)alarm.get("before"));	
+			alarm.replace("before", howBefore);
+		}
+		
+		return alarms;
 	}
 	
 	/*
+	 * 
 	 * 읽은 알람 삭제
 	 */
 	public void deleteReadAlarm(Shop shop, Member member) {
@@ -190,6 +194,27 @@ public class ItemService {
 		log.info("alarm @Scheduled 실행");
 		itemRepository.deleteTimeoutAlarm();
 	}
+	
+	
+	//----------------------------------------------------------------------------------------------------------
+	
+	
+	/*
+	 * 아이템등록시간과 현재 시간의 차이. (몇시간 전에 올라온 아이템인지)
+	 */
+	private int getHowBefore(Timestamp regisdate) {
+		//MySql의 Timestamp의 타임존을 반영
+		Timestamp newRegisdate = new Timestamp(regisdate.getTime() - (9 * 60 * 60 * 1000));
+		
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+        Timestamp current = new Timestamp(now.getTime());
+        
+        long before = (current.getTime() - newRegisdate.getTime())/1000/60/60;
+        
+        return (int)before;
+	}
+		
 	
 	
 }

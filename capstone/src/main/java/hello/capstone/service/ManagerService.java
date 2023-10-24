@@ -1,39 +1,27 @@
 package hello.capstone.service;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.time.format.DateTimeFormatter;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
-import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.NullContentException;
 import hello.capstone.exception.NullTitleException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.ManagerRepository;
-import hello.capstone.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ManagerService {
 	
 	private final ManagerRepository managerRepository;
-	private final ShopRepository shopRepository;
 
 	/*
 	 * 공지사항 CREATE
@@ -97,6 +85,26 @@ public class ManagerService {
 	 */
 	public List<Notice> noticeReadAll(){
 		return managerRepository.noticeReadAll();
+	}
+	
+	/*
+	 * 공지사항 알림
+	 */
+	public List<Map<String, Object>> noticeGetAlarm(){
+		List<Map<String, Object>> notices = managerRepository.noticeGetAlarm();
+		//24시간 이전에 올라온 공지사항만 가져오기
+		for(Map<String, Object> notice : notices) {
+			
+			LocalDateTime dateTime = LocalDateTime.now();
+			Timestamp timestamp = Timestamp.valueOf(dateTime);
+			//MySql의 타임존을 반영하여 9시간을 더해줌.
+			Timestamp now = new Timestamp(timestamp.getTime() + (9 * 60 * 60 * 1000));
+			//시간단위로 차이 구하기
+	        int before = (int) ((now.getTime() - ((Timestamp)notice.get("noticedate")).getTime()) / (1000 * 60 * 60));
+	        
+	        notice.put("before", before);
+		}
+		return notices;
 	}
 	
 	// 사용자 관리----------------------------------------------------------------------------

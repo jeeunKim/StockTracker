@@ -3,7 +3,6 @@ package hello.capstone.service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -11,12 +10,9 @@ import hello.capstone.dto.Inquiry;
 import hello.capstone.exception.InquiryException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.InquiryRepository;
-import hello.capstone.repository.MemberRepository;
-import hello.capstone.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @RequiredArgsConstructor
 @Service
 public class InquiryService {

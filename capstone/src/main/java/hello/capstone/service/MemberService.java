@@ -4,26 +4,20 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.FindPwException;
 import hello.capstone.exception.InvalidPhoneNumberException;
-//import hello.capstone.exception.FindPwException;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
-import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.MemberRepository;
 import hello.capstone.repository.ShopRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @RequiredArgsConstructor
 @Service
 public class MemberService {

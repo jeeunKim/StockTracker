@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Param;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
-import hello.capstone.dto.Reservation;
 import hello.capstone.dto.Shop;
 
 @Mapper
@@ -30,6 +29,8 @@ public interface ManagerMapper {
 	//모든공지사항 읽기
 	List<Notice> noticeReadAll();
 	
+	//공지사항 알림
+	List<Map<String, Object>> noticeGetAlarm();
 	
 	
 	

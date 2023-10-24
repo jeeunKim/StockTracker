@@ -2,14 +2,11 @@ package hello.capstone.repository;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import hello.capstone.dto.Alarm;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Reservation;
@@ -68,7 +65,7 @@ public class ItemRepository {
 	/*
 	 * 알림 가져오기
 	 */
-	public List<Alarm> getAlarm(int memberidx) {
+	public List<Map<String, Object>> getAlarm(int memberidx) {
 		return itemMapper.getAlarm(memberidx);
 		   
 	}

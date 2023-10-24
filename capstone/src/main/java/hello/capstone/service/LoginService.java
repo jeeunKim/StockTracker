@@ -180,12 +180,7 @@ public class LoginService {
 	
 	}
 	
-	//중복회원 검사
-	private Member duplicateCheck(Member member) {
-		Member findMember = memberRepository.findById(member.getId(),"normal");
-		
-		return findMember;
-	}
+	
 	//닉네임 임의의 random String
 	private String createRandomNickname() {
 		int randomNicknameLen = 8;

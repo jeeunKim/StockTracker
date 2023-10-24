@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
 
 @Mapper

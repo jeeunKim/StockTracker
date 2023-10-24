@@ -14,12 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.Inquiry;
 import hello.capstone.service.InquiryService;
-import hello.capstone.service.ItemService;
-import hello.capstone.service.ShopService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequestMapping("/inquiry")
 @RestController
 @RequiredArgsConstructor

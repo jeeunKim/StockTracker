@@ -44,10 +44,12 @@
 		where shopidx = #{shop.shopidx} and memberidx = #{member.memberidx}
     </delete>
 	
-	<select id = "getAlarm" resultType="Alarm">
-		Select *
-		from alarm
-		where memberidx = #{memberidx};
+	<select id = "getAlarm" resultType="Map">
+		select s.*, a.regisdate as 'before'
+		from shop s
+		inner join alarm a on s.shopidx = a.shopidx
+		where a.memberidx = #{memberidx}
+		order by a.regisdate asc;
 	</select>
 	
 	<select id = "getQuantity">

@@ -1,12 +1,8 @@
 package hello.capstone.controller;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.commons.lang3.tuple.Pair;
 
-import hello.capstone.dto.AlarmWithBefore;
+
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
-import hello.capstone.dto.Alarm;
-import hello.capstone.exception.LogInException;
-import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.ItemService;
 import hello.capstone.service.MemberService;
 import hello.capstone.service.ShopService;
@@ -168,30 +159,12 @@ public class MemberController {
 	 * 알람 가져오기
 	 */
 	@GetMapping("/getAlarm")
-	public List<AlarmWithBefore> getAlarm(HttpSession session){
-		Member member = (Member) session.getAttribute("member");
-		List<AlarmWithBefore> alarmList = new ArrayList<AlarmWithBefore>();
+	public List<Map<String, Object>> getAlarm(HttpSession session){
+		Member member = (Member) session.getAttribute("member");	
+		List<Map<String, Object>> alarms = itemService.getAlarm(memberService.getMeberIdx(member));
 		
-		
-		List<Alarm> alarms = itemService.getAlarm(memberService.getMeberIdx(member));
-		for (Alarm alarm : alarms) {
-			Shop alarmShop = shopService.getShopByIdx(alarm.getShopIdx());
-			int before = getHowBefore(alarm.getRegisdate());
-			//<즐겨찾기한 가게>와 <아이템이 몇시간전에 올라왔는지> Pair
-			alarmList.add(new AlarmWithBefore(alarmShop, before));	
-		}
-		
-		// Integer 크기 순으로 오름차순 정렬
-        Collections.sort(alarmList, new Comparator<AlarmWithBefore>() {
-            @Override
-            public int compare(AlarmWithBefore shop1, AlarmWithBefore shop2) {
-                return Integer.compare(shop1.getBefore(), shop2.getBefore());
-            }
-        });
-		
-		return alarmList;
+		return alarms;
 	}
-	
 	
 	/*
 	 * 읽은 알람 삭제
@@ -205,20 +178,7 @@ public class MemberController {
 //----------------------------------------------------------------------------------------------------------
 	
 	
-	/*
-	 * 아이템등록시간과 현재 시간의 차이. (몇시간 전에 올라온 아이템인지)
-	 */
-	private int getHowBefore(Timestamp regisdate) {
-		//MySql의 Timestamp의 타임존을 반영
-		Timestamp newRegisdate = new Timestamp(regisdate.getTime() - (9 * 60 * 60 * 1000));
 
-		Date now = new Date();
-        Timestamp current = new Timestamp(now.getTime());
-        
-        long before = (current.getTime() - newRegisdate.getTime())/1000/60/60;
-        
-        return (int)before;
-	}
 	
 }
 
