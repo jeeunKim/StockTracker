@@ -70,7 +70,7 @@ public class ManagerRepository {
 	}
 	
 	/*
-	 * 실패한 예약 조회(신뢰도가 깎인 예약)
+	 * 실패한 예약 조회(신뢰도가 깎인 예약) 깎은 가게와 횟수
 	 */
 	public List<Map<String, Object>> getFailedReservation(int memberIdx){
 		return managerMapper.getFailedReservation(memberIdx);
@@ -79,8 +79,8 @@ public class ManagerRepository {
 	/*
 	 * 신뢰도가 깎인 가게에서 예약한 상품
 	 */
-	public List<Item> getFailedItems(int shopIdx){
-		return managerMapper.getFailedItems(shopIdx);
+	public List<Map<String, Object>> getFailedItems(int shopIdx, int memberIdx){
+		return managerMapper.getFailedItems(shopIdx, memberIdx);
 	}
 	
 	

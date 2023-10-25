@@ -118,7 +118,7 @@ public class ManagerService {
 	}
 	
 	/*
-	 * 실패한 예약 조회(신뢰도가 깍인 예약)
+	 * 실패한 예약 조회(신뢰도가 깎인 예약) 깎은 가게와 횟수
 	 */
 	public List<Map<String, Object>> getFailedReservation(int memberIdx){
 		List<Map<String, Object>> failedReservations = managerRepository.getFailedReservation(memberIdx);
@@ -130,9 +130,9 @@ public class ManagerService {
 	/*
 	 * 신뢰도를 깎은 가게에서 어떤 아이템을 예약했었는지 조회
 	 */
-	public List<Item> getFailedItems(int shopIdx){
+	public List<Map<String, Object>> getFailedItems(int shopIdx, int memberIdx){
 		
-		return managerRepository.getFailedItems(shopIdx);
+		return managerRepository.getFailedItems(shopIdx, memberIdx);
 	}
 	
 	

@@ -106,7 +106,7 @@ public class ManagerController {
 	 * 신뢰도를 깎은 가게와 예약 날짜 조회
 	 */
 	@GetMapping("/member/user/trustmanage")
-	public List<Map<String, Object>>  trustManage(@RequestParam("memberIdx") String memberidx){
+	public List<Map<String, Object>> trustManage(@RequestParam("memberIdx") String memberidx){
 		int memberIdx = Integer.parseInt(memberidx);
 		
 		
@@ -117,11 +117,11 @@ public class ManagerController {
 	 * 신뢰도를 깎은 가게에서 어떤 아이템을 예약했었는지 조회
 	 */
 	@GetMapping("/member/user/trustmanage/item")
-	public List<Item> failItem(@RequestParam("shopIdx") String shopidx){
+	public List<Map<String, Object>> failItem(@RequestParam("shopIdx") String shopidx, @RequestParam("memberIdx") String memberidx  ){
 		int shopIdx = Integer.parseInt(shopidx);
+		int memberIdx = Integer.parseInt(memberidx);
 		
-		
-		return managerService.getFailedItems(shopIdx);
+		return managerService.getFailedItems(shopIdx,memberIdx);
 	}
 	
 

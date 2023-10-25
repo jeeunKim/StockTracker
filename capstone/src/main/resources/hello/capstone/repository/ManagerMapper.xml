@@ -82,17 +82,20 @@
 	</select>
 	
 	<select id="getFailedReservation" resultType = "Map">
-		select s.*, r.redate
+		select s.*, count(*) as duplicateCount, r.memberidx
 		from shop s
 		join reservation r on s.shopidx = r.shopidx
-		where r.memberidx = 3 and r.confirm = 'false';
+		where r.memberidx = #{memberIdx} and r.confirm = 'false'
+		group by r.shopidx
+		order by s.shopname asc ;
 	</select>
 	
-	<select id = "getFailedItems" resultType = "Item">
-		select *
-		from item
-		where itemidx in 
-		(select itemidx from reservation where confirm = 'false' and shopidx = #{shopIdx});
+	<select id = "getFailedItems" resultType = "Map">
+		select i.*, r.number, r.redate, r.confirm
+		from item i
+		join reservation r on i.itemidx = r.itemidx
+		where r.shopidx = #{shopIdx} and r.memberidx = #{memberIdx}
+		order by r.redate asc;
 	</select>
 	
 	

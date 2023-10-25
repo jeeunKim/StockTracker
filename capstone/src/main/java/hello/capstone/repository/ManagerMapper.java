@@ -50,11 +50,11 @@ public interface ManagerMapper {
 	//역할 별 사용자 조회
 	List<Member> getMemberByRole(String role);
 	
-	//실패한(신뢰도가 깍인 예약조회)
+	//실패한(신뢰도가 깍인 예약조회) 깎인 상품과 횟수
 	List<Map<String, Object>> getFailedReservation(int memberIdx);
 	
 	//신뢰도가 깎인 가게에서 예약한 상품
-	List<Item> getFailedItems(int shopIdx);
+	List<Map<String, Object>> getFailedItems(@Param("shopIdx") int shopIdx, @Param("memberIdx") int memberIdx);
 	
 	
 	

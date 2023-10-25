@@ -34,7 +34,7 @@ public class ShopController {
 	private String fileDir;
 	
 	@PostMapping("/shopRegistration")
-	public String shopRegistration(@RequestParam(value = "imageFilename", required = false) MultipartFile Image,
+	public void shopRegistration(@RequestParam(value = "imageFilename", required = false) MultipartFile Image,
 								   @RequestParam(value = "shopidx", defaultValue = "0") String sidx,
 			  					   @RequestParam("shopName") String shopName,
 			  					   @RequestParam("shopTel") String shopTel,
@@ -85,7 +85,7 @@ public class ShopController {
 		
 		shopService.saveShop(shop, method);
 		
-		return "/home_user";
+		
 	}
 	
 	/*
