@@ -79,10 +79,6 @@ public class ShopController {
 			shop.setShopAddress(shopAddress);
 		}
 		
-		
-		log.info("가게 파라미터={}",shop);
-		log.info("파일 파라미터={}",Image);
-		
 		shopService.saveShop(shop, method);
 		
 		
@@ -153,29 +149,25 @@ public class ShopController {
        if(dist != 0) {
           List<Shop> distanceFilteredShops = shopService.runDistanceFilter(latitude, longitude, dist, unit);
           if(distanceFilteredShops != null) {   
-             allShops.retainAll(distanceFilteredShops);
-             log.info("distanceFilteredShops = {}", distanceFilteredShops);   
+             allShops.retainAll(distanceFilteredShops); 
           }
        }   
        if(price != 0) {
           List<Shop> priceFilteredShops = shopService.runPriceFilter(price);
           if(priceFilteredShops != null) {   
              allShops.retainAll(priceFilteredShops);
-             log.info("priceFilteredShops= {}", priceFilteredShops);   
           }
        }
        if(minute != 0) {
            List<Shop> deadlineFilteredShops = shopService.runDeadlineFilter(minute);   
            if(deadlineFilteredShops != null) {   
-              allShops.retainAll(deadlineFilteredShops);
-              log.info("deadlineFilteredShops= {}", deadlineFilteredShops);   
+              allShops.retainAll(deadlineFilteredShops); 
            }
         }       
        if(rating != 0) {
     	   List<Shop> ratingFilteredShops = shopService.runRatingFilter(rating);
     	   if(ratingFilteredShops != null) {
     		   allShops.retainAll(ratingFilteredShops);
-    		   log.info("ratingFilteredShops = {}", ratingFilteredShops);
     	   }
        }
       

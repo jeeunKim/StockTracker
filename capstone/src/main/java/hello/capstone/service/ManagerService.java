@@ -23,7 +23,7 @@ public class ManagerService {
 	
 	private final ManagerRepository managerRepository;
 
-	/*
+    /*
 	 * 공지사항 CREATE
 	 */
 	public void noticeCreate(Notice notice) {
@@ -124,7 +124,6 @@ public class ManagerService {
 		List<Map<String, Object>> failedReservations = managerRepository.getFailedReservation(memberIdx);
 
 		return failedReservations;
-		
 	}
 	
 	/*
@@ -139,12 +138,14 @@ public class ManagerService {
 	
 	//상업자 관리---------------------------------------------------------------------------------------
 	
+	
 	/*
 	 *  해당 상업자의 가게 정보 조회
 	 */
 	public List<Shop> getShopinfoByBusiness(int owneridx){
 		return managerRepository.getShopinfoByBusiness(owneridx);
 	}
+	
 	
 	/*
 	 * 해당 가게에 등록했던 상품 조회
@@ -153,9 +154,7 @@ public class ManagerService {
 		return managerRepository.getIteminfoByBusiness(shopidx);
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	
-	
+
 	//가게 분석---------------------------------------------------------------------------------------
 
 	/*

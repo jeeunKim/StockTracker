@@ -167,8 +167,15 @@ public class ItemService {
     /*
      * 예약 상품 리스트 조회
      */
-    public List<Map<String, Object>> getReservations(int memberidx){
-    	return itemRepository.getReservations(memberidx);
+    public List<Map<String, Object>> getReservations(int memberidx , String confirm){
+    	return itemRepository.getReservations(memberidx, confirm);
+    }
+    
+    /*
+     * 상품 예약 취소,거부 (상업자)
+     */
+    public void reservationCancelBusiness(int reservationIdx) {
+    	itemRepository.reservationCancelBusiness(reservationIdx);
     }
 	
 	

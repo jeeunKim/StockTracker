@@ -59,7 +59,6 @@ public class ShopService {
 			shop.setRegistrationDate(registrationDate);
 		}
 
-		log.info("saveShop Middle");
 		
 		//주소로 경도, 위도 뽑아서 shop에 저장
 		String shop_address = shop.getShopAddress();
@@ -67,7 +66,6 @@ public class ShopService {
 		shop.setLongitude(cor.getX());
 		shop.setLatitude(cor.getY());
 		
-		log.info("shop info = {}", shop);
 		
 		return shopRepository.saveShop(shop,method);
 	}

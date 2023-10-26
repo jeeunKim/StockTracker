@@ -130,12 +130,21 @@ public class ItemRepository {
 		itemMapper.increaseQuantity(itemidx, number);
 	}
 	
+	
 	/*
      * 예약 상품 리스트 조회
      */
-    public List<Map<String, Object>> getReservations(int memberidx){
-    	return itemMapper.getReservations(memberidx);
+    public List<Map<String, Object>> getReservations(int memberidx,  String confirm){
+    	return itemMapper.getReservations(memberidx,confirm);
     }
+    
+    /*
+	 * 상품 예약 취소(상업자)
+	 */
+    public void reservationCancelBusiness(int reservationIdx) {
+    	itemMapper.reservationCancelBusiness(reservationIdx);
+    }
+    
     
 	/*
 	 * 예약자 실제 상품 결제 확인하여 신뢰점수 차감

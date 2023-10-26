@@ -5,13 +5,11 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -172,7 +170,7 @@ public class ItemController {
    }
    
    /*
-    * 상품 예약 취소
+    * 상품 예약 취소(사용자)
     */
    @PostMapping("/reservation/cancel")
    public String cancel(HttpSession session, @RequestBody List<Map<String, Object>> reservationinfo) {
@@ -195,12 +193,21 @@ public class ItemController {
    }
    
    /*
-    * 예약 상품 리스트 조회
+    * 예약 상품 리스트 조회(사용자) (대기중인 예약, 완료된 예약 따로)
     */
    @GetMapping("/reservation/getreservations")
-   public List<Map<String, Object>> getReservations(HttpSession session){
+   public List<Map<String, Object>> getReservations(@RequestParam("confirm") String confirm,HttpSession session){
 	   Member member = (Member) session.getAttribute("member");
-	   return itemService.getReservations(member.getMemberIdx());
+	   return itemService.getReservations(member.getMemberIdx(), confirm);
+   }
+   
+   /*
+    * 상품 예약 취소(상업자)
+    */
+   @DeleteMapping("/reservation/cancel/business")
+   public void reservationCancelBusiness(@RequestParam("reservationIdx") Integer reservationIdx) {
+	   itemService.reservationCancelBusiness(reservationIdx);
+	   
    }
    
    
