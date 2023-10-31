@@ -30,18 +30,15 @@ public class OAuthController {
 	 * 카카오 로그인 인가토큰 받고, 회원 정보 받아오기
 	 */
     @ResponseBody
-    @GetMapping("/kakao/oauth")
-    public HashMap<String, Object> getKakaoTokenAndInfo(@RequestParam String code) {
-        log.info("code={}",code);
-        
+    @PostMapping("/kakao/oauth")
+    public HashMap<String, Object> getKakaoTokenAndInfo(@RequestBody Map<String, String> codeMap) {
+        String code = codeMap.get("code");
         String accessToken = oauthService.getKakaoAccessToken(code);
         HashMap<String, Object> infos = oauthService.getUserInfo(accessToken);
         
         for(String infoKey : infos.keySet()){	
         	log.info("info = {}, {}",infoKey, infos.get(infoKey));
-        	
         }
-        log.info("acttn = {}", accessToken);  
         
         HashMap<String, Object> token = new HashMap<>();
         token.put("url", "/kakao/oauth/signUp");
@@ -56,12 +53,8 @@ public class OAuthController {
      * 카카오 - 받은 정보로 비회원이라면 회원가입
      */
     @PostMapping("/kakao/oauth/signUp")
-    public String kakaoSignUp(@RequestBody Member member , HttpServletRequest request) {
-    	log.info("name = {}", member.getName());
-    	log.info("id = {}", member.getId());
-    	
+    public String kakaoSignUp(@RequestBody Member member , HttpServletRequest request) {    	
     	member = loginService.kakaoSignUp(member);
-    	
     	
     	HttpSession session = request.getSession();
     	session.setAttribute("member", member);

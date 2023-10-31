@@ -106,6 +106,16 @@ public class ItemController {
       return item;
    }
    
+   
+   /*
+    * 아이템 삭제
+    */
+   @DeleteMapping("/delete")
+   public void itemDelete(@ModelAttribute Item item) {
+	   itemService.itemDelete(item);
+   }
+   
+   
    /*
     * 아이템 정보가져오기
     */
@@ -120,16 +130,7 @@ public class ItemController {
       return items;
    }
    
-   /*
-    * 아이템 삭제
-    */
-   @DeleteMapping("/delete")
-   public void itemDelete(@ModelAttribute Item item) {
-	   itemService.itemDelete(item);
-   }
-   
-   
-   
+    
    
    /*
     * 상품 예약

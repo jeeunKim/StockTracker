@@ -46,7 +46,7 @@ public interface ItemMapper {
 	
 	void reservationCancelBusiness(int reservationIdx);
 	
-	List<Map<String, Object>> getReservations(int memberidx, String confirm);
+	List<Map<String, Object>> getReservations(@Param("memberidx") int memberidx, @Param("confirm") String confirm);
 	
 	void increaseQuantity(@Param("itemidx")int itemidx, @Param("number")int number);
 	

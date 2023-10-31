@@ -91,7 +91,7 @@
 	</delete>
 	
 	<select id="getReservations" resultType="map">
-		SELECT r.reservationidx, s.shopname, s.shopaddress, i.itemidx, i.itemname, i.image, r.number
+		SELECT s.shopidx, r.reservationidx, s.shopname, s.shopaddress, i.itemidx, i.itemname, i.image, r.number
 		FROM reservation r
 		JOIN shop s ON r.shopidx = s.shopidx
 		JOIN item i ON r.itemidx = i.itemidx

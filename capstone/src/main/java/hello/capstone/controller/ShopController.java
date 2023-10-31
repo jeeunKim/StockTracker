@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,58 +31,89 @@ public class ShopController {
 	private final MemberService memberService;
 	private final ShopService shopService;
 	
-	@Value("${file.dir}")
-	private String fileDir;
 	
-	@PostMapping("/shopRegistration")
-	public void shopRegistration(@RequestParam(value = "imageFilename", required = false) MultipartFile Image,
-								   @RequestParam(value = "shopidx", defaultValue = "0") String sidx,
-			  					   @RequestParam("shopName") String shopName,
-			  					   @RequestParam("shopTel") String shopTel,
-			  					   @RequestParam(value = "shopAddress", required = false) String shopAddress,
-			  					   @RequestParam("promotionText") String promotionText,
-			  					   @RequestParam("shopWebsite") String shopWebsite,
-			  					   @RequestParam(value = "existingAddress", required = false) String existingAddress,
-			  					   @RequestParam(value = "existingImage", required = false) String existingImage,
-			  					   @RequestParam(value = "method", defaultValue = "register") String method,
-			  					   HttpSession session) throws IllegalStateException, IOException {
+//	@PostMapping("/shopRegistration")
+//	public void shopRegistration(@RequestParam(value = "imageFilename", required = false) MultipartFile Image,
+//								   @RequestParam(value = "shopidx", defaultValue = "0") String sidx,
+//			  					   @RequestParam("shopName") String shopName,
+//			  					   @RequestParam("shopTel") String shopTel,
+//			  					   @RequestParam(value = "shopAddress", required = false) String shopAddress,
+//			  					   @RequestParam("promotionText") String promotionText,
+//			  					   @RequestParam("shopWebsite") String shopWebsite,
+//			  					   @RequestParam(value = "existingAddress", required = false) String existingAddress,
+//			  					   @RequestParam(value = "existingImage", required = false) String existingImage,
+//			  					   @RequestParam(value = "method", defaultValue = "register") String method,
+//			  					   HttpSession session) throws IllegalStateException, IOException {
+//		
+//		
+//		Member ownerMember = (Member)session.getAttribute("member");
+//		int memberidx = memberService.getMeberIdx(ownerMember);
+//		
+//		Shop shop = new Shop();
+//		shop.setShopName(shopName);
+//		shop.setShopTel(shopTel);
+//		shop.setPromotionText(promotionText);
+//		shop.setShopWebsite(shopWebsite);
+//		shop.setOwnerIdx(memberidx);
+//		
+//		if(Image != null) {
+//			String fullPath = fileDir + Image.getOriginalFilename();
+//			log.info("파일 저장 fullPath ={}",fullPath);
+//			int shopidx = Integer.parseInt(sidx);
+//			shop.setShopidx(shopidx);
+//			Image.transferTo(new File(fullPath));
+//			shop.setImageFilename(Image.getOriginalFilename());
+//		}
+//		else {
+//			int shopidx = Integer.parseInt(sidx);
+//			shop.setShopidx(shopidx);
+//			shop.setImageFilename(existingImage);
+//		}
+//		
+//		if(shopAddress.equals("")) {
+//			log.info("existingAddress = {}", existingAddress);
+//			shop.setShopAddress(existingAddress);
+//		}
+//		else {
+//			shop.setShopAddress(shopAddress);
+//		}
+//		
+//		shopService.saveShop(shop, method);
+//		
+//		
+//	}
+	/*
+	 * 가게 등록
+	 */
+	@PostMapping("/shop/create")
+	public void shopCreate(@ModelAttribute Shop shop, HttpSession session) throws IllegalStateException, IOException {
+		Member member = (Member) session.getAttribute("member");
+		shop.setOwnerIdx(member.getMemberIdx());
 		
+		shopService.saveShop(shop);
+	}
+	
+	
+	/*
+	 * 가게 수정 - 이미지를 변경하지 않을떄 multipartFile가 null이기 때문에 @RequestParam으로 따로따로 받음
+	 */
+	@PostMapping("/shop/update")
+	public void shopUpdate(@RequestParam(value = "imageFile", required = false) MultipartFile Image,
+						   @RequestParam("shopidx") int shopIdx,
+						   @RequestParam("shopName") String shopName,
+						   @RequestParam("shopTel") String shopTel,
+						   @RequestParam(value = "shopAddress", required = false) String shopAddress,
+						   @RequestParam("promotionText") String promotionText,
+						   @RequestParam("shopWebsite") String shopWebsite) throws IllegalStateException, IOException {
 		
-		Member ownerMember = (Member)session.getAttribute("member");
-		int memberidx = memberService.getMeberIdx(ownerMember);
+		Shop oldShop = shopService.getShopByIdx(shopIdx);
 		
-		Shop shop = new Shop();
-		shop.setShopName(shopName);
-		shop.setShopTel(shopTel);
-		shop.setPromotionText(promotionText);
-		shop.setShopWebsite(shopWebsite);
-		shop.setOwnerIdx(memberidx);
-		
-		if(Image != null) {
-			String fullPath = fileDir + Image.getOriginalFilename();
-			log.info("파일 저장 fullPath ={}",fullPath);
-			int shopidx = Integer.parseInt(sidx);
-			shop.setShopidx(shopidx);
-			Image.transferTo(new File(fullPath));
-			shop.setImageFilename(Image.getOriginalFilename());
-		}
-		else {
-			int shopidx = Integer.parseInt(sidx);
-			shop.setShopidx(shopidx);
-			shop.setImageFilename(existingImage);
-		}
-		
-		if(shopAddress.equals("")) {
-			log.info("existingAddress = {}", existingAddress);
-			shop.setShopAddress(existingAddress);
-		}
-		else {
-			shop.setShopAddress(shopAddress);
-		}
-		
-		shopService.saveShop(shop, method);
-		
-		
+		oldShop.setShopName(shopName);
+		oldShop.setShopTel(shopTel);
+		oldShop.setPromotionText(promotionText);
+		oldShop.setShopWebsite(shopWebsite);
+
+		shopService.updateShop(oldShop, Image, shopAddress);
 	}
 	
 	/*
@@ -178,16 +210,19 @@ public class ShopController {
     /*
      * 별점 추가
      */
-    @GetMapping("/setRating")
-    public String setRating(@RequestParam int shopidx,
-	                        @RequestParam int memberidx,
-	                        @RequestParam int rating) {
-
+    @PostMapping("/setRating")
+    public void setRating(HttpSession session,
+                          @RequestParam("shopidx") int shopidx,
+                          @RequestParam("rating") int rating) {
+       
+       
+       Member member = (Member) session.getAttribute("member");
+       int memberidx = member.getMemberIdx(); 
+       
        Ratings ratings = new Ratings(0,shopidx,memberidx,rating);
        
        shopService.setRating(ratings);
-       return "";
-    } 
+    }  
 
 	
 	
