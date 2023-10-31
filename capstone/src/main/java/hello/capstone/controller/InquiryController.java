@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hello.capstone.dto.Inquiry;
+import hello.capstone.dto.Member;
 import hello.capstone.service.InquiryService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/inquiry")
@@ -36,24 +38,25 @@ public class InquiryController {
 	/*
 	 * 1:1문의 등록
 	 */
-	@PostMapping("/register")
-	public String inquiryRegister(@RequestParam("useridx") String uidx,
-								  @RequestParam("content_inquiry") String content_inquiry) {
-		
+	 @PostMapping("/register")
+	 public String inquiryRegister(HttpSession session, @RequestParam("content_inquiry") String content_inquiry) {
+	  
 		Inquiry inquiry = new Inquiry();
-		
-		int useridx = Integer.parseInt(uidx);
+		  
+		Member member = (Member)session.getAttribute("member");
+		  
+		int useridx = member.getMemberIdx();
 		long miliseconds = System.currentTimeMillis();
 		Date redate = new Date(miliseconds);
-		
+		  
 		inquiry.setUseridx(useridx);
 		inquiry.setContent_inquiry(content_inquiry);
 		inquiry.setRedate(redate);
-		
+		  
 		inquiryService.register(inquiry);
-		
+		  
 		return "";
-	}
+	 }
 	
 	/*
 	 * 1:1문의 삭제

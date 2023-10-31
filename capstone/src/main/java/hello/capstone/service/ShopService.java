@@ -282,25 +282,32 @@ public class ShopService {
      */
     public boolean setRating(Ratings ratings) {
    	 
-   	 int shopidx = ratings.getShopidx();
-   	 int memberidx = ratings.getMemberidx();
-   	 
-   	 if(ratingsRepository.existingRatings(shopidx, memberidx) == true) {
-   		 ratingsRepository.updateRatings(ratings);
-   	 }
-   	 else {
-   		 ratingsRepository.setRatings(ratings);
-   	 }
-   	 
-   	 Map ratings_info = ratingsRepository.getSumCount(shopidx);    	 
-   	 
-   	 Double sum = (Double) ratings_info.get("sum");
-   	 Double count = ((Long)ratings_info.get("count")).doubleValue();
-   	 
-   	 double tol_rating = sum / count;
-   	 
-   	 shopRepository.setRatings(shopidx,tol_rating);
-   	 
-   	 return true;
+	   	 int shopidx = ratings.getShopidx();
+	   	 int memberidx = ratings.getMemberidx();
+	   	 
+	   	 if(ratingsRepository.existingRatings(shopidx, memberidx) == true) {
+	   		 ratingsRepository.updateRatings(ratings);
+	   	 }
+	   	 else {
+	   		 ratingsRepository.setRatings(ratings);
+	   	 }
+	   	 
+	   	 Map ratings_info = ratingsRepository.getSumCount(shopidx);    	 
+	   	 
+	   	 Double sum = (Double) ratings_info.get("sum");
+	   	 Double count = ((Long)ratings_info.get("count")).doubleValue();
+	   	 
+	   	 double tol_rating = sum / count;
+	   	 
+	   	 shopRepository.setRatings(shopidx,tol_rating);
+	   	 
+	   	 return true;
     }
+    /*
+     * 해당 아이템 별로 예약자 리스트 조회
+     */
+    public List<Map<String, Object>> getItemReservations(int itemidx){
+        return shopRepository.getItemReservations(itemidx);
+    }    
+    
 }

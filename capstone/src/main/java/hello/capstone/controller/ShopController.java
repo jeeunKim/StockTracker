@@ -3,6 +3,7 @@ package hello.capstone.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -224,7 +225,20 @@ public class ShopController {
        shopService.setRating(ratings);
     }  
 
-	
+    /*
+     * 해당 아이템 별로 예약자 리스트 조회
+     */
+    @GetMapping("/shop/item/reservations")
+    public List<Map<String, Object>> getItemReservations(@RequestParam("itemidx") int itemidx){
+       log.info("itemidx = {}", itemidx);
+       
+       List<Map<String, Object>> map = shopService.getItemReservations(itemidx);
+       
+       log.info("map.reservationidx={}", map.get(0).get("reservationidx"));
+       
+       return shopService.getItemReservations(itemidx);
+    }
+    
 	
 	
 

@@ -65,4 +65,12 @@
 		update shop set rating = #{rating}
 		where shopidx = #{shopidx};
 	</update>
+	
+	<select id = "getItemReservations">
+        select r.reservationidx, m.memberidx, m.name, m.phone, m.trust, r.number, r.confirm, r.itemidx 
+        from member as m 
+        left join reservation as r
+        on m.memberidx = r.memberidx
+        where r.itemidx = #{itemidx};
+   </select>
 </mapper>
