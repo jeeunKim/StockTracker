@@ -3,7 +3,6 @@ package hello.capstone.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,11 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
-import hello.capstone.dto.Coordinates;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Reservation;
@@ -111,9 +107,6 @@ public class ItemService {
 	
 	/*
 	 * 아이템 수정
-	 */
-	/*
-	 * 가게 수정
 	 */
 	public void updateItem(Item item, MultipartFile imageFile) 
 			throws IllegalStateException, IOException {
@@ -251,16 +244,16 @@ public class ItemService {
     }
 	
 	
-	/*
+    /*
 	 * 인증 메시지
 	 */
 	public SingleMessageSentResponse sendMessage(String phone, String content) {
 		
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSRAEZQIIMYGVDM", "Z8VBFEFGTR9FIY47NF42GEK8UUKCKUKG", "https://api.coolsms.co.kr");
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSNIDGJX633DVCZ", "O5QWFUPOJQ6TUOTT1XOKICBFC0YYU3B2", "https://api.coolsms.co.kr");
 		
 		Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01092592260");
+        message.setFrom("01087528309");
         message.setTo(phone);
         message.setText(content);
 

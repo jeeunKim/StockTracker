@@ -1,5 +1,7 @@
 package hello.capstone.exception.exception_manager;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +20,7 @@ import hello.capstone.exception.SendMessageException;
 //import hello.capstone.exception.SendMessageException;
 import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.TimeSettingException;
+import hello.capstone.exception.ValidationException;
 import hello.capstone.exception.AlreadyBookmarkedShopException;
 import hello.capstone.exception.CodeVerificationException;
 import hello.capstone.exception.ExistReservationException;
@@ -153,6 +156,11 @@ public class ExceptionManager {
 	   return ResponseEntity.status(e.getErrorCode().getStatus())
 	           .body(Response.error(e.getErrorCode().getMessage(),e.getErrorCode().getMessage()));
 	}
+	//기존에 만들어둔 에러(ValidationException)가 발생시 동작
+	@ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getErrors());
+    }
 		
 		
 }

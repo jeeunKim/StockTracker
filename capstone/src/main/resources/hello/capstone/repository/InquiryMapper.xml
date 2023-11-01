@@ -9,6 +9,11 @@
 		inner join member m on i.useridx = m.memberidx
 		order by redate asc;
 	</select>
+	
+	<select id = "inquiryAnswerView">
+		select * from inquiry
+		where inquiryidx = #{inquiryidx};
+	</select>
 
 	<insert id = "register">
 		insert into inquiry(useridx, redate, content_inquiry)
@@ -48,5 +53,6 @@
 		set adminidx = #{adminidx}, answer_redate = #{answer_idx}, content_answer = #{content_answer}, status = "답변 완료"
 		where where inquiryidx = #{inquiryidx};
 	</update>
+	
 	
 </mapper>

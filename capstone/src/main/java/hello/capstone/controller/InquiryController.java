@@ -34,6 +34,13 @@ public class InquiryController {
 		
 	}
 	
+	/*
+	 * 1:1 문의 답변 보기(사용자 입장)
+	 */
+	@GetMapping("/user/answer/view")
+	public Inquiry inquiryAnswerView(@RequestParam("inquiryidx") int inquiryidx) {
+		return inquiryService.inquiryAnswerView(inquiryidx);
+	}
 	
 	/*
 	 * 1:1문의 등록

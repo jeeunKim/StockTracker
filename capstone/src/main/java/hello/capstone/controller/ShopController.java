@@ -1,11 +1,9 @@
 package hello.capstone.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,7 +89,7 @@ public class ShopController {
 	public void shopCreate(@ModelAttribute Shop shop, HttpSession session) throws IllegalStateException, IOException {
 		Member member = (Member) session.getAttribute("member");
 		shop.setOwnerIdx(member.getMemberIdx());
-		
+		log.info("shop = {}", shop);
 		shopService.saveShop(shop);
 	}
 	
@@ -115,6 +113,7 @@ public class ShopController {
 		oldShop.setPromotionText(promotionText);
 		oldShop.setShopWebsite(shopWebsite);
 
+		
 		shopService.updateShop(oldShop, Image, shopAddress);
 	}
 	

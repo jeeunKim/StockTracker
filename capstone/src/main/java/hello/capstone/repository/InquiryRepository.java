@@ -23,6 +23,13 @@ public class InquiryRepository {
 	}
 	
 	/*
+	 * 1:1 문의 답변 보기(사용자 입장)
+	 */
+	public Inquiry inquiryAnswerView(int inquiryidx) {
+		return inquiryMapper.inquiryAnswerView(inquiryidx);
+	}
+	
+	/*
 	 * 1:1문의 등록
 	 */
 	public void register(Inquiry inquiry) {

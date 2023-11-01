@@ -14,6 +14,8 @@ public interface InquiryMapper {
 
 	List<Map<String, Object>> inquiryView();
 	
+	Inquiry inquiryAnswerView(int inquiryidx);
+	
 	void register(Inquiry inquiry);
 	
 	void delete(int inquiryidx);

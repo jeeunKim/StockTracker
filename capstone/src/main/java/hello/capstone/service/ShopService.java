@@ -120,7 +120,7 @@ public class ShopService {
 		}
 		
 		//주소가 새로 바뀐 경우 / 위도, 경도까지 새로 적용
-		if(address != null || address =="" ) {
+		if(!(address.equals("")) ) {
 			shop.setShopAddress(address);
 			
 			Coordinates cor = getCoordinate(address);
