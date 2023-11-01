@@ -3,18 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hello.capstone.repository.ItemMapper">
 
-	<insert id="saveitem">
+	<insert id="saveItem">
         insert into item(shopidx, itemname, itemnotice, cost, salecost, quantity, image, category, starttime, endtime) 
         values(#{shopidx},#{itemname}, #{itemnotice}, #{cost},#{salecost},#{quantity},#{image},#{category}, #{starttime}, #{endtime});
     </insert>
 
 
-	<update id="modifyItem">
-        update item set shopidx = #{shopidx}, itemname = #{itemname}, itemnotice = #{itemnotice}, cost = #{cost}, salecost = #{salecost}, quantity = #{quantity}, image = #{image}, category = #{category}, starttime = #{starttime}, endtime = #{endtime}
+	<update id="updateItem">
+        update item set 
+        shopidx = #{shopidx}, itemname = #{itemname}, itemnotice = #{itemnotice}, cost = #{cost}, salecost = #{salecost}, quantity = #{quantity}, image = #{image}, category = #{category}, starttime = #{starttime}, endtime = #{endtime}
         where itemidx = #{itemidx}   
     </update>
    
-	<select id="findByShopIdx_itemname" resultType="item">
+	<select id="findByShopIdxAndItemname" resultType="item">
 		select * from item where shopidx = #{shopidx} and itemname = #{itemname};
 	</select>
 
@@ -22,6 +23,12 @@
         select * 
         from item 
         where shopidx = #{shopidx} and endtime &gt;= NOW();
+    </select>
+    
+    <select id="findByItemIdx" resultType = "Item">
+    	select *
+    	from item
+    	where itemidx = #{itemidx}
     </select>
 	
 	<delete id ="itemDelete">

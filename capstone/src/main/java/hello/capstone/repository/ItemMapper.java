@@ -14,13 +14,15 @@ import hello.capstone.dto.Shop;
 @Mapper
 public interface ItemMapper {
 
-	void saveitem(Item item);
+	void saveItem(Item item);
 	
-	void modifyItem(Item item);
+	void updateItem(Item item);
 	
-	Item findByShopIdx_itemname(@Param("shopidx") int shopidx, @Param("itemname") String itemname);
+	Item findByShopIdxAndItemname(@Param("shopidx") int shopidx, @Param("itemname") String itemname);
 	
 	List<Item> getItems(@Param("shopidx") int shopidx);
+	
+	Item findByItemIdx(int ItemIdx);
 	
 	void itemDelete(Item item);
 	

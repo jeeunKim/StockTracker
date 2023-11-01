@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,7 +99,7 @@ public class ShopController {
 	/*
 	 * 가게 수정 - 이미지를 변경하지 않을떄 multipartFile가 null이기 때문에 @RequestParam으로 따로따로 받음
 	 */
-	@PostMapping("/shop/update")
+	@PutMapping("/shop/update")
 	public void shopUpdate(@RequestParam(value = "imageFile", required = false) MultipartFile Image,
 						   @RequestParam("shopidx") int shopIdx,
 						   @RequestParam("shopName") String shopName,
