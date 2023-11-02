@@ -200,7 +200,7 @@ public class ItemController {
     * 상품 예약
     */
    @PostMapping("/reservation")
-   public String reservation(@RequestParam("shopidx") String si,
+   public void reservation(@RequestParam("shopidx") String si,
 		   					 @RequestParam("memberidx") String mi,
 		   					 @RequestParam("itemidx") String ii,
 		   					 @RequestParam("number") String num,
@@ -218,17 +218,13 @@ public class ItemController {
 	   
 	   itemService.reservation(reservation, shopname, itemname, name, phone);
 	   
-	   return "";
    }
    
    /*
     *  상품 예약 확인(상업자가 확인 버튼 클릭)
     */
    @PostMapping("/reservation/confirm")
-   public String confirm(@RequestParam("reservationidx") String ridx) {
-	   
-	   int reservationIdx = Integer.parseInt(ridx);
-	   
+   public String confirm(@RequestParam("reservationidx") int reservationIdx) {
 	   itemService.reservationConfirm(reservationIdx);
 	   
 	   return "";
@@ -239,13 +235,6 @@ public class ItemController {
     */
    @PostMapping("/reservation/cancel")
    public String cancel(HttpSession session, @RequestBody List<Map<String, Object>> reservationinfo) {
-	   
-	   log.info("reservationinfo = {}", reservationinfo);
-	   
-	   for(Map<String, Object> info : reservationinfo) {
-		   log.info("reservationidx = {}",info.get("reservationidx"));
-	   }
-	   
 	   Member member = (Member) session.getAttribute("member");
 	   String phone = member.getPhone();
 	   String name = member.getName();

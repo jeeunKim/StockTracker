@@ -38,26 +38,26 @@ public class InquiryController {
 	 * 1:1 문의 답변 보기(사용자 입장)
 	 */
 	@GetMapping("/user/answer/view")
-	public Inquiry inquiryAnswerView(@RequestParam("inquiryidx") int inquiryidx) {
-		return inquiryService.inquiryAnswerView(inquiryidx);
+	public Inquiry inquiryAnswerView(@RequestParam("inquiryidx") int inquiryIdx) {
+		return inquiryService.inquiryAnswerView(inquiryIdx);
 	}
 	
 	/*
 	 * 1:1문의 등록
 	 */
 	 @PostMapping("/register")
-	 public String inquiryRegister(HttpSession session, @RequestParam("content_inquiry") String content_inquiry) {
+	 public String inquiryRegister(HttpSession session, @RequestParam("content_inquiry") String contentInquiry) {
 	  
 		Inquiry inquiry = new Inquiry();
 		  
 		Member member = (Member)session.getAttribute("member");
 		  
-		int useridx = member.getMemberIdx();
+		int userIdx = member.getMemberIdx();
 		long miliseconds = System.currentTimeMillis();
 		Date redate = new Date(miliseconds);
 		  
-		inquiry.setUseridx(useridx);
-		inquiry.setContent_inquiry(content_inquiry);
+		inquiry.setUseridx(userIdx);
+		inquiry.setContent_inquiry(contentInquiry);
 		inquiry.setRedate(redate);
 		  
 		inquiryService.register(inquiry);
@@ -69,23 +69,19 @@ public class InquiryController {
 	 * 1:1문의 삭제
 	 */
 	@DeleteMapping("/delete")
-	public void inquiryDelete(@RequestParam("inquiryidx") String iqidx) {
+	public void inquiryDelete(@RequestParam("inquiryidx") int inquiryIdx) {
 		
-		int inquiryidx = Integer.parseInt(iqidx);
-		
-		inquiryService.delete(inquiryidx);
+		inquiryService.delete(inquiryIdx);
 	}
 	
 	/*
 	 * 1:1문의 수정
 	 */
 	@PutMapping("/update")
-	public String inquiryUpdate(@RequestParam("inquiryidx") String iqidx,
-								@RequestParam("content_inquiry") String content_inquiry) {
+	public String inquiryUpdate(@RequestParam("inquiryidx") int inquiryIdx,
+								@RequestParam("content_inquiry") String contentInquiry) {
 		
-		int inquiryidx = Integer.parseInt(iqidx);
-		
-		inquiryService.update(inquiryidx, content_inquiry);
+		inquiryService.update(inquiryIdx, contentInquiry);
 		
 		return "";
 	}
@@ -94,16 +90,14 @@ public class InquiryController {
 	 * 1:1문의 답변 등록
 	 */
 	@PostMapping("/answer")
-	public String inquiryAnswer(@RequestParam("inquiryidx") String iqidx,
-			 					@RequestParam("adminidx") String adidx,
-			 					@RequestParam("content_answer") String content_answer) {
+	public String inquiryAnswer(@RequestParam("inquiryidx") int inquiryIdx,
+			 					@RequestParam("adminidx") int adminIdx,
+			 					@RequestParam("content_answer") String contentAnswer) {
 		
-		int inquiryidx = Integer.parseInt(iqidx);
-		int adminidx = Integer.parseInt(adidx);
 		long miliseconds = System.currentTimeMillis();
-		Date answer_redate = new Date(miliseconds);
+		Date answerRedate = new Date(miliseconds);
 		
-		Inquiry inquiry = new Inquiry(inquiryidx, 0, null, null, adminidx, answer_redate, content_answer, "답변 완료");
+		Inquiry inquiry = new Inquiry(inquiryIdx, 0, null, null, adminIdx, answerRedate, contentAnswer, "답변 완료");
 		
 		inquiryService.inquiryAnswer(inquiry);
 		
@@ -114,27 +108,22 @@ public class InquiryController {
 	 * 1:1문의 답변 삭제
 	 */
 	@DeleteMapping("/answer/delete")
-	public void inquiryAnswerDelete(@RequestParam("inquiryidx") String iqidx,
-									@RequestParam("adminidx") String adidx) {
-		
-		int inquiryidx = Integer.parseInt(iqidx);
-		int adminidx = Integer.parseInt(adidx);
-		
-		inquiryService.inquiryAnswerDelete(inquiryidx,adminidx);
+	public void inquiryAnswerDelete(@RequestParam("inquiryidx") int inquiryIdx,
+									@RequestParam("adminidx") int adminIdx) {
+
+		inquiryService.inquiryAnswerDelete(inquiryIdx,adminIdx);
 	}
 	
 	/*
 	 * 1:1문의 답변 수정
 	 */
 	@PutMapping("/answer/update")
-	public String inquiryAnswerUpdate(@RequestParam("inquiryidx") String iqidx,
-									  @RequestParam("adminidx") String adidx,
-									  @RequestParam("content_answer") String content_answer) {
+	public String inquiryAnswerUpdate(@RequestParam("inquiryidx") int inquiryIdx,
+									  @RequestParam("adminidx") int adminIdx,
+									  @RequestParam("content_answer") String contentAnswer) {
+	
 		
-		int inquiryidx = Integer.parseInt(iqidx);
-		int adminidx = Integer.parseInt(adidx);
-		
-		inquiryService.inquiryAnswerUpdate(inquiryidx, adminidx, content_answer);
+		inquiryService.inquiryAnswerUpdate(inquiryIdx, adminIdx, contentAnswer);
 		
 		return "";
 	}

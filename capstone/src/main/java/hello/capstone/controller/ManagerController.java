@@ -90,7 +90,7 @@ public class ManagerController {
 		return notices;
 	}
 	
-	
+
 	// 사용자 관리------------------------------------------------------------------------------------------
 	
 	/*
@@ -106,9 +106,7 @@ public class ManagerController {
 	 * 신뢰도를 깎은 가게와 예약 날짜 조회
 	 */
 	@GetMapping("/member/user/trustmanage")
-	public List<Map<String, Object>> trustManage(@RequestParam("memberIdx") String memberidx){
-		int memberIdx = Integer.parseInt(memberidx);
-		
+	public List<Map<String, Object>> trustManage(@RequestParam("memberIdx") int memberIdx){		
 		
 		return managerService.getFailedReservation(memberIdx);
 	}
@@ -138,9 +136,9 @@ public class ManagerController {
 	 * 해당 상업자의 가게 정보 조회
 	 */
 	@GetMapping("/member/business/shopinfo")
-	public List<Shop> getShopinfoByBusiness(@RequestParam("memberidx") int owneridx){
+	public List<Shop> getShopinfoByBusiness(@RequestParam("memberidx") int ownerIdx){
 		
-		return managerService.getShopinfoByBusiness(owneridx);
+		return managerService.getShopinfoByBusiness(ownerIdx);
 	}
 	
 	/*
@@ -177,19 +175,19 @@ public class ManagerController {
 	}
 	
 	/*
-	 * 해당 가게에 등록된 상품과 상품별 예약자 수 조회
+	 * 해당 가게에 등록된 상품과 상품별 예약된 상품수량 조회
 	 */
 	@GetMapping("/analysis/item")
-	public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopidx){
-		return managerService.getIteminfo(shopidx);
+	public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopIdx){
+		return managerService.getIteminfo(shopIdx);
 	}
 	
 	/*
 	 * 해당 가게에서 상품을 구매해간 고객 정보 
 	 */
 	@GetMapping("/analysis/reservation/member")
-	public List<Member> AnalysisReservation(@RequestParam("shopidx") int shopidx){
-		return managerService.getReservationMember(shopidx);
+	public List<Member> AnalysisReservation(@RequestParam("shopidx") int shopIdx){
+		return managerService.getReservationMember(shopIdx);
 	}
 	
 	

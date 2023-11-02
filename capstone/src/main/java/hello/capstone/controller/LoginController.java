@@ -7,10 +7,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +23,7 @@ import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.LoginService;
 import hello.capstone.service.MemberService;
 import hello.capstone.validation.ValidationSequence;
+import hello.capstone.validation.group.PatternCheckGroup;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -58,10 +57,8 @@ public class LoginController {
     	String pw = bCryptPasswordEncoder.encode(member.getPw());
     	member.setPw(pw);
     	
-    	boolean success = loginService.signUp(member);
+    	loginService.signUp(member);
     	
-    	
-    	log.info("SignUp Success !");
 		return "/login";
     }
     
@@ -105,9 +102,9 @@ public class LoginController {
      * 아아디, 비밀번호 찾기
      */
     //아이디 확인(비밀번호 찾기)
-    @GetMapping("/ID_verification")
-    public String ID_verification(@RequestParam String id, HttpServletRequest request) {
-    	Member member = memberService.ID_verification(id);
+    @GetMapping("/id-verification")
+    public String idVerification(@RequestParam String id, HttpServletRequest request) {
+    	Member member = memberService.IdVerification(id);
     	HttpSession session = request.getSession();
     	session.setAttribute("findpw_member", member);
     	return "ok";
@@ -116,8 +113,8 @@ public class LoginController {
     /*
      * 비밀번호 찾기(인증 문자 전송)
      */
-    @GetMapping("/findPw_sendMessage")
-    public SingleMessageSentResponse findPw_sendMessage(@RequestParam String phone, HttpServletRequest request) {
+    @GetMapping("/findpw-sendmessage")
+    public SingleMessageSentResponse findPwSendMessage(@RequestParam String phone, HttpServletRequest request) {
     	HttpSession session = request.getSession();
     	Member member = (Member)session.getAttribute("findpw_member");
     	if(phone.equals(member.getPhone())) {
@@ -131,12 +128,14 @@ public class LoginController {
     /*
      * 아이디 찾기(인증 문자 전송)
      */
-    @GetMapping("/findId_sendMessage")
-    public SingleMessageSentResponse findId_sendMessage(@RequestParam(required = false) String name,@RequestParam String phone, HttpServletRequest request) {
+    @GetMapping("/findid-sendmessage")
+    public SingleMessageSentResponse findIdSendMessage(@RequestParam(value = "name", required = false) String name,@RequestParam("phone") String phone, HttpServletRequest request) {
     	HttpSession session = request.getSession();
+
     	if(name != null) {
-    		Member member2 = memberService.Name_verification(name,phone);
+    		Member member2 = memberService.nameVerification(name,phone);
     		session.setAttribute("findid_member", member2);
+    		
     		if(phone.equals(member2.getPhone())) {
     			return Message(phone,request);
     		}
@@ -152,12 +151,12 @@ public class LoginController {
     /*
      * 아이디 찾기(이름, 휴대폰 인증 성공 후 실제로 아이디 정보 보여주기)
      */
-    @GetMapping("/find_id")
+    @GetMapping("/find-id")
     public String showID(HttpServletRequest request) {
        HttpSession session = request.getSession();
-       Member find_member = (Member)session.getAttribute("findid_member");
-       String id = find_member.getId();
-       log.info("find_member_ID = {}",id);
+       Member findMember = (Member)session.getAttribute("findid_member");
+       String id = findMember.getId();
+       
        session.removeAttribute("findid_member");
        return id;
     }
@@ -166,8 +165,8 @@ public class LoginController {
     /*
      * 비밀번호 찾기(인증 문자 확인)
      */
-    @GetMapping("Pw_Code_verification")
-    public String Pw_Code_verification(@RequestParam String code, HttpServletRequest request) {
+    @GetMapping("pw-code-verification")
+    public String pwCodeVerification(@RequestParam String code, HttpServletRequest request) {
     	HttpSession session = request.getSession();
     	if(code.equals(session.getAttribute("code")) && session.getAttribute("findpw_member") != null) {
     		session.removeAttribute("code");
@@ -181,8 +180,8 @@ public class LoginController {
     /*
      * 아이디 찾기(인증 문자 확인)
      */
-    @GetMapping("Id_Code_verification")
-    public String Id_Code_verification(@RequestParam String code, HttpServletRequest request) {
+    @GetMapping("id-code-verification")
+    public String IdCodeVerification(@RequestParam String code, HttpServletRequest request) {
     	HttpSession session = request.getSession();
     	if(code.equals(session.getAttribute("code")) && session.getAttribute("findid_member") != null) {
     		session.removeAttribute("code");
@@ -193,12 +192,28 @@ public class LoginController {
     	}
     }
     
-    @GetMapping("/updatepw")
-    public String updatepw(@RequestParam String pw, HttpServletRequest request) {
+    @PutMapping("/updatepw")
+    public String updatePw(@Validated(value = PatternCheckGroup.class) @RequestBody Member memberPw, BindingResult bindingResult, HttpServletRequest request) {
+    	//변경 비밀번호 검증 및 암호화
+    	if(bindingResult.hasErrors()) {
+    		Map<String, String> errors = new HashMap<>();
+	    	for (FieldError error : bindingResult.getFieldErrors()) {
+	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	    	throw new ValidationException(errors);
+    	}
+    	
+    	
     	HttpSession session = request.getSession();
     	Member member = (Member)session.getAttribute("findpw_member");
-    	memberService.updatepw(member.getId(),pw);
+    	
+    	//암호화
+    	String pw = bCryptPasswordEncoder.encode(memberPw.getPw());
+    	
+    	memberService.updatePw(member.getId(),pw);
     	session.removeAttribute("find_member");
+    	
     	return "/login";
     }
     
@@ -218,8 +233,6 @@ public class LoginController {
     }
     
 }
-
-
 
 
 

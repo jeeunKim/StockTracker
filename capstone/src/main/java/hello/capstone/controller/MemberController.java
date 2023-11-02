@@ -40,8 +40,6 @@ public class MemberController {
 	public String bookmarkRegistration(HttpSession session, @RequestBody Shop shop) {
 		Member member = (Member) session.getAttribute("member");
 		
-		log.info("member = {} ", member);
-		
 		int memberIdx = memberService.getMeberIdx(member);
 		int shopIdx = shopService.getShopIdx(shop);
 		

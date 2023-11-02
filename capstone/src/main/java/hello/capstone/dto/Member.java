@@ -2,10 +2,14 @@ package hello.capstone.dto;
 
 import java.sql.Date;
 
+import hello.capstone.validation.group.EmailCheckGroup;
 import hello.capstone.validation.group.NotBlanckGroup;
 import hello.capstone.validation.group.PatternCheckGroup;
+import hello.capstone.validation.group.SizeCheckGroup;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +25,11 @@ public class Member {
 	
 	private int memberIdx;
 	
-    @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", message = "이메일 형식으로 정확히 입력해주세요.", groups = PatternCheckGroup.class)
+	@Email(groups = EmailCheckGroup.class, message ="이메일 형식의 아이디를 입력하세요.")
     @NotBlank(message = "아이디는 필수 입력항목입니다.(공백 사용X)", groups = NotBlanckGroup.class)
 	private String id;
     
+    @Size(min = 8, max = 16, message="비밀번호는 8~16자로 입력하세요.", groups = SizeCheckGroup.class)
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{7,15}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.", groups = PatternCheckGroup.class)
     @NotBlank(message = "비밀번호는 필수 입력항목입니다.(공백 사용X)", groups = NotBlanckGroup.class)
 	private String pw;

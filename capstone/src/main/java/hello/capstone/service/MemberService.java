@@ -16,8 +16,9 @@ import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.MemberRepository;
 import hello.capstone.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -115,7 +116,7 @@ public class MemberService {
 	/*
 	 * 비밀번호 찾기(아이디 유무 확인)
 	 */
-	public Member ID_verification(String id) {
+	public Member IdVerification(String id) {
 		Member member = memberRepository.findById(id,"normal");
 		
 		if(member == null) {
@@ -128,19 +129,20 @@ public class MemberService {
 	/*
 	 * 아이디 찾기(이름, 휴대폰 번호 매칭)
 	 */
-	public Member Name_verification(String name, String phone) {
+	public Member nameVerification(String name, String phone) {
 		Member member = memberRepository.findByName_Phone(name,phone,"normal");
 		
 		if(member == null) {
 			throw new FindPwException(ErrorCode.NONEXISTENT_MEMBER,null);
 		}
+		log.info("member = {}", member);
 		return member;
 	}
 	/*
 	 * 비밀번호 변경 (비밀번호 찾기에서)
 	 */
 	@Transactional
-	public void updatepw(String id, String pw) {
+	public void updatePw(String id, String pw) {
 		memberRepository.updatepw(id, pw, "normal");
 	}
 	
