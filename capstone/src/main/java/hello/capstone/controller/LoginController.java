@@ -22,8 +22,8 @@ import hello.capstone.exception.ValidationException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.LoginService;
 import hello.capstone.service.MemberService;
-import hello.capstone.validation.ValidationSequence;
-import hello.capstone.validation.group.PatternCheckGroup;
+import hello.capstone.validation.group.SignUpValidationGroup;
+import hello.capstone.validation.group.UpdatePwValidationGroup;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class LoginController {
 	 * 일반 회원 회원가입
 	 */
     @PostMapping("/join")
-    public String signUp(@Validated(value = ValidationSequence.class) @RequestBody Member member, BindingResult bindingResult){
+    public String signUp(@Validated(value = SignUpValidationGroup.class) @RequestBody Member member, BindingResult bindingResult){
     	
     	if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
@@ -87,6 +87,16 @@ public class LoginController {
     
     @GetMapping("/getSessionMember")
     public Member getSessionMember(HttpSession session) {
+    	
+    	return (Member)session.getAttribute("member");
+    }
+    @GetMapping("/getSessionMember/business")
+    public Member getSessionMemberBusiness(HttpSession session) {
+    	
+    	return (Member)session.getAttribute("member");
+    }
+    @GetMapping("/getSessionMember/getSessionMemberManager")
+    public Member getSessionMemberManager(HttpSession session) {
     	
     	return (Member)session.getAttribute("member");
     }
@@ -193,7 +203,7 @@ public class LoginController {
     }
     
     @PutMapping("/updatepw")
-    public String updatePw(@Validated(value = PatternCheckGroup.class) @RequestBody Member memberPw, BindingResult bindingResult, HttpServletRequest request) {
+    public String updatePw(@Validated(value = UpdatePwValidationGroup.class) @RequestBody Member memberPw, BindingResult bindingResult, HttpServletRequest request) {
     	//변경 비밀번호 검증 및 암호화
     	if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();

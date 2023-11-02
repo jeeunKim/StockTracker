@@ -24,7 +24,8 @@ import hello.capstone.exception.ValidationException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.service.MemberService;
 import hello.capstone.service.ShopService;
-import hello.capstone.validation.ValidationSequence;
+import hello.capstone.validation.group.SaveShopValidationGroup;
+import hello.capstone.validation.group.UpdateShopValidationGroup;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,7 +93,7 @@ public class ShopController {
 	 * 가게 등록
 	 */
 	@PostMapping("/shop/create")
-	public void shopCreate(@Validated(value = ValidationSequence.class) @ModelAttribute Shop shop, 
+	public void shopCreate(@Validated(value = SaveShopValidationGroup.class) @ModelAttribute Shop shop, 
 							BindingResult bindingResult, HttpSession session) 
 									throws IllegalStateException, IOException {
 		if(bindingResult.hasErrors()) {
@@ -115,23 +116,19 @@ public class ShopController {
 	 * 가게 수정 - 이미지를 변경하지 않을떄 multipartFile가 null이기 때문에 @RequestParam으로 따로따로 받음
 	 */
 	@PutMapping("/shop/update")
-	public void shopUpdate(@RequestParam(value = "imageFile", required = false) MultipartFile Image,
-						   @RequestParam("shopidx") int shopIdx,
-						   @RequestParam("shopName") String shopName,
-						   @RequestParam("shopTel") String shopTel,
-						   @RequestParam(value = "shopAddress", required = false) String shopAddress,
-						   @RequestParam("promotionText") String promotionText,
-						   @RequestParam("shopWebsite") String shopWebsite) throws IllegalStateException, IOException {
+	public void shopUpdate(@Validated(value = UpdateShopValidationGroup.class) @ModelAttribute Shop shop, BindingResult bindingResult,
+						   @RequestParam(value = "imagefile", required = false) MultipartFile Image ) throws IllegalStateException, IOException {
+		log.info("shop = {}",shop);
+		if(bindingResult.hasErrors()) {
+    		Map<String, String> errors = new HashMap<>();
+	    	for (FieldError error : bindingResult.getFieldErrors()) {
+	            log.info("error in {} = {}", error.getField(), error.getDefaultMessage());
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	    	throw new ValidationException(errors);
+    	}
 		
-		Shop oldShop = shopService.getShopByIdx(shopIdx);
-		
-		oldShop.setShopName(shopName);
-		oldShop.setShopTel(shopTel);
-		oldShop.setPromotionText(promotionText);
-		oldShop.setShopWebsite(shopWebsite);
-
-		
-		shopService.updateShop(oldShop, Image, shopAddress);
+		shopService.updateShop(shop, Image, shop.getShopAddress());
 	}
 	
 	/*
