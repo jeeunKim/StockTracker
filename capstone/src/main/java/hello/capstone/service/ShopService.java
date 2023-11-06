@@ -86,14 +86,19 @@ public class ShopService {
 			});
 
 		//파일 이름 추출
-		MultipartFile imageFile = shop.getImageFile();
+		Optional<MultipartFile> imageFile = shop.getImageFile();
 		
-		if(imageFile != null) {
-			String fullPath = fileDir + imageFile.getOriginalFilename();
+		imageFile.ifPresent(value -> {
+			String fullPath = fileDir + value.getOriginalFilename();
 			log.info("파일 저장 fullPath ={}",fullPath);
-			imageFile.transferTo(new File(fullPath));
-			shop.setImageFilename(imageFile.getOriginalFilename());
-		}
+			try {
+				value.transferTo(new File(fullPath));
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			shop.setImageFilename(value.getOriginalFilename());
+		});
 		
 		//주소로 경도, 위도 뽑아서 shop에 저장
 		String shopAddress = shop.getShopAddress();
@@ -135,6 +140,13 @@ public class ShopService {
 		}
 		
 		shopRepository.updateShop(oldShop);
+	}
+	
+	/*
+	 * 가게 삭제
+	 */
+	public void deleteShop(int shopIdx) {
+		shopRepository.deleteShop(shopIdx);
 	}
 	
 	/*

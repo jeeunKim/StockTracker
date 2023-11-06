@@ -15,7 +15,11 @@ public interface ShopMapper {
    Shop findByAddress(@Param("address") String address);  
    
    void saveShop(Shop shop);
-  
+   
+   void modifyShop(Shop shop);
+   
+   void deleteShop(int shopIdx);
+   
    int getShopIdx(Shop shop);
    
    //shop mark 테스트용
@@ -25,8 +29,6 @@ public interface ShopMapper {
    
    List<Shop> runPriceFilter(int price);
    
-   void modifyShop(Shop shop);
-
    Shop getShopByIdx(@Param("shopidx") int shopidx);
    
    Shop getShopByItemIdx(@Param("itemidx") int itemidx);

@@ -15,12 +15,12 @@ public class InquiryRepository {
 
 	private final InquiryMapper inquiryMapper;
 	
-	/*
-	 * 1:1문의 나열
-	 */
-	public List<Map<String, Object>> inquiryView(){
-		return inquiryMapper.inquiryView();
-	}
+    /*
+     * 1:1문의 나열
+     */
+    public List<Map<String, Object>> inquiryView(int memberidx){
+       return inquiryMapper.inquiryView(memberidx);
+    }
 	
 	/*
 	 * 1:1 문의 답변 보기(사용자 입장)

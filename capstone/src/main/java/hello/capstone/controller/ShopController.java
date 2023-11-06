@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -118,7 +119,7 @@ public class ShopController {
 	@PutMapping("/shop/update")
 	public void shopUpdate(@Validated(value = UpdateShopValidationGroup.class) @ModelAttribute Shop shop, BindingResult bindingResult,
 						   @RequestParam(value = "imagefile", required = false) MultipartFile Image ) throws IllegalStateException, IOException {
-		log.info("shop = {}",shop);
+		
 		if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
 	    	for (FieldError error : bindingResult.getFieldErrors()) {
@@ -130,6 +131,15 @@ public class ShopController {
 		
 		shopService.updateShop(shop, Image, shop.getShopAddress());
 	}
+	
+	/*
+	 * 가게 삭제
+	 */
+	@DeleteMapping("/shop/delete")
+	public void shopDelete(@RequestParam("shopidx") int shopIdx) {
+		shopService.deleteShop(shopIdx);
+	}
+	
 	
 	/*
 	 * 본인 인증(pw 확인)

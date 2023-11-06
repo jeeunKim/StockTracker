@@ -22,8 +22,8 @@ public class InquiryService {
 	/*
 	 * 1:1문의 나열
 	 */
-	public List<Map<String, Object>> inquiryView(){
-		return inquiryRepository.inquiryView();
+	public List<Map<String, Object>> inquiryView(int memberidx){
+	   return inquiryRepository.inquiryView(memberidx);
 	}
 	
 	/*

@@ -129,17 +129,24 @@ public class ItemService {
 		itemRepository.updateItem(item);
 	}
 	
-	/*
-	 * 아이템 가져오기
-	 */
-	
-	public List<Item> getItems(int shopIdx){
-		List<Item> items = new ArrayList<Item>();
-		items = itemRepository.getItems(shopIdx);
-		
-		return items;
-		
-	}
+    /*
+     * 아이템 가져오기
+     */
+   
+    public List<Item> getItems(int shopIdx){
+       List<Item> items = new ArrayList<Item>();
+       items = itemRepository.getItems(shopIdx);
+      
+       for(int i = 0; i < items.size(); i++) {
+          Timestamp starttime = new Timestamp(items.get(i).getStarttime().getTime() - (9 * 60 * 60 * 1000));
+          Timestamp endtime = new Timestamp(items.get(i).getEndtime().getTime() - (9 * 60 * 60 * 1000));
+         
+          items.get(i).setStarttime(starttime);
+          items.get(i).setEndtime(endtime);
+       }
+      
+       return items;  
+    }
 	
 	/*
 	 * 인덱스로 아이템찾기
@@ -249,14 +256,14 @@ public class ItemService {
 	 */
 	public SingleMessageSentResponse sendMessage(String phone, String content) {
 		
-		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSNIDGJX633DVCZ", "O5QWFUPOJQ6TUOTT1XOKICBFC0YYU3B2", "https://api.coolsms.co.kr");
+		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCS9UG2XED3DLI5I", "TZKJX9RAOQBJO4AW3AWH1HJII4FVV83S", "https://api.coolsms.co.kr");
 		
 		Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
-        message.setFrom("01087528309");
+        message.setFrom("01077359350");
         message.setTo(phone);
         message.setText(content);
-
+        log.info("phone = {}", phone);
         SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
         log.info("sendMessageResponse={}", response);
 

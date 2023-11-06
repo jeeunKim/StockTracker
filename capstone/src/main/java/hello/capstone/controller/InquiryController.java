@@ -25,14 +25,15 @@ public class InquiryController {
 
 	private final InquiryService inquiryService;
 	
-	/*
-	 * 1:1문의 전체 나열
-	 */
-	@GetMapping("/view")
-	public List<Map<String, Object>> inquiryView(){
-		return inquiryService.inquiryView();
-		
-	}
+	 /*
+      * 1:1문의 전체 나열
+      */
+     @GetMapping("/view")
+     public List<Map<String, Object>> inquiryView(HttpSession session){
+        Member member = (Member) session.getAttribute("member");
+        int memberidx = member.getMemberIdx();
+        return inquiryService.inquiryView(memberidx);
+     }
 	
 	/*
 	 * 1:1 문의 답변 보기(사용자 입장)

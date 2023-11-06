@@ -3,6 +3,7 @@ package hello.capstone.dto;
 
 
 import java.sql.Date;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +28,7 @@ public class Shop {
 	
 	private int ownerIdx;
 	
-	@NotNull(message = "가게 이미지는 필수 항목입니다.", groups = SaveShopValidationGroup.class)
-	private MultipartFile imageFile;
+	private Optional<MultipartFile> imageFile;
 	
 	private String imageFilename;
 	

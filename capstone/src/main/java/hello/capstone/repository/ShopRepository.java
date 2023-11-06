@@ -39,6 +39,14 @@ public class ShopRepository {
 		shopMapper.modifyShop(shop);
 	}
 	
+	/*
+	 * 매장 삭제
+	 */
+	public void deleteShop(int shopIdx) {
+		shopMapper.deleteShop(shopIdx);
+	}
+	
+	
 	
 	/*
 	 * shop 인덱스조회
