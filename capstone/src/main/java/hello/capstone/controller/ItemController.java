@@ -47,6 +47,12 @@ public class ItemController {
    private final ItemService itemService;
    private final ShopService shopService;
      
+   
+   /*
+    * 리팩토링 전 등록, 수정 // 한 메소드에서 두개의 기능을 가지고 있음.(기본에 충실하지 못했음), 여러가지 필요없는 지저분 코드가 많고 컨트롤러가 무거워짐.
+    */
+   
+   
    /*
     * 아이템 등록
     */
@@ -110,6 +116,9 @@ public class ItemController {
 //   }
    
 
+   /*
+    * 리팩토링 후 상품 등록, 수정 -> 등록 및 수정을 분리하고 지저분한 코드를 최소화했으며, 연결을 담당하는 컨트롤러가 너무 무거워지지 않도록 Service에서 더 많은 로직을 처리
+    */
    
    /*
     * item 등록
@@ -119,8 +128,8 @@ public class ItemController {
                         @RequestParam("startParam") String startParam,
                         @RequestParam("endParam") String endParam) throws IllegalStateException, IOException, ParseException{
       
-         if(bindingResult.hasErrors()) {
-         Map<String, String> errors = new HashMap<>();
+      if(bindingResult.hasErrors()) {
+          Map<String, String> errors = new HashMap<>();
           for (FieldError error : bindingResult.getFieldErrors()) {
                log.info("{} = {}", error.getField(), error.getDefaultMessage());
                errors.put(error.getField(), error.getDefaultMessage());
@@ -139,13 +148,13 @@ public class ItemController {
     */
    @PutMapping("/update")
    public void itemUpdate(@Validated(value = UpdateItemValidationGroup.class) @ModelAttribute Item item, BindingResult bindingResult, 
-                        @RequestParam(value = "imageF", required = false) MultipartFile imageFile,
-                       @RequestParam(value = "endParam", required = false) String endParam,
-                       @RequestParam(value = "startParam", required = false) String startParam) 
+                          @RequestParam(value = "imageF", required = false) MultipartFile imageFile,
+                          @RequestParam(value = "endParam", required = false) String endParam,
+                          @RequestParam(value = "startParam", required = false) String startParam) 
                              throws ParseException, IllegalStateException, IOException {
 
-         if(bindingResult.hasErrors()) {
-         Map<String, String> errors = new HashMap<>();
+      if(bindingResult.hasErrors()) {
+          Map<String, String> errors = new HashMap<>();
           for (FieldError error : bindingResult.getFieldErrors()) {
                log.info("{} = {}", error.getField(), error.getDefaultMessage());
                errors.put(error.getField(), error.getDefaultMessage());
@@ -161,7 +170,7 @@ public class ItemController {
       oldItem.setQuantity(item.getQuantity());
       oldItem.setCategory(item.getCategory());
       oldItem.setItemnotice(item.getItemnotice());
-      log.info("endparam = {}", endParam);
+
       if(endParam != null || endParam =="" ) {
          oldItem.setEndtime(convertStringToTimestamp(endParam));
       }
@@ -201,19 +210,14 @@ public class ItemController {
     * 상품 예약
     */
    @PostMapping("/reservation")
-   public void reservation(@RequestParam("shopidx") String si,
-		   					 @RequestParam("memberidx") String mi,
-		   					 @RequestParam("itemidx") String ii,
-		   					 @RequestParam("number") String num,
-		   					 @RequestParam("shopname") String shopname,
-		   					 @RequestParam("itemname") String itemname,
-		   					 @RequestParam("name") String name,
-		   					 @RequestParam("phone") String phone) {
-	   
-	   int memberIdx = Integer.parseInt(mi);
-	   int shopIdx = Integer.parseInt(si);
-	   int itemIdx = Integer.parseInt(ii);
-	   int number = Integer.parseInt(num);
+   public void reservation(@RequestParam("shopidx") int shopIdx,
+	   				       @RequestParam("memberidx") int memberIdx,
+	   					   @RequestParam("itemidx") int itemIdx,
+	   					   @RequestParam("number") int number,
+	   					   @RequestParam("shopname") String shopname,
+	   					   @RequestParam("itemname") String itemname,
+	   					   @RequestParam("name") String name,
+	   					   @RequestParam("phone") String phone) {
 	   
 	   Reservation reservation = new Reservation(0,memberIdx,shopIdx,itemIdx,number,null,"wait");
 	   
@@ -235,16 +239,12 @@ public class ItemController {
     * 상품 예약 취소(사용자)
     */
    @PostMapping("/reservation/cancel")
-   public String cancel(HttpSession session, @RequestBody List<Map<String, Object>> reservationinfo) {
+   public void cancel(HttpSession session, @RequestBody List<Map<String, Object>> reservationinfo) {
 	   Member member = (Member) session.getAttribute("member");
 	   String phone = member.getPhone();
 	   String name = member.getName();
 	   
-	   log.info("phone = {}", phone);
-	   log.info("name = {}", name);
-	   
 	   itemService.reservationCancel(reservationinfo, name, phone);
-	   return "";
    }
    
    /*
@@ -253,6 +253,7 @@ public class ItemController {
    @GetMapping("/reservation/getreservations")
    public List<Map<String, Object>> getReservations(@RequestParam("confirm") String confirm,HttpSession session){
 	   Member member = (Member) session.getAttribute("member");
+	   
 	   return itemService.getReservations(member.getMemberIdx(), confirm);
    }
    

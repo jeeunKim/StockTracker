@@ -28,7 +28,7 @@ public class Shop {
 	
 	private int ownerIdx;
 	
-	private Optional<MultipartFile> imageFile;
+	private MultipartFile imageFile;
 	
 	private String imageFilename;
 	

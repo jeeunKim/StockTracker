@@ -4,20 +4,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.ValidationException;
 import hello.capstone.service.ItemService;
 import hello.capstone.service.MemberService;
 import hello.capstone.service.ShopService;
+import hello.capstone.validation.group.UpdateInfoValidationGroup;
+import hello.capstone.validation.group.UpdatePwValidationGroup;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +53,6 @@ public class MemberController {
 		
 		memberService.bookmarkRegistration(memberIdx, shopIdx);
 		
-
 		return "/home_user";
 	}
 	
@@ -56,14 +63,11 @@ public class MemberController {
 	public List<Shop> bookmarkDelete(HttpSession session, @RequestBody List<Shop> shops) {
 		Member member = (Member) session.getAttribute("member");
 		
-		
 		for (Shop shop : shops) {
-			log.info("Shop={}", shop);
 			memberService.bookmarkDelete(member.getMemberIdx(), shop.getShopidx());
         }
 		
-		List<Shop> MyBookmarkedShops = bookmarkCheck(session);
-		return MyBookmarkedShops;
+		return bookmarkCheck(session);
 	}
 	
 	
@@ -73,11 +77,8 @@ public class MemberController {
 	@GetMapping("/bookmark/check")
 	public List<Shop> bookmarkCheck(HttpSession session) {
 		Member member = (Member) session.getAttribute("member");
-		
-		
-		List<Shop> MyBookmarkedShops = memberService.getMyBookmarkedShop(member.getMemberIdx());
-		
-		return MyBookmarkedShops;
+				
+		return memberService.getMyBookmarkedShop(member.getMemberIdx());
 	}
 	
 	/*
@@ -91,7 +92,6 @@ public class MemberController {
 		
 		memberService.updateNickname(member, nickname);
 		session.setAttribute("member", member);
-		log.info("member = {}", member);
 		
 		return "home_user";
 	}
@@ -100,14 +100,22 @@ public class MemberController {
 	 * 비밀번호 수정
 	 */
 	@PutMapping("/update/pw")
-	public String updatePw(@RequestBody HashMap<String,String> pwMap, HttpSession session) {
-		log.info("pwMap = {}", pwMap);
-		String oldPw = pwMap.get("oldpw");
-		String newPw = pwMap.get("newpw");
-		Member member = (Member)session.getAttribute("member");
-		memberService.pwCheck(member, oldPw);
+	public String updatePw(@Validated(value = UpdatePwValidationGroup.class) @ModelAttribute Member member, BindingResult bindingResult,
+						   @RequestParam("oldpw") String oldPw,HttpSession session) {
 		
-		Member newMember = memberService.updatePwOnPurpose(member, newPw);
+		if(bindingResult.hasErrors()) {
+    		Map<String, String> errors = new HashMap<>();
+	    	for (FieldError error : bindingResult.getFieldErrors()) {
+	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	    	throw new ValidationException(errors);
+    	}
+		
+		Member oldMember = (Member)session.getAttribute("member");
+		memberService.pwCheck(oldMember, oldPw);
+		
+		Member newMember = memberService.updatePwOnPurpose(oldMember, member.getPw());
 		session.setAttribute("member", newMember);
 		
 		return "/";
@@ -117,21 +125,22 @@ public class MemberController {
 	 * 회원정보 수정
 	 */
 	@PutMapping("/update/info")
-	public String updateInfo(@RequestBody HashMap<String, String> newMemberMap, HttpSession session) {
-		log.info("newMemberMap = {}", newMemberMap);
+	public String updateInfo(@Validated(value = UpdateInfoValidationGroup.class) @RequestBody Member member, 
+							 BindingResult bindingResult, HttpSession session) {
+		
+		if(bindingResult.hasErrors()) {
+    		Map<String, String> errors = new HashMap<>();
+	    	for (FieldError error : bindingResult.getFieldErrors()) {
+	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	    	throw new ValidationException(errors);
+    	}
+		
 		Member oldMember = (Member) session.getAttribute("member");
-		String newName = newMemberMap.get("newname");
-		String newNickname = newMemberMap.get("newnickname");
-		String newPhone = newMemberMap.get("newphone");
+		oldMember = memberService.updateMember(oldMember, member);
 		
-		Member newMember = new Member();
-		newMember.setName(newName);
-		newMember.setNickname(newNickname);
-		newMember.setPhone(newPhone);
-		
-		newMember = memberService.updateMember(oldMember, newMember);
-		
-		session.setAttribute("member", newMember);
+		session.setAttribute("member", oldMember);
 		
 		return "home_user";
 	}

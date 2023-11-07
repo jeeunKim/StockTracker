@@ -2,6 +2,7 @@ package hello.capstone.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	private final MemberRepository memberRepository;
 	private final ShopRepository shopRepository;
+	private final PasswordEncoder bCryptPasswordEncoder;
 	
 	/*
 	 * 멤버의 멤버인덱스 조회
@@ -52,7 +54,6 @@ public class MemberService {
 	/*
 	 * 즐겨찾기 취소
 	 */
-	@Transactional
 	public void bookmarkDelete(int memberIdx, int shopIdx) {
 		memberRepository.bookmarkDelete(memberIdx, shopIdx);
 	}
@@ -69,8 +70,6 @@ public class MemberService {
 	/*
 	 * 닉네임 변경
 	 */
-	@Transactional
-	
 	public Member updateNickname(Member member, String nickname) {
 		//닉네임이 15글자 이상은 수정x
 		if( nickname.length() > 15) {
@@ -85,7 +84,6 @@ public class MemberService {
 	/*
 	 * 회원 탈퇴
 	 */
-	@Transactional
 	public void deleteMember(Member member) {
 		memberRepository.deleteMember(member);
 	}
@@ -94,17 +92,8 @@ public class MemberService {
 	/*
 	 * 회원정보 수정
 	 */
-	@Transactional
 	public Member updateMember(Member oldMember, Member newMember) {
 		
-		if(newMember.getNickname().length() > 15) {
-			throw new NicknameException(ErrorCode.NICKNAME_MORE_TAHN_15LETTERS, null);
-		}
-		
-		//휴대폰 번호 유효성 검사
-		if(newMember.getPhone().length() != 11 || newMember.getPhone().contains("-") ) {
-			throw new InvalidPhoneNumberException(ErrorCode.INVALID_PHONE_NUMBER,null);
-		}
 		memberRepository.updateMember(oldMember, newMember);
 		oldMember.setNickname(newMember.getNickname());
 		oldMember.setName(newMember.getName());
@@ -146,7 +135,6 @@ public class MemberService {
 		memberRepository.updatepw(id, pw, "normal");
 	}
 	
-	
 	/*
 	 * 비밀번호 일치 확인
 	 */
@@ -163,13 +151,13 @@ public class MemberService {
 	/*
 	 * 비민번호 변경 (사용자가 의도적으로 비밀번호 변경을 원할 때)
 	 */
-	@Transactional
 	public Member updatePwOnPurpose(Member member, String newPw) {
 		
-		member.setPw(newPw);
-		memberRepository.updatepw(member.getId(), member.getPw(), "normal");
+		String pw = bCryptPasswordEncoder.encode(newPw);
+		member.setPw(pw);
 		
-		
+		updatePw(member.getId(), pw);
+				
 		return member;
 	}
 	

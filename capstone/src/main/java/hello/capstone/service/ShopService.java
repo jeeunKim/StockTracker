@@ -26,6 +26,7 @@ import hello.capstone.dto.Coordinates;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Ratings;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.ItemRepository;
@@ -79,42 +80,36 @@ public class ShopService {
 	 * 가게등록
 	 */
 	public void saveShop(Shop shop) throws IllegalStateException, IOException {
-		//해당 주소에 가게가 이미 존재하는지 판단
+		
+		duplicateShopCheck(shop);
+
+		MultipartFile imageFile = shop.getImageFile();
+		
+		if(imageFile != null) {
+			shop = saveImageFile(imageFile, shop);
+		}
+		
+		//주소로 경도, 위도 뽑아서 shop에 저장
+		Coordinates cor = getCoordinate(shop.getShopAddress());
+		shop.setLongitude(cor.getX());
+		shop.setLatitude(cor.getY());
+		
+		shopRepository.saveShop(shop);
+	} 
+	
+	//중복 가게 검사
+	private void duplicateShopCheck(Shop shop) {
 		Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
 			.ifPresent(user->{
 				throw new SaveShopException(ErrorCode.DUPLICATED_SHOP,null);
 			});
-
-		//파일 이름 추출
-		Optional<MultipartFile> imageFile = shop.getImageFile();
-		
-		imageFile.ifPresent(value -> {
-			String fullPath = fileDir + value.getOriginalFilename();
-			log.info("파일 저장 fullPath ={}",fullPath);
-			try {
-				value.transferTo(new File(fullPath));
-			} catch (IllegalStateException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			shop.setImageFilename(value.getOriginalFilename());
-		});
-		
-		//주소로 경도, 위도 뽑아서 shop에 저장
-		String shopAddress = shop.getShopAddress();
-		Coordinates cor = getCoordinate(shopAddress);
-		shop.setLongitude(cor.getX());
-		shop.setLatitude(cor.getY());
-		
-		
-		shopRepository.saveShop(shop);
 	}
 		
 	
 	/*
 	 * 가게 수정
 	 */
-	public void updateShop(Shop shop, MultipartFile image, String address) throws IllegalStateException, IOException {
+	public void updateShop(Shop shop, MultipartFile imageFile, String address) throws IllegalStateException, IOException {
 		
 		Shop oldShop = shopRepository.getShopByIdx(shop.getShopidx());
 		oldShop.setShopName(shop.getShopName());
@@ -123,11 +118,8 @@ public class ShopService {
 		oldShop.setShopWebsite(shop.getShopWebsite());
 		
 		//이미지 파일이 새로 바뀐 경우
-		if(image != null) {
-			String fullPath = fileDir + image.getOriginalFilename();
-			log.info("파일 저장 fullPath ={}",fullPath);
-			image.transferTo(new File(fullPath));
-			oldShop.setImageFilename(image.getOriginalFilename());
+		if(imageFile != null) {
+			shop = saveImageFile(imageFile, shop);
 		}
 		
 		//주소가 새로 바뀐 경우 / 위도, 경도까지 새로 적용
@@ -141,6 +133,7 @@ public class ShopService {
 		
 		shopRepository.updateShop(oldShop);
 	}
+	
 	
 	/*
 	 * 가게 삭제
@@ -176,11 +169,8 @@ public class ShopService {
 	        dist = rad2deg(dist);
 	        dist = dist * 60 * 1.1515;
 	        
-	        if (unit.equals("km")) {
-	            dist = dist * 1.609344;
-	        } else if(unit.equals("m")){
-	            dist = dist * 1609.344;
-	        }
+	        dist = unit.equals("km") ? dist * 1.609344 : dist * 1609.344;
+
 	        if(dist <= distance) {
 	        	filteredShops.add(shop);
 	        }
@@ -208,8 +198,7 @@ public class ShopService {
 		for (Shop shop : shops) {
 			List<Item> items = itemRepository.getItems(shop.getShopidx());
 			for(Item item : items) {
-				LocalDateTime now = LocalDateTime.now();
-				Timestamp timestamp = Timestamp.valueOf(now);
+				Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 				long remainTime = (item.getEndtime().getTime() - timestamp.getTime()) /1000 /60; //분으로 계산
 				
 				if(remainTime > minute) {
@@ -220,6 +209,92 @@ public class ShopService {
 		}
 		
 		return filteredShops;
+	}
+	
+
+	
+	/*
+	 * shop mark 표시 (아이템 등록된 가게만 가져오기)
+	 */
+	public List<Shop> getShops(){
+		return shopRepository.getShops();
+	}
+	
+	public int getShopIdx(Shop shop) {
+		return shopRepository.getShopIdx(shop);
+	}
+	
+	public Shop getShopByIdx(int shopidx) {
+		return shopRepository.getShopByIdx(shopidx);
+	}
+	
+	public Shop getShopByItemIdx(int itemidx) {
+		return shopRepository.getShopByItemIdx(itemidx);
+	}
+	
+	/*
+	 * 상업자 버전
+	 */
+	public List<Shop> getShopByMember(int memberidx){
+		return shopRepository.getShopByMember(memberidx);
+		
+	}
+	
+
+    /*
+     * 별점 추가하기
+     */
+    public void setRating(Ratings ratings) {
+   	 
+	   	 int shopIdx = ratings.getShopidx();
+	   	 int memberIdx = ratings.getMemberidx();
+	   	 
+	   	 if(ratingsRepository.existingRatings(shopIdx, memberIdx) == true) {
+	   		 ratingsRepository.updateRatings(ratings);
+	   	 }
+	   	 else {
+	   		 ratingsRepository.setRatings(ratings);
+	   	 }
+	   	 
+	   	setRatingAvg(shopIdx);
+    }
+    
+    /*
+     * 가게 별점 평균 계산
+     */
+    private void setRatingAvg(int shopIdx) {
+    	Map ratingsInfo = ratingsRepository.getSumCount(shopIdx);    	 
+	   	 
+	   	Double sum = (Double) ratingsInfo.get("sum");
+	   	Double count = ((Long)ratingsInfo.get("count")).doubleValue();
+	   	 
+	   	double rating = sum / count;
+	   	 
+	   	shopRepository.setRatings(shopIdx,rating);
+    }
+    
+    /*
+     * 해당 아이템 별로 예약자 리스트 조회
+     */
+    public List<Map<String, Object>> getItemReservations(int itemidx){
+        return shopRepository.getItemReservations(itemidx);
+    }    
+    
+    
+    //-------------------------------------------------------------------------------------
+    
+    
+    /*
+	 * 파일 저장 메소드
+	 */
+	private Shop saveImageFile(MultipartFile imageFile, Shop shop) throws IllegalStateException, IOException {
+		String fullPath = fileDir + imageFile.getOriginalFilename();
+		log.info("파일 저장 fullPath ={}",fullPath);
+		
+		imageFile.transferTo(new File(fullPath));
+		shop.setImageFilename(imageFile.getOriginalFilename());
+		
+		return shop;
 	}
 	
 	/*
@@ -266,67 +341,4 @@ public class ShopService {
 
         return new Coordinates(x, y);
     }
-	
-	/*
-	 * shop mark 표시 (아이템 등록된 가게만 가져오기)
-	 */
-	public List<Shop> getShops(){
-		return shopRepository.getShops();
-	}
-	
-	public int getShopIdx(Shop shop) {
-		return shopRepository.getShopIdx(shop);
-	}
-	
-	public Shop getShopByIdx(int shopidx) {
-		return shopRepository.getShopByIdx(shopidx);
-	}
-	
-	public Shop getShopByItemIdx(int itemidx) {
-		return shopRepository.getShopByItemIdx(itemidx);
-	}
-	
-	/*
-	 * 상업자 버전
-	 */
-	public List<Shop> getShopByMember(int memberidx){
-		return shopRepository.getShopByMember(memberidx);
-		
-	}
-	
-	
-    
-    /*
-     * 별점 추가하기
-     */
-    public boolean setRating(Ratings ratings) {
-   	 
-	   	 int shopidx = ratings.getShopidx();
-	   	 int memberidx = ratings.getMemberidx();
-	   	 
-	   	 if(ratingsRepository.existingRatings(shopidx, memberidx) == true) {
-	   		 ratingsRepository.updateRatings(ratings);
-	   	 }
-	   	 else {
-	   		 ratingsRepository.setRatings(ratings);
-	   	 }
-	   	 
-	   	 Map ratings_info = ratingsRepository.getSumCount(shopidx);    	 
-	   	 
-	   	 Double sum = (Double) ratings_info.get("sum");
-	   	 Double count = ((Long)ratings_info.get("count")).doubleValue();
-	   	 
-	   	 double tol_rating = sum / count;
-	   	 
-	   	 shopRepository.setRatings(shopidx,tol_rating);
-	   	 
-	   	 return true;
-    }
-    /*
-     * 해당 아이템 별로 예약자 리스트 조회
-     */
-    public List<Map<String, Object>> getItemReservations(int itemidx){
-        return shopRepository.getItemReservations(itemidx);
-    }    
-    
 }

@@ -82,25 +82,13 @@ public class ItemService {
 		
 		//이미지 파일 이름 저장
 		if(item.getImageFile() != null) {
-	         String fullPath = fileDir + item.getImageFile().getOriginalFilename();
-	         item.getImageFile().transferTo(new File(fullPath));
-	         item.setImage(item.getImageFile().getOriginalFilename());
-	      }
+			 item = saveImageFile(item.getImageFile(), item);
+	    }
+
+		duplicateItemCheck(item);		
+		timeCheck(item);
 		
-		//중복아이템 검사
-		Optional.ofNullable(itemRepository.findByShopIdxAndItemname(item.getShopidx(), item.getItemname()))
-		.ifPresent(user->{
-			throw new SaveItemException(ErrorCode.DUPLICATED_ITEM,null);
-		});
-		
-		//시작시간보다 마감시간이 빠른지 검사
-		int timeOut = item.getStarttime().compareTo(item.getEndtime());
-		if(timeOut >= 0) {
-			throw new TimeSettingException(ErrorCode.TIME_SETTING_ERROR,null);
-		}
-		
-		itemRepository.saveItem(item);
-		
+		itemRepository.saveItem(item);		
 		itemRepository.pushAlarm(item.getShopidx());
 		
 	}
@@ -113,20 +101,28 @@ public class ItemService {
 		
 		//이미지 파일이 새로 바뀐 경우
 		if(imageFile != null) {
-			String fullPath = fileDir + imageFile.getOriginalFilename();
-			log.info("파일 저장 fullPath ={}",fullPath);
-			imageFile.transferTo(new File(fullPath));
-			item.setImage(imageFile.getOriginalFilename());
+			item = saveImageFile(imageFile, item);
 		}
-		log.info("Item = {}", item);
 		
-		//시작시간보다 마감시간이 빠른지 검사
+		timeCheck(item);
+		
+		itemRepository.updateItem(item);
+	}
+	
+	//중복아이템 검사
+	private void duplicateItemCheck(Item item) {
+		Optional.ofNullable(itemRepository.findByShopIdxAndItemname(item.getShopidx(), item.getItemname()))
+		.ifPresent(user->{
+			throw new SaveItemException(ErrorCode.DUPLICATED_ITEM,null);
+		});
+	}
+	
+	//시작시간보다 마감시간이 빠른지 검사
+	private void timeCheck(Item item) {
 		int timeOut = item.getStarttime().compareTo(item.getEndtime());
 		if(timeOut >= 0) {
 			throw new TimeSettingException(ErrorCode.TIME_SETTING_ERROR,null);
 		}
-		
-		itemRepository.updateItem(item);
 	}
 	
     /*
@@ -136,16 +132,22 @@ public class ItemService {
     public List<Item> getItems(int shopIdx){
        List<Item> items = new ArrayList<Item>();
        items = itemRepository.getItems(shopIdx);
-      
-       for(int i = 0; i < items.size(); i++) {
-          Timestamp starttime = new Timestamp(items.get(i).getStarttime().getTime() - (9 * 60 * 60 * 1000));
-          Timestamp endtime = new Timestamp(items.get(i).getEndtime().getTime() - (9 * 60 * 60 * 1000));
-         
-          items.get(i).setStarttime(starttime);
-          items.get(i).setEndtime(endtime);
+             
+       for(Item item : items) {
+    	   item = changeTimeZone(item);
        }
-      
        return items;  
+    }
+    
+    //타임존 정보 맞추기
+    private Item changeTimeZone(Item item) {
+    	Timestamp starttime = new Timestamp(item.getStarttime().getTime() - (9 * 60 * 60 * 1000));
+ 	    Timestamp endtime = new Timestamp(item.getEndtime().getTime() - (9 * 60 * 60 * 1000));
+ 	   
+ 	    item.setStarttime(starttime);
+ 	    item.setEndtime(endtime);
+ 	    
+ 	    return item;
     }
 	
 	/*
@@ -163,9 +165,7 @@ public class ItemService {
 		if(itemRepository.reservationCheck(item) != 0){
 			throw new ExistReservationException(ErrorCode.EXIST_RESERVATION_PERSON,null);
 		}
-		itemRepository.itemDelete(item);
-		
-		
+		itemRepository.itemDelete(item);	
 	}
 	
 	/*
@@ -193,21 +193,18 @@ public class ItemService {
 	/*
 	 *  상품 예약
 	 */
-	public void reservation(Reservation reservation, String shopname, String itemname, String name, String phone) {
+	public void reservation(Reservation reservation, String shopName, String itemName, String name, String phone) {
 		
 		int number = reservation.getNumber();
-		int itemidx = reservation.getItemidx();
-		int quantity = itemRepository.getQuantityByitemIdx(itemidx);
+		int quantity = itemRepository.getQuantityByitemIdx(reservation.getItemidx());
 		
 		if(quantity < number) {
 			throw new QuantityException(ErrorCode.EXCESS_QUANTITY,null);
 		}
 		
-		long miliseconds = System.currentTimeMillis();
-		Date redate = new Date(miliseconds);
-		reservation.setRedate(redate);
+		reservation.setRedate(new Date(System.currentTimeMillis()));
 		
-		String content = "[재고30]\n" + name + "님 정상적으로 예약이 완료되었습니다.\n\n" + "가게 이름: " + shopname + "\n상품명: " + itemname + "\n수량: " + number;
+		String content = "[재고30]\n" + name + "님 정상적으로 예약이 완료되었습니다.\n\n" + "가게 이름: " + shopName + "\n상품명: " + itemName + "\n수량: " + number;
 		
 		itemRepository.reservation(reservation);
 		sendMessage(phone, content);
@@ -217,20 +214,20 @@ public class ItemService {
 	/*
 	 *  상품 예약 확인(상업자가 확인 버튼 클릭)
 	 */
-	public void reservationConfirm(int ridx) {
-		itemRepository.reservationConfirm(ridx);
+	public void reservationConfirm(int reservationIdx) {
+		itemRepository.reservationConfirm(reservationIdx);
 	}
 	
 	/*
 	 * 상품 예약 취소
 	 */
-	public void reservationCancel(List<Map<String, Object>> reservationinfo, String name, String phone) {
+	public void reservationCancel(List<Map<String, Object>> reservationInfo, String name, String phone) {
 		
-		for(Map<String, Object> info : reservationinfo) {
-			int ridx = (int)info.get("reservationidx");
-			int itemidx = (int)info.get("itemidx");
+		for(Map<String, Object> info : reservationInfo) {
+			int reservationIdx = (int)info.get("reservationidx");
+			int itemIdx = (int)info.get("itemidx");
 			int number = (int)info.get("number");
-			itemRepository.reservationCancel(ridx, itemidx, number);
+			itemRepository.reservationCancel(reservationIdx, itemIdx, number);
 		}
 		String content = "[재고30]\n" + name + "님 정상적으로 예약이 취소되었습니다.\n";
 		sendMessage(phone, content);
@@ -312,6 +309,18 @@ public class ItemService {
         return (int)before;
 	}
 		
+	/*
+	 * 파일 저장 메소드
+	 */
+	private Item saveImageFile(MultipartFile imageFile, Item item) throws IllegalStateException, IOException {
+		String fullPath = fileDir + imageFile.getOriginalFilename();
+		log.info("파일 저장 fullPath ={}",fullPath);
+		
+		imageFile.transferTo(new File(fullPath));
+		item.setImage(imageFile.getOriginalFilename());
+		
+		return item;
+	}
 	
 	
 }

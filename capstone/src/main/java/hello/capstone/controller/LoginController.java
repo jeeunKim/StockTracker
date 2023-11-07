@@ -116,6 +116,7 @@ public class LoginController {
     public String idVerification(@RequestParam String id, HttpServletRequest request) {
     	Member member = memberService.IdVerification(id);
     	HttpSession session = request.getSession();
+    	
     	session.setAttribute("findpw_member", member);
     	return "ok";
     }
@@ -127,13 +128,15 @@ public class LoginController {
     public SingleMessageSentResponse findPwSendMessage(@RequestParam String phone, HttpServletRequest request) {
     	HttpSession session = request.getSession();
     	Member member = (Member)session.getAttribute("findpw_member");
+    	
     	if(phone.equals(member.getPhone())) {
     		return Message(phone, request);
     	}
     	else {
     		throw new SendMessageException(ErrorCode.PHONE_MISMATCH,null);
     	}
-    }
+    	
+}
     
     /*
      * 아이디 찾기(인증 문자 전송)

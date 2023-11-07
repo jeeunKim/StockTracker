@@ -39,7 +39,9 @@ public class ShopController {
 	private final MemberService memberService;
 	private final ShopService shopService;
 	
-	
+	/*
+	 * 리팩토링 전 등록, 수정 // 한 메소드에서 두개의 기능을 가지고 있음.(기본에 충실하지 못했음), 여러가지 필요없는 지저분 코드가 많고 컨트롤러가 무거워짐.
+	 */
 //	@PostMapping("/shopRegistration")
 //	public void shopRegistration(@RequestParam(value = "imageFilename", required = false) MultipartFile Image,
 //								   @RequestParam(value = "shopidx", defaultValue = "0") String sidx,
@@ -90,6 +92,11 @@ public class ShopController {
 //		
 //		
 //	}
+	
+	/*
+	 * 리팩토링 후 가게 등록, 수정 -> 등록 및 수정을 분리하고 지저분한 코드를 최소화했으며, 연결을 담당하는 컨트롤러가 너무 무거워지지 않도록 Service에서 더 많은 로직을 처리
+	 */
+	
 	/*
 	 * 가게 등록
 	 */
