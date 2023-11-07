@@ -1,9 +1,11 @@
 package hello.capstone.controller;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -38,7 +40,8 @@ public class LoginController {
 	private final LoginService loginService;
 	private final MemberService memberService;
 	private final PasswordEncoder bCryptPasswordEncoder;
-	
+	private final MessageSource messageSource;
+
 	/*
 	 * 일반 회원 회원가입
 	 */
@@ -48,8 +51,8 @@ public class LoginController {
     	if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
 	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
+	    		String em = messageSource.getMessage(error, Locale.getDefault());
+	            errors.put(error.getField(), em);
 	        }
 	    	throw new ValidationException(errors);
     	}
@@ -87,18 +90,25 @@ public class LoginController {
     
     @GetMapping("/getSessionMember")
     public Member getSessionMember(HttpSession session) {
+    	Member member = (Member)session.getAttribute("member");
+    	member.maskSensitiveInformation();
     	
-    	return (Member)session.getAttribute("member");
+    	return member; 
+    	
     }
     @GetMapping("/getSessionMember/business")
     public Member getSessionMemberBusiness(HttpSession session) {
+    	Member member = (Member)session.getAttribute("member");
+    	member.maskSensitiveInformation();
     	
-    	return (Member)session.getAttribute("member");
+    	return member; 
     }
     @GetMapping("/getSessionMember/getSessionMemberManager")
     public Member getSessionMemberManager(HttpSession session) {
+    	Member member = (Member)session.getAttribute("member");
+    	member.maskSensitiveInformation();
     	
-    	return (Member)session.getAttribute("member");
+    	return member; 
     }
     
     @GetMapping("/SessionLogout")
@@ -211,8 +221,8 @@ public class LoginController {
     	if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
 	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
+	    		String em = messageSource.getMessage(error, Locale.getDefault());
+	            errors.put(error.getField(), em);
 	        }
 	    	throw new ValidationException(errors);
     	}

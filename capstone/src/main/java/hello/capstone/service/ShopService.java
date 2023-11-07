@@ -145,8 +145,8 @@ public class ShopService {
 	/*
 	 * 가격 필터가 적용된 가게 조회
 	 */
-	public List<Shop> runPriceFilter(int price){
-		 List<Shop> filteredShops = shopRepository.runPriceFilter(price);
+	public List<Shop> runPriceFilter(int maxPrice, int minPrice){
+		 List<Shop> filteredShops = shopRepository.runPriceFilter(maxPrice, minPrice);
 		 
 		 return filteredShops;
 	}

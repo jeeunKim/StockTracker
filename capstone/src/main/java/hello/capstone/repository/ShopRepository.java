@@ -77,14 +77,14 @@ public class ShopRepository {
 	/*
 	 * 상업자 본인이 올린 가게
 	 */
-	public List<Shop> getShopByMember(int memberidx){
-		return shopMapper.getShopByMember(memberidx);
+	public List<Shop> getShopByMember(int memberIdx){
+		return shopMapper.getShopByMember(memberIdx);
 	}
 	/*
 	 * 가격 필터에 해당되는 가게 조회
 	 */
-	public List<Shop> runPriceFilter(int price){
-		return shopMapper.runPriceFilter(price);
+	public List<Shop> runPriceFilter(int maxPrice, int minPrice){
+		return shopMapper.runPriceFilter(maxPrice, minPrice);
 	}
 	
 	/*
@@ -97,15 +97,15 @@ public class ShopRepository {
 	/*
 	 * 가게 별점 설정하기
 	 */
-	public void setRatings(int shopidx, double rating) {
-		shopMapper.setRatings(shopidx, rating);
+	public void setRatings(int shopIdx, double rating) {
+		shopMapper.setRatings(shopIdx, rating);
 	}
 	
 	   /*
      * 해당 아이템 별로 예약자 리스트 조회
      */
-    public List<Map<String, Object>> getItemReservations(int itemidx){
-       return shopMapper.getItemReservations(itemidx);
+    public List<Map<String, Object>> getItemReservations(int itemIdx){
+       return shopMapper.getItemReservations(itemIdx);
     }  
 }
 

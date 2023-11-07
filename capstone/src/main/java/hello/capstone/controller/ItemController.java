@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -46,7 +47,7 @@ public class ItemController {
 
    private final ItemService itemService;
    private final ShopService shopService;
-     
+   private final MessageSource messageSource;  
    
    /*
     * 리팩토링 전 등록, 수정 // 한 메소드에서 두개의 기능을 가지고 있음.(기본에 충실하지 못했음), 여러가지 필요없는 지저분 코드가 많고 컨트롤러가 무거워짐.
@@ -131,8 +132,8 @@ public class ItemController {
       if(bindingResult.hasErrors()) {
           Map<String, String> errors = new HashMap<>();
           for (FieldError error : bindingResult.getFieldErrors()) {
-               log.info("{} = {}", error.getField(), error.getDefaultMessage());
-               errors.put(error.getField(), error.getDefaultMessage());
+               String em = messageSource.getMessage(error, Locale.getDefault());
+	           errors.put(error.getField(), em);
            }
           throw new ValidationException(errors);
       }
@@ -156,8 +157,8 @@ public class ItemController {
       if(bindingResult.hasErrors()) {
           Map<String, String> errors = new HashMap<>();
           for (FieldError error : bindingResult.getFieldErrors()) {
-               log.info("{} = {}", error.getField(), error.getDefaultMessage());
-               errors.put(error.getField(), error.getDefaultMessage());
+        	   String em = messageSource.getMessage(error, Locale.getDefault());
+	           errors.put(error.getField(), em);
            }
           throw new ValidationException(errors);
       }

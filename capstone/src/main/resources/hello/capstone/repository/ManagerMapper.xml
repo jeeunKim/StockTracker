@@ -85,7 +85,7 @@
 		select s.*, count(*) as duplicateCount, r.memberidx
 		from shop s
 		join reservation r on s.shopidx = r.shopidx
-		where r.memberidx = #{memberIdx} and r.confirm = 'false'
+		where r.memberidx = #{memberIdx}
 		group by r.shopidx
 		order by s.shopname asc ;
 	</select>

@@ -27,7 +27,7 @@ public interface ShopMapper {
    
    List<Shop> getShopByMember(@Param("memberidx") int memberidx);
    
-   List<Shop> runPriceFilter(int price);
+   List<Shop> runPriceFilter(@Param("maxPrice") int maxPrice,@Param("minPrice") int minPrice);
    
    Shop getShopByIdx(@Param("shopidx") int shopidx);
    

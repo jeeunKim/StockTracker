@@ -115,7 +115,7 @@ public class ManagerController {
 	 * 신뢰도를 깎은 가게에서 어떤 아이템을 예약했었는지 조회
 	 */
 	@GetMapping("/member/user/trustmanage/item")
-	public List<Map<String, Object>> failItem(@RequestParam("shopIdx") int shopIdx, @RequestParam("memberIdx") int memberIdx  ){
+	public List<Map<String, Object>> failItem(@RequestParam("shopidx") int shopIdx, @RequestParam("memberidx") int memberIdx  ){
 	
 		return managerService.getFailedItems(shopIdx,memberIdx);
 	}

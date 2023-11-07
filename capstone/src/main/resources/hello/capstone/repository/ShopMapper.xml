@@ -55,7 +55,10 @@
 		select * 
 		from shop 
 		where shopidx in (
-			select distinct shopidx from item where salecost &lt;= #{price} and endtime &gt;= #{now()}
+			select distinct shopidx from item 
+			where salecost &lt;= #{maxPrice} and 
+			salecost &gt;= #{minPrice} and 
+			endtime &gt;= now()
 		);
 	</select>
 	

@@ -3,8 +3,10 @@ package hello.capstone.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +40,8 @@ public class ShopController {
 	
 	private final MemberService memberService;
 	private final ShopService shopService;
+	private final MessageSource messageSource;
+
 	
 	/*
 	 * 리팩토링 전 등록, 수정 // 한 메소드에서 두개의 기능을 가지고 있음.(기본에 충실하지 못했음), 여러가지 필요없는 지저분 코드가 많고 컨트롤러가 무거워짐.
@@ -107,15 +111,15 @@ public class ShopController {
 		if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
 	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("error in {} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
+	    		String em = messageSource.getMessage(error, Locale.getDefault());
+		        errors.put(error.getField(), em);
 	        }
 	    	throw new ValidationException(errors);
     	}
 		
 		Member member = (Member) session.getAttribute("member");
 		shop.setOwnerIdx(member.getMemberIdx());
-		log.info("shop = {}", shop);
+
 		shopService.saveShop(shop);
 	}
 	
@@ -130,8 +134,8 @@ public class ShopController {
 		if(bindingResult.hasErrors()) {
     		Map<String, String> errors = new HashMap<>();
 	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("error in {} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
+	    		String em = messageSource.getMessage(error, Locale.getDefault());
+		        errors.put(error.getField(), em);
 	        }
 	    	throw new ValidationException(errors);
     	}
@@ -191,33 +195,28 @@ public class ShopController {
 	 * 필터를 적용한 가게 조회 거리, 가격, 마감시간
 	 */
 	@GetMapping("/getShop/filter")
-    public List<Shop> getShopFilterDistance(@RequestParam("latitude") String myLatitude,
-		                                    @RequestParam("longitude") String myLongitude,
-		                                    @RequestParam(value = "distance", defaultValue = "0") String distance,
+    public List<Shop> getShopFilterDistance(@RequestParam("latitude") double latitude,
+		                                    @RequestParam("longitude") double longitude,
+		                                    @RequestParam(value = "distance", defaultValue = "0") double dist,
 		                                    @RequestParam(value = "unit", defaultValue = "km") String unit,
-		                                    @RequestParam(value = "price", defaultValue = "0") String itemprice,
-		                                    @RequestParam(value = "time", defaultValue = "0") String time,
-		                                    @RequestParam(value = "rating", defaultValue = "0") String shoprating){
+		                                    @RequestParam(value = "maxprice", defaultValue = "0") int maxPrice,
+		                                    @RequestParam(value = "minprice", defaultValue = "0") int minPrice,
+		                                    @RequestParam(value = "time", defaultValue = "0") Long time,
+		                                    @RequestParam(value = "rating", defaultValue = "0") double rating){
       
-
+		
        List<Shop> allShops = shopService.getShops();
       
-       double latitude = Double.parseDouble(myLatitude);
-       double longitude = Double.parseDouble(myLongitude);
-       double dist = Double.parseDouble(distance);
-       int price = Integer.parseInt(itemprice);
-       double rating = Double.parseDouble(shoprating);
-       long minute = Long.parseLong(time) * 60;
-       
-       
+       long minute = time * 60;
+
        if(dist != 0) {
           List<Shop> distanceFilteredShops = shopService.runDistanceFilter(latitude, longitude, dist, unit);
           if(distanceFilteredShops != null) {   
              allShops.retainAll(distanceFilteredShops); 
           }
        }   
-       if(price != 0) {
-          List<Shop> priceFilteredShops = shopService.runPriceFilter(price);
+       if(maxPrice != 0) {
+          List<Shop> priceFilteredShops = shopService.runPriceFilter(maxPrice, minPrice);
           if(priceFilteredShops != null) {   
              allShops.retainAll(priceFilteredShops);
           }

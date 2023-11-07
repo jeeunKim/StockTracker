@@ -111,17 +111,18 @@ public class MemberController {
 	        }
 	    	throw new ValidationException(errors);
     	}
-		
+
 		Member oldMember = (Member)session.getAttribute("member");
-		memberService.pwCheck(oldMember, oldPw);
+		//memberService.pwCheck(oldMember, oldPw);
 		
 		Member newMember = memberService.updatePwOnPurpose(oldMember, member.getPw());
+		newMember.maskSensitiveInformation();
 		session.setAttribute("member", newMember);
 		
 		return "/";
 	}
 	
-	/*
+	/*0
 	 * 회원정보 수정
 	 */
 	@PutMapping("/update/info")

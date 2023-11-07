@@ -113,13 +113,13 @@ public class LoginService {
 	}
 	
 	/*
-	 * 로그인 나중에 1로 변경
+	 * 로그인 
 	 */
 	public Member login(String id, String pw) {
 		
 		
 		Member userMember = memberRepository.findById(id,"normal");
-		passwordCheck2(userMember, pw);
+		passwordCheck(userMember, pw);
 
 		return userMember;
 	}
@@ -167,14 +167,7 @@ public class LoginService {
 	      }
 		
 	}
-	//비밀번호 일치 확인 - 나중에 지움 임시
-	private void passwordCheck2(Member userMember, String pw) {
-		if(!(pw.equals(userMember.getPw()))) {
-			throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
-	    }
-		
-	}
-	
+
 	
 	//닉네임 임의의 random String
 	private String createRandomNickname() {
