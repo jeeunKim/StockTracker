@@ -33,15 +33,14 @@ public class Member {
    @NotBlank(groups = SignUpValidationGroup.class)
    private String pw;
     
-   @Pattern(regexp = "^[가-힣a-zA-Z]{1,6}$", groups = SignUpValidationGroup.class)
+   @Pattern(regexp = "^[가-힣a-zA-Z]{1,6}$", groups = {SignUpValidationGroup.class,UpdateInfoValidationGroup.class})
    @NotBlank(groups = SignUpValidationGroup.class)
    private String name;
-   
-   
-   @Pattern(regexp = "^[가-힣a-zA-Z0-9]{1,15}$", groups = UpdateInfoValidationGroup.class)
+
+   @Size(min = 1, max = 15, groups = UpdateInfoValidationGroup.class)
    private String nickname;
     
-   @Pattern(regexp = "^01[016789]\\d{7,8}$", groups = SignUpValidationGroup.class)
+   @Pattern(regexp = "^01[016789]\\d{7,8}$", groups = {SignUpValidationGroup.class, UpdateInfoValidationGroup.class})
    @NotBlank(groups = SignUpValidationGroup.class)
    private String phone;
      
@@ -54,8 +53,6 @@ public class Member {
    
    private String trust;
    
-   public void maskSensitiveInformation() {
-	   this.pw = "********************";
-   }
+  
 
 }

@@ -109,12 +109,7 @@ public class ShopController {
 							BindingResult bindingResult, HttpSession session) 
 									throws IllegalStateException, IOException {
 		if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	    		String em = messageSource.getMessage(error, Locale.getDefault());
-		        errors.put(error.getField(), em);
-	        }
-	    	throw new ValidationException(errors);
+			sendErrors(bindingResult);
     	}
 		
 		Member member = (Member) session.getAttribute("member");
@@ -132,17 +127,24 @@ public class ShopController {
 						   @RequestParam(value = "imagefile", required = false) MultipartFile Image ) throws IllegalStateException, IOException {
 		
 		if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	    		String em = messageSource.getMessage(error, Locale.getDefault());
-		        errors.put(error.getField(), em);
-	        }
-	    	throw new ValidationException(errors);
+			sendErrors(bindingResult);
     	}
 		
 		shopService.updateShop(shop, Image, shop.getShopAddress());
 	}
 	
+	
+    //검증 오류
+    private void sendErrors(BindingResult bindingResult) {
+ 	   Map<String, String> errors = new HashMap<>();
+        for (FieldError error : bindingResult.getFieldErrors()) {
+     	   String em = messageSource.getMessage(error, Locale.getDefault());
+            errors.put(error.getField(), em);
+        }
+        throw new ValidationException(errors);
+    }
+    
+    
 	/*
 	 * 가게 삭제
 	 */

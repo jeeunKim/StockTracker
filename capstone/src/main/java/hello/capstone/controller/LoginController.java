@@ -49,12 +49,7 @@ public class LoginController {
     public String signUp(@Validated(value = SignUpValidationGroup.class) @RequestBody Member member, BindingResult bindingResult){
     	
     	if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	    		String em = messageSource.getMessage(error, Locale.getDefault());
-	            errors.put(error.getField(), em);
-	        }
-	    	throw new ValidationException(errors);
+    		sendErrors(bindingResult);
     	}
     	
     	String pw = bCryptPasswordEncoder.encode(member.getPw());
@@ -91,7 +86,6 @@ public class LoginController {
     @GetMapping("/getSessionMember")
     public Member getSessionMember(HttpSession session) {
     	Member member = (Member)session.getAttribute("member");
-    	member.maskSensitiveInformation();
     	
     	return member; 
     	
@@ -99,14 +93,12 @@ public class LoginController {
     @GetMapping("/getSessionMember/business")
     public Member getSessionMemberBusiness(HttpSession session) {
     	Member member = (Member)session.getAttribute("member");
-    	member.maskSensitiveInformation();
     	
     	return member; 
     }
     @GetMapping("/getSessionMember/getSessionMemberManager")
     public Member getSessionMemberManager(HttpSession session) {
     	Member member = (Member)session.getAttribute("member");
-    	member.maskSensitiveInformation();
     	
     	return member; 
     }
@@ -219,14 +211,8 @@ public class LoginController {
     public String updatePw(@Validated(value = UpdatePwValidationGroup.class) @RequestBody Member memberPw, BindingResult bindingResult, HttpServletRequest request) {
     	//변경 비밀번호 검증 및 암호화
     	if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	    		String em = messageSource.getMessage(error, Locale.getDefault());
-	            errors.put(error.getField(), em);
-	        }
-	    	throw new ValidationException(errors);
+    		sendErrors(bindingResult);
     	}
-    	
     	
     	HttpSession session = request.getSession();
     	Member member = (Member)session.getAttribute("findpw_member");
@@ -240,11 +226,19 @@ public class LoginController {
     	return "/login";
     }
     
-    /*
-     *-----------------------------------------------------------------------------------------------------
-     *private 메소드
-     *----------------------------------------------------------------------------------------------------- 	
-     */
+    //-------------------------------------------------------------------------------------------------------
+    
+    
+    //검증 오류
+    private void sendErrors(BindingResult bindingResult) {
+ 	   Map<String, String> errors = new HashMap<>();
+        for (FieldError error : bindingResult.getFieldErrors()) {
+     	   String em = messageSource.getMessage(error, Locale.getDefault());
+           errors.put(error.getField(), em);
+        }
+        throw new ValidationException(errors);
+    }
+    
     
     //인증 번호 문자 보내는 코드
     private SingleMessageSentResponse Message(String phone, HttpServletRequest request) {

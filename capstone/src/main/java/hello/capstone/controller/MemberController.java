@@ -2,8 +2,10 @@ package hello.capstone.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +41,7 @@ public class MemberController {
 	private final MemberService memberService;
 	private final ShopService shopService;
 	private final ItemService itemService;
-	
+	private final MessageSource messageSource;
 	
 	/*
 	 * 즐겨찾기 등록
@@ -104,25 +106,19 @@ public class MemberController {
 						   @RequestParam("oldpw") String oldPw,HttpSession session) {
 		
 		if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
-	        }
-	    	throw new ValidationException(errors);
+			sendErrors(bindingResult);
     	}
 
 		Member oldMember = (Member)session.getAttribute("member");
-		//memberService.pwCheck(oldMember, oldPw);
+		memberService.pwCheck(oldMember, oldPw);
 		
 		Member newMember = memberService.updatePwOnPurpose(oldMember, member.getPw());
-		newMember.maskSensitiveInformation();
 		session.setAttribute("member", newMember);
 		
 		return "/";
 	}
 	
-	/*0
+	/*
 	 * 회원정보 수정
 	 */
 	@PutMapping("/update/info")
@@ -130,12 +126,7 @@ public class MemberController {
 							 BindingResult bindingResult, HttpSession session) {
 		
 		if(bindingResult.hasErrors()) {
-    		Map<String, String> errors = new HashMap<>();
-	    	for (FieldError error : bindingResult.getFieldErrors()) {
-	            log.info("{} = {}", error.getField(), error.getDefaultMessage());
-	            errors.put(error.getField(), error.getDefaultMessage());
-	        }
-	    	throw new ValidationException(errors);
+			sendErrors(bindingResult);
     	}
 		
 		Member oldMember = (Member) session.getAttribute("member");
@@ -185,8 +176,17 @@ public class MemberController {
 	
 //----------------------------------------------------------------------------------------------------------
 	
-	
+	// 검증 오류
+	private void sendErrors(BindingResult bindingResult) {
+		Map<String, String> errors = new HashMap<>();
+    	for (FieldError error : bindingResult.getFieldErrors()) {
+    		String em = messageSource.getMessage(error, Locale.getDefault());
+            errors.put(error.getField(), em);
+        }
+    	throw new ValidationException(errors);
+	}
 
+	
 	
 }
 

@@ -130,12 +130,7 @@ public class ItemController {
                         @RequestParam("endParam") String endParam) throws IllegalStateException, IOException, ParseException{
       
       if(bindingResult.hasErrors()) {
-          Map<String, String> errors = new HashMap<>();
-          for (FieldError error : bindingResult.getFieldErrors()) {
-               String em = messageSource.getMessage(error, Locale.getDefault());
-	           errors.put(error.getField(), em);
-           }
-          throw new ValidationException(errors);
+    	  sendErrors(bindingResult);
       }
       
       item.setStarttime(convertStringToTimestamp(startParam));
@@ -155,12 +150,7 @@ public class ItemController {
                              throws ParseException, IllegalStateException, IOException {
 
       if(bindingResult.hasErrors()) {
-          Map<String, String> errors = new HashMap<>();
-          for (FieldError error : bindingResult.getFieldErrors()) {
-        	   String em = messageSource.getMessage(error, Locale.getDefault());
-	           errors.put(error.getField(), em);
-           }
-          throw new ValidationException(errors);
+    	  sendErrors(bindingResult);
       }
       
       Item oldItem = itemService.findByItemIdx(item.getItemidx());
@@ -181,6 +171,16 @@ public class ItemController {
 
       
       itemService.updateItem(oldItem, imageFile);
+   }
+   
+   //검증 오류
+   private void sendErrors(BindingResult bindingResult) {
+	   Map<String, String> errors = new HashMap<>();
+       for (FieldError error : bindingResult.getFieldErrors()) {
+    	   String em = messageSource.getMessage(error, Locale.getDefault());
+           errors.put(error.getField(), em);
+       }
+       throw new ValidationException(errors);
    }
    
    /*
@@ -271,9 +271,8 @@ public class ItemController {
    
    //---------------------------------------------------------------------------------------------------
    
-   /*
-    * String을 Timestamp로 변환하는 함수
-    */
+	
+   //String을 Timestamp로 변환하는 함수
    private Timestamp convertStringToTimestamp(String dateString) throws ParseException {
      
 	   try {

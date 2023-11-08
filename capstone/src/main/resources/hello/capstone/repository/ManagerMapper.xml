@@ -81,14 +81,14 @@
 		order by name, role asc;
 	</select>
 	
-	<select id="getFailedReservation" resultType = "Map">
-		select s.*, count(*) as duplicateCount, r.memberidx
-		from shop s
-		join reservation r on s.shopidx = r.shopidx
-		where r.memberidx = #{memberIdx}
-		group by r.shopidx
-		order by s.shopname asc ;
-	</select>
+    <select id="getFailedReservation" resultType = "Map">
+	    select s.*, SUM(CASE WHEN r.confirm = 'false' THEN 1 ELSE 0 END) as duplicateCount, r.memberidx
+	    from shop s
+	    join reservation r on s.shopidx = r.shopidx
+	    where r.memberidx = #{memberIdx}
+	    group by r.shopidx
+	    order by s.shopname asc ;
+    </select>
 	
 	<select id = "getFailedItems" resultType = "Map">
 		select i.*, r.number, r.redate, r.confirm
