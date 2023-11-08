@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hello.capstone.repository.InquiryMapper">
 	
+	<select id = "inquiryViewAll" resultType ="Map">
+        select *
+        from inquiry
+        order by redate asc;
+    </select>
+    
 	<select id = "inquiryView" resultType ="Map">
         select i.*, m.name
         from inquiry i 
@@ -11,7 +17,7 @@
         order by redate asc;
     </select>
 	
-	<select id = "inquiryAnswerView">
+	<select id = "inquiryAnswerView" resultType ="Map">
 		select * from inquiry
 		where inquiryidx = #{inquiryidx};
 	</select>

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hello.capstone.dto.Member;
+import hello.capstone.exception.AdminLoginException;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.errorcode.ErrorCode;
@@ -56,6 +57,25 @@ public class LoginService {
 	}
 	
 
+	/*
+     * 관리자 페이지 로그인
+     */
+    public Member admin_login(String id, String pw) {
+       
+       Member AdminMember = memberRepository.findById(id,"normal");
+       passwordCheck(AdminMember, pw);
+       AdminCheck(AdminMember);
+       
+       return AdminMember;
+    }
+    
+    //관리자인지 확인
+    private void AdminCheck(Member adminMember) {
+       if(!adminMember.getRole().equals("관리자")) {
+          throw new AdminLoginException(ErrorCode.NOT_ADMINISTER, null);
+       }
+       
+    }
 	/*
 	 * 카카오 회원가입 - 
 	 * */
@@ -164,7 +184,7 @@ public class LoginService {
 		boolean pwCheck = bCryptPasswordEncoder.matches(pw, userMember.getPw());
 		if(!pwCheck) {
 	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
-	      }
+	     }
 		
 	}
 

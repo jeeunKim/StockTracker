@@ -12,9 +12,11 @@ import hello.capstone.dto.Inquiry;
 @Mapper
 public interface InquiryMapper {
 
+	List<Map<String, Object>> inquiryViewAll();
+	
 	List<Map<String, Object>> inquiryView(int memberidx);
 	
-	Inquiry inquiryAnswerView(int inquiryidx);
+	Map<String, Object> inquiryAnswerView(int inquiryidx);
 	
 	void register(Inquiry inquiry);
 	

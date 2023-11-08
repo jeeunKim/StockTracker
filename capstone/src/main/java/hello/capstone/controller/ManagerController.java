@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import hello.capstone.dto.Notice;
 import hello.capstone.dto.Shop;
 import hello.capstone.service.ManagerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 /*
@@ -39,7 +41,7 @@ public class ManagerController {
 	 * 공지사항 CREATE
 	 */
 	@PostMapping("/notice/create")
-	public void noticeCreate(@RequestBody Notice notice) {
+	public void noticeCreate(@ModelAttribute Notice notice) {
 		managerService.noticeCreate(notice);
 		
 	}
@@ -48,33 +50,33 @@ public class ManagerController {
 	 * 공지사항 READ 
 	 */
 	@GetMapping("/notice/read")
-	public Notice noticeRead(@RequestParam String noticeIdx, @RequestParam String title ){
-		int idx = Integer.parseInt(noticeIdx);
-		
-		return managerService.noticeRead(idx, title);
+	public Map<String,Object> noticeRead(@RequestParam int noticeIdx ){
+
+		return managerService.noticeRead(noticeIdx);
 	}
 	
 	/*
 	 * 공지사항 UPDATE
 	 */
 	@PutMapping("/notice/update")
-	public void noticeUpdate(@RequestBody Notice newNotice) {
+	public Map<String,Object> noticeUpdate(@ModelAttribute Notice newNotice) {
 		managerService.noticeUpdate(newNotice);
+		return noticeRead(newNotice.getNoticeIdx());
 	}
 	
 	/*
 	 * 공지사항 DELETE
 	 */
 	@DeleteMapping("/notice/delete")
-	public void noticeDelete(@RequestBody Notice notice) {
-		managerService.noticeDelete(notice);
+	public void noticeDelete(@RequestParam int noticeIdx) {
+		managerService.noticeDelete(noticeIdx);
 	}
 	
 	/*
 	 * 모든 공지사항 READ 
 	 */
 	@GetMapping("/notice/readall")
-	public List<Notice> noticeReadAll(){
+	public List<Map<String, Object>> noticeReadAll(){
 		
 		return managerService.noticeReadAll();
 	}
@@ -164,31 +166,48 @@ public class ManagerController {
 		
 	
 	
-	//가게 분석---------------------------------------------------------------------------------------
-	
-	/*
-	 * 모든 가게 정보 조회
-	 */
-	@GetMapping("/analysis/shop")
-	public List<Shop> getShopinfo(){
-		return managerService.getShopinfo();
-	}
-	
-	/*
-	 * 해당 가게에 등록된 상품과 상품별 예약된 상품수량 조회
-	 */
-	@GetMapping("/analysis/item")
-	public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopIdx){
-		return managerService.getIteminfo(shopIdx);
-	}
-	
-	/*
-	 * 해당 가게에서 상품을 구매해간 고객 정보 
-	 */
-	@GetMapping("/analysis/reservation/member")
-	public List<Member> AnalysisReservation(@RequestParam("shopidx") int shopIdx){
-		return managerService.getReservationMember(shopIdx);
-	}
+	   //가게 분석---------------------------------------------------------------------------------------
+	   
+	   /*
+	    * 모든 가게 정보 조회
+	    */
+	   @GetMapping("/analysis/shop")
+	   public List<Map<String, Object>> getShopinfo(){
+	      return managerService.getShopinfo();
+	   }
+	   
+	   /*
+	    * 해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
+	    */
+	   @GetMapping("/analysis/item")
+	   public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopidx){
+	      return managerService.getIteminfo(shopidx);
+	   }
+
+	   /*
+	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(1)
+	    */
+	   @GetMapping("/analysis/rating")
+	   public List<Map<String, Object>> AnalysisRating(@RequestParam("shopidx") int shopidx){
+	      return managerService.getRatingNumber(shopidx);
+	   }
+	   
+	   /*
+	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
+	    */
+	   @GetMapping("/analysis/rating/client")
+	   public List<Map<String, Object>> AnalysisRatingClient(@RequestParam("shopidx") int shopidx,
+	                                            @RequestParam("rating") int rating){
+	      return managerService.getRatingClient(shopidx, rating);
+	   }
+	   
+	   /*
+	    * 해당 가게에서 상품을 구매해간 고객 정보 
+	    */
+	   @GetMapping("/analysis/reservation/member")
+	   public List<Map<String, Object>> AnalysisReservation(@RequestParam("shopidx") int shopidx){
+	      return managerService.getReservationMember(shopidx);
+	   }
 	
 	
 	//검색---------------------------------------------------------------------------------------------------

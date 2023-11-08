@@ -141,12 +141,10 @@ public class MemberService {
 	
 	public void pwCheck(Member member, String oldPw) {
 
-		if(!(member.getPw().equals(oldPw))) {
-			  log.info("olpw = {}",oldPw);
-			  log.info("member.getPw() = {}",member.getPw());
+		boolean pwCheck = bCryptPasswordEncoder.matches(oldPw, member.getPw());
+		if(!pwCheck) {
 	    	  throw new LogInException(ErrorCode.PASSWORD_MISMATCH, null);
-	      }
-	
+	      }	
 	}
 	
 

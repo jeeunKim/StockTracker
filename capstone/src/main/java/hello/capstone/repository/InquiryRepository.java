@@ -15,8 +15,15 @@ public class InquiryRepository {
 
 	private final InquiryMapper inquiryMapper;
 	
+	/*
+     * 1:1문의 나열 전체
+     */
+    public List<Map<String, Object>> inquiryViewAll(){
+       return inquiryMapper.inquiryViewAll();
+    }
+    
     /*
-     * 1:1문의 나열
+     * 1:1문의 나열 한명
      */
     public List<Map<String, Object>> inquiryView(int memberidx){
        return inquiryMapper.inquiryView(memberidx);
@@ -25,7 +32,7 @@ public class InquiryRepository {
 	/*
 	 * 1:1 문의 답변 보기(사용자 입장)
 	 */
-	public Inquiry inquiryAnswerView(int inquiryidx) {
+	public Map<String, Object> inquiryAnswerView(int inquiryidx) {
 		return inquiryMapper.inquiryAnswerView(inquiryidx);
 	}
 	

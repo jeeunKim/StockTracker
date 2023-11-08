@@ -61,6 +61,27 @@ public class LoginController {
     }
     
     /*
+     * 관리자 페이지 로그인
+     */
+    @PostMapping("/admin/login")
+    public String admin_login(@RequestBody HashMap<String, Object> loginMap, HttpServletRequest request) {
+       String id = (String) loginMap.get("id");
+       String pw = (String) loginMap.get("pw");
+       
+       log.info("id = {}, pw = {}", id, pw);
+      
+       if(id.isEmpty()) {
+          return "/ad_login";
+       }
+       Member member = loginService.admin_login(id, pw);
+       HttpSession session = request.getSession();       
+       
+       session.setAttribute("AdminMember", member);
+       
+       return "/ad_user";
+    }
+    
+    /*
      * 일반 회원 로그인
      */
     @PostMapping("/login")
@@ -96,7 +117,7 @@ public class LoginController {
     	
     	return member; 
     }
-    @GetMapping("/getSessionMember/getSessionMemberManager")
+    @GetMapping("/getSessionMember/manager")
     public Member getSessionMemberManager(HttpSession session) {
     	Member member = (Member)session.getAttribute("member");
     	

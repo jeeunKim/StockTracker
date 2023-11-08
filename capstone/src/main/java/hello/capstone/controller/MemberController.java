@@ -122,9 +122,8 @@ public class MemberController {
 	 * 회원정보 수정
 	 */
 	@PutMapping("/update/info")
-	public String updateInfo(@Validated(value = UpdateInfoValidationGroup.class) @RequestBody Member member, 
+	public String updateInfo(@RequestBody @Validated(value = UpdateInfoValidationGroup.class) Member member, 
 							 BindingResult bindingResult, HttpSession session) {
-		
 		if(bindingResult.hasErrors()) {
 			sendErrors(bindingResult);
     	}
@@ -180,7 +179,9 @@ public class MemberController {
 	private void sendErrors(BindingResult bindingResult) {
 		Map<String, String> errors = new HashMap<>();
     	for (FieldError error : bindingResult.getFieldErrors()) {
+    		log.info("error = {}", error);
     		String em = messageSource.getMessage(error, Locale.getDefault());
+    		log.info("em = {}", em);
             errors.put(error.getField(), em);
         }
     	throw new ValidationException(errors);

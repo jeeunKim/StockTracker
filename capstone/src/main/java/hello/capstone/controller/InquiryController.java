@@ -17,7 +17,8 @@ import hello.capstone.dto.Member;
 import hello.capstone.service.InquiryService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RequestMapping("/inquiry")
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +27,18 @@ public class InquiryController {
 	private final InquiryService inquiryService;
 	
 	 /*
-      * 1:1문의 전체 나열
+      * 1:1문의 전체 한명
+      */
+     @GetMapping("/view/all")
+     public List<Map<String, Object>> inquiryView(){
+        return inquiryService.inquiryViewAll();
+     }
+     
+     /*
+      * 한 사람 1:1문의 나열
       */
      @GetMapping("/view")
-     public List<Map<String, Object>> inquiryView(HttpSession session){
+     public List<Map<String, Object>> inquiryViewOne(HttpSession session){
         Member member = (Member) session.getAttribute("member");
         int memberidx = member.getMemberIdx();
         return inquiryService.inquiryView(memberidx);
@@ -39,7 +48,8 @@ public class InquiryController {
 	 * 1:1 문의 답변 보기(사용자 입장)
 	 */
 	@GetMapping("/user/answer/view")
-	public Inquiry inquiryAnswerView(@RequestParam("inquiryidx") int inquiryIdx) {
+	public Map<String, Object> inquiryAnswerView(@RequestParam("inquiryidx") int inquiryIdx) {
+		log.info("inquiry ={}", inquiryService.inquiryAnswerView(inquiryIdx));
 		return inquiryService.inquiryAnswerView(inquiryIdx);
 	}
 	
@@ -91,7 +101,7 @@ public class InquiryController {
 	 * 1:1문의 답변 등록
 	 */
 	@PostMapping("/answer")
-	public String inquiryAnswer(@RequestParam("inquiryidx") int inquiryIdx,
+	public Map<String, Object> inquiryAnswer(@RequestParam("inquiryidx") int inquiryIdx,
 			 					@RequestParam("adminidx") int adminIdx,
 			 					@RequestParam("content_answer") String contentAnswer) {
 		
@@ -102,31 +112,32 @@ public class InquiryController {
 		
 		inquiryService.inquiryAnswer(inquiry);
 		
-		return "";
+		return inquiryAnswerView(inquiryIdx);
 	}
 	
 	/*
-	 * 1:1문의 답변 삭제
+	 * 1:1문의 답변만 삭제
 	 */
-	@DeleteMapping("/answer/delete")
-	public void inquiryAnswerDelete(@RequestParam("inquiryidx") int inquiryIdx,
+	@PutMapping("/answer/delete")
+	public Map<String, Object> inquiryAnswerDelete(@RequestParam("inquiryidx") int inquiryIdx,
 									@RequestParam("adminidx") int adminIdx) {
 
 		inquiryService.inquiryAnswerDelete(inquiryIdx,adminIdx);
+		return inquiryAnswerView(inquiryIdx);
 	}
 	
 	/*
 	 * 1:1문의 답변 수정
 	 */
 	@PutMapping("/answer/update")
-	public String inquiryAnswerUpdate(@RequestParam("inquiryidx") int inquiryIdx,
+	public Map<String, Object> inquiryAnswerUpdate(@RequestParam("inquiryidx") int inquiryIdx,
 									  @RequestParam("adminidx") int adminIdx,
 									  @RequestParam("content_answer") String contentAnswer) {
 	
 		
 		inquiryService.inquiryAnswerUpdate(inquiryIdx, adminIdx, contentAnswer);
 		
-		return "";
+		return inquiryAnswerView(inquiryIdx);
 	}
 	
 }

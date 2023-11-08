@@ -6,24 +6,26 @@
 	<insert id = "noticeCreate">
 		insert into 
 		
-		notice(title, content, noticedate) 
+		notice(title, content, noticedate, memberidx) 
 		
-		values( #{title}, #{content}, #{noticeDate}  );
+		values( #{title}, #{content}, #{noticeDate}, #{memberIdx}  );
 	</insert>
 	
 	
-	<select id = "noticeRead" resultType ="Notice">
-		select *
+	<select id = "noticeRead" resultType ="Map">
+		select n.*, m.name
 		
-		from notice
+		from notice n 
 		
-		where noticeidx = #{noticeIdx} and title = #{title};
+		join member m on n.memberidx = m.memberidx
+		
+		where noticeidx = #{noticeIdx}
 	</select>
 	
 	<update id="noticeUpdate">
 		update notice
 
-		set title = #{title}, content = #{content}, noticedate =#{noticeDate}, noticemodify = #{noticeModify}
+		set title = #{title}, content = #{content}, noticedate =#{noticeDate}, noticemodify = #{noticeModify}, memberidx = #{memberIdx}
 		
 		where noticeidx = #{noticeIdx}
 	</update>
@@ -36,10 +38,12 @@
 		where noticeidx = #{noticeIdx}
 	</delete>
 	
-	<select id = "noticeReadAll" resultType ="Notice">
-		select *
+	<select id = "noticeReadAll" resultType ="Map">
+		select n.*, m.name
 		
-		from notice
+		from notice n 
+		
+		join member m on n.memberidx = m.memberidx
 		
 		order by noticedate;
 	</select>
@@ -113,36 +117,57 @@
    		order by itemname asc;
    	</select>
    	
-   	<select id = "getShopinfo">
-   		select *
-   		from shop
- 		order by shopname asc;
-   	</select>
-   	
-   	<select id="getIteminfo" resultType="map">
-        select i.*, sum(case when r.confirm &lt;&gt; 'false' then r.number else 0 end) as reservation_count from item as i
-        left join reservation as r
-        on i.itemidx = r.itemidx
-        where i.shopidx = #{shopidx}
-        group by i.itemidx
-        order by i.itemname asc;
-    </select>
-   	
-   	<select id="getReservationMember" resultType="Member">
-   		select m.* from member as m
-		left join reservation as r
-		on m.memberidx = r.memberidx
-		where r.shopidx = #{shopidx} and r.confirm = "true";
-   	</select>
-	
-	
-	<select id = "getItemAll" resultType ="Map">
-		select i.*, s.shopname
-		from item i
-		inner join shop s on i.shopidx = s.shopidx
-		order by i.itemname asc , i.starttime asc;
-	
-	</select>
+   	     <select id = "getShopinfo" resultType="map">
+      select s.*, COUNT(CASE WHEN r.confirm != 'false' THEN r.reservationidx END) as reservater
+      from shop as s
+      left join reservation as r
+      on s.shopidx = r.shopidx
+      group by s.shopidx
+      order by shopname asc;
+      </select>
+      
+      <select id="getIteminfo" resultType="map">
+      select i.itemidx, i.itemname, quantity, COUNT(CASE WHEN r.confirm != 'false' THEN r.reservationidx END) as reservater
+      from item as i
+      left join reservation as r
+      on r.itemidx = i.itemidx
+      where i.shopidx = #{shopidx}
+      group by i.itemidx
+      order by itemname asc;
+      </select>
+
+      <select id="getRatingNumber" resultType="map">
+         SELECT r.rating, COALESCE(COUNT(rt.rating), 0) as rating_count
+      FROM (
+             SELECT 0 AS rating
+             UNION ALL SELECT 1
+             UNION ALL SELECT 2
+             UNION ALL SELECT 3
+             UNION ALL SELECT 4
+             UNION ALL SELECT 5
+         ) AS r
+      LEFT JOIN ratings AS rt 
+      ON r.rating = rt.rating AND rt.shopidx = #{shopidx}
+      GROUP BY r.rating
+      ORDER BY r.rating;
+      </select>
+      
+      <select id="getRatingClient" resultType="map">
+         select m.* 
+      from member as m
+      left join ratings as r
+      on m.memberidx = r.memberidx
+      where r.rating = #{rating} and r.shopidx = #{shopidx}
+      order by m.name asc;
+      </select>
+      
+      <select id="getReservationMember" resultType="Map">
+      SELECT i.itemidx, i.itemname, m.memberidx, m.id, r.number, r.redate
+      FROM reservation r
+      JOIN member m ON r.memberidx = m.memberidx
+      JOIN item i ON r.itemidx = i.itemidx
+      WHERE r.shopidx = #{shopidx} and r.confirm != 'false';
+      </select>
 	
 	
 	<select id ="searchMemberByName">
