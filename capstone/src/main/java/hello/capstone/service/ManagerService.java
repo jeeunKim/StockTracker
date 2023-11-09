@@ -84,7 +84,13 @@ public class ManagerService {
 	 * 모든 공지사항 READ
 	 */
 	public List<Map<String, Object>> noticeReadAll(){
-		return managerRepository.noticeReadAll();
+		List<Map<String, Object>> notices = managerRepository.noticeReadAll();
+		
+		for(Map<String, Object> notice : notices) {
+			Timestamp newRegisdate = new Timestamp(((Timestamp) notice.get("noticedate")).getTime() - (9 * 60 * 60 * 1000));
+			notice.put("noticedate", newRegisdate);
+		}
+		return notices;
 	}
 	
 	/*
@@ -155,43 +161,43 @@ public class ManagerService {
 	}
 	
 
-	   //가게 분석---------------------------------------------------------------------------------------
+    //가게 분석---------------------------------------------------------------------------------------
 
-	   /*
-	    * 모든 가게 정보 조회
-	    */
-	   public List<Map<String, Object>> getShopinfo(){
-	      return managerRepository.getShopinfo();
-	   }
-	   
-	   /*
-	    * 해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
-	    */
-	   public List<Map<String, Object>> getIteminfo(int shopidx){
-	      List<Map<String, Object>> iteminfo = managerRepository.getIteminfo(shopidx);
-	      return iteminfo;
-	   }
-	   
-	   /*
-	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수
-	    */
-	   public List<Map<String, Object>> getRatingNumber(int shopidx){
-	      return managerRepository.getRatingNumber(shopidx);
-	   }
-	   
-	   /*
-	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
-	    */
-	   public List<Map<String, Object>> getRatingClient (int shopidx, int rating){
-	      return managerRepository.getRatingClient(shopidx, rating);
-	   }
-
-	   /*
-	    * 해당 가게에서 상품을 구매해간 고객 정보 
-	    */
-	   public List<Map<String, Object>> getReservationMember(int shopidx){
-	      return managerRepository.getReservationMember(shopidx);
-	   }
+    /*
+     * 모든 가게 정보 조회
+     */
+    public List<Map<String, Object>> getShopinfo(){
+       return managerRepository.getShopinfo();
+    }
+   
+    /*
+     * 해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
+     */
+    public List<Map<String, Object>> getIteminfo(int shopidx){
+       List<Map<String, Object>> iteminfo = managerRepository.getIteminfo(shopidx);
+       return iteminfo;
+    }
+   
+    /*
+     * 별점 카테고리(0,1,2,3,4,5) 별 인원수
+     */
+    public List<Map<String, Object>> getRatingNumber(int shopidx){
+       return managerRepository.getRatingNumber(shopidx);
+    }
+   
+    /*
+     * 별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
+     */
+    public List<Map<String, Object>> getRatingClient (int shopidx, int rating){
+       return managerRepository.getRatingClient(shopidx, rating);
+    }
+ 
+    /*
+     * 해당 가게에서 상품을 구매해간 고객 정보 
+     */
+    public List<Map<String, Object>> getReservationMember(int shopidx){
+       return managerRepository.getReservationMember(shopidx);
+    }
 
 	
 	//검색---------------------------------------------------------------------------------------------------

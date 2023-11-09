@@ -124,13 +124,13 @@ public class ShopController {
 	 */
 	@PutMapping("/shop/update")
 	public void shopUpdate(@Validated(value = UpdateShopValidationGroup.class) @ModelAttribute Shop shop, BindingResult bindingResult,
-						   @RequestParam(value = "imagefile", required = false) MultipartFile Image ) throws IllegalStateException, IOException {
+						   @RequestParam(value = "imagefile", required = false) MultipartFile image ) throws IllegalStateException, IOException {
 		
 		if(bindingResult.hasErrors()) {
 			sendErrors(bindingResult);
     	}
 		
-		shopService.updateShop(shop, Image, shop.getShopAddress());
+		shopService.updateShop(shop, image, shop.getShopAddress());
 	}
 	
 	

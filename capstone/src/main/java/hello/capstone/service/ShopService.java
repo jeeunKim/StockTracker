@@ -116,10 +116,9 @@ public class ShopService {
 		oldShop.setShopTel(shop.getShopTel());
 		oldShop.setPromotionText(shop.getPromotionText());
 		oldShop.setShopWebsite(shop.getShopWebsite());
-		
 		//이미지 파일이 새로 바뀐 경우
 		if(imageFile != null) {
-			shop = saveImageFile(imageFile, shop);
+			oldShop = saveImageFile(imageFile, oldShop);
 		}
 		
 		//주소가 새로 바뀐 경우 / 위도, 경도까지 새로 적용
@@ -130,7 +129,6 @@ public class ShopService {
 			oldShop.setLongitude(cor.getX());
 			oldShop.setLatitude(cor.getY());
 		}
-		
 		shopRepository.updateShop(oldShop);
 	}
 	
@@ -184,7 +182,8 @@ public class ShopService {
      */
     public List<Shop> runRatingFilter(double rating){
    	 	List<Shop> filteredShops = shopRepository.runRatingFilter(rating);
-   	 return filteredShops;
+   	 	
+   	 	return filteredShops;
     }
     
 	/*

@@ -96,17 +96,24 @@ public class ItemService {
 	/*
 	 * 아이템 수정
 	 */
-	public void updateItem(Item item, MultipartFile imageFile) 
+	public void updateItem(Item item, MultipartFile imageFile, Item oldItem) 
 			throws IllegalStateException, IOException {
 		
+	    oldItem.setItemname(item.getItemname());
+	    oldItem.setCost(item.getCost());
+	    oldItem.setSalecost(item.getSalecost());
+	    oldItem.setQuantity(item.getQuantity());
+	    oldItem.setCategory(item.getCategory());
+	    oldItem.setItemnotice(item.getItemnotice());
+
 		//이미지 파일이 새로 바뀐 경우
 		if(imageFile != null) {
-			item = saveImageFile(imageFile, item);
+			oldItem = saveImageFile(imageFile, oldItem);
 		}
 		
-		timeCheck(item);
+		timeCheck(oldItem);
 		
-		itemRepository.updateItem(item);
+		itemRepository.updateItem(oldItem);
 	}
 	
 	//중복아이템 검사

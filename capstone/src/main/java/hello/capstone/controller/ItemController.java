@@ -152,25 +152,15 @@ public class ItemController {
       if(bindingResult.hasErrors()) {
     	  sendErrors(bindingResult);
       }
-      
       Item oldItem = itemService.findByItemIdx(item.getItemidx());
-
-      oldItem.setItemname(item.getItemname());
-      oldItem.setCost(item.getCost());
-      oldItem.setSalecost(item.getSalecost());
-      oldItem.setQuantity(item.getQuantity());
-      oldItem.setCategory(item.getCategory());
-      oldItem.setItemnotice(item.getItemnotice());
-
-      if(endParam != null || endParam =="" ) {
-         oldItem.setEndtime(convertStringToTimestamp(endParam));
-      }
-      if(startParam != null || startParam =="" ) {
-         oldItem.setStarttime(convertStringToTimestamp(startParam));
-      }
-
       
-      itemService.updateItem(oldItem, imageFile);
+	  if(endParam != null || endParam =="" ) {
+	     oldItem.setEndtime(convertStringToTimestamp(endParam));
+	  }
+	  if(startParam != null || startParam =="" ) {
+    	 oldItem.setStarttime(convertStringToTimestamp(startParam));
+	  }
+      itemService.updateItem(item, imageFile, oldItem);
    }
    
    //검증 오류

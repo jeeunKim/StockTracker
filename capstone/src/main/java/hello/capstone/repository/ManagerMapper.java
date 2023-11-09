@@ -69,25 +69,22 @@ public interface ManagerMapper {
 	List<Item> getIteminfoByBusiness(int shopidx);
 	
 	
-	
-	
-	
-	   //가게 분석-----------------------------------------------------------------------------------------
+    //가게 분석-----------------------------------------------------------------------------------------
 
-	   //모든 가게 정보 조회
-	   List<Map<String, Object>> getShopinfo();
-	   
-	   //해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
-	   List<Map<String, Object>> getIteminfo(int shopidx);
+    //모든 가게 정보 조회
+    List<Map<String, Object>> getShopinfo();
+   
+    //해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
+    List<Map<String, Object>> getIteminfo(int shopidx);
 
-	   //별점 카테고리(0,1,2,3,4,5) 별 인원수
-	   public List<Map<String, Object>> getRatingNumber(int shopidx);
-	   
-	   //별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
-	   public List<Map<String, Object>> getRatingClient (@Param("shopidx")int shopidx, @Param("rating")int rating);
-	   
-	   //해당 가게에서 상품을 구매해간 고객 정보
-	   public List<Map<String, Object>> getReservationMember(int shopidx);
+    //별점 카테고리(0,1,2,3,4,5) 별 인원수
+    public List<Map<String, Object>> getRatingNumber(int shopidx);
+   
+    //별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
+    public List<Map<String, Object>> getRatingClient (@Param("shopidx")int shopidx, @Param("rating")int rating);
+   
+    //해당 가게에서 상품을 구매해간 고객 정보
+    public List<Map<String, Object>> getReservationMember(int shopidx);
 	   
 	
 	

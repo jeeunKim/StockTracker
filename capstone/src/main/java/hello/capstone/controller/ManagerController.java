@@ -166,48 +166,48 @@ public class ManagerController {
 		
 	
 	
-	   //가게 분석---------------------------------------------------------------------------------------
+	//가게 분석---------------------------------------------------------------------------------------
 	   
-	   /*
-	    * 모든 가게 정보 조회
-	    */
-	   @GetMapping("/analysis/shop")
-	   public List<Map<String, Object>> getShopinfo(){
-	      return managerService.getShopinfo();
-	   }
-	   
-	   /*
-	    * 해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
-	    */
-	   @GetMapping("/analysis/item")
-	   public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopidx){
-	      return managerService.getIteminfo(shopidx);
-	   }
+   /*
+    * 모든 가게 정보 조회
+    */
+    @GetMapping("/analysis/shop")
+    public List<Map<String, Object>> getShopinfo(){
+       return managerService.getShopinfo();
+    }
+   
+    /*
+     * 해당 가게에 등록된 상품과 상품별 예약자 수 조회(1)
+     */
+    @GetMapping("/analysis/item")
+    public List<Map<String, Object>> AnalysisItem(@RequestParam("shopidx") int shopidx){
+       return managerService.getIteminfo(shopidx);
+    }
 
-	   /*
-	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(1)
-	    */
-	   @GetMapping("/analysis/rating")
-	   public List<Map<String, Object>> AnalysisRating(@RequestParam("shopidx") int shopidx){
-	      return managerService.getRatingNumber(shopidx);
-	   }
-	   
-	   /*
-	    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
-	    */
-	   @GetMapping("/analysis/rating/client")
-	   public List<Map<String, Object>> AnalysisRatingClient(@RequestParam("shopidx") int shopidx,
-	                                            @RequestParam("rating") int rating){
-	      return managerService.getRatingClient(shopidx, rating);
-	   }
-	   
-	   /*
-	    * 해당 가게에서 상품을 구매해간 고객 정보 
-	    */
-	   @GetMapping("/analysis/reservation/member")
-	   public List<Map<String, Object>> AnalysisReservation(@RequestParam("shopidx") int shopidx){
-	      return managerService.getReservationMember(shopidx);
-	   }
+   /*
+    * 별점 카테고리(0,1,2,3,4,5) 별 인원수(1)
+    */
+    @GetMapping("/analysis/rating")
+    public List<Map<String, Object>> AnalysisRating(@RequestParam("shopidx") int shopidx){
+       return managerService.getRatingNumber(shopidx);
+    }
+   
+    /*
+     * 별점 카테고리(0,1,2,3,4,5) 별 인원수(2) -> 인원수 클릭시 해당 별점을 입력했던 사용자 정보 표시
+     */
+    @GetMapping("/analysis/rating/client")
+    public List<Map<String, Object>> AnalysisRatingClient(@RequestParam("shopidx") int shopidx,
+                                             @RequestParam("rating") int rating){
+       return managerService.getRatingClient(shopidx, rating);
+    }
+   
+    /*
+     * 해당 가게에서 상품을 구매해간 고객 정보 
+     */
+    @GetMapping("/analysis/reservation/member")
+    public List<Map<String, Object>> AnalysisReservation(@RequestParam("shopidx") int shopidx){
+       return managerService.getReservationMember(shopidx);
+    }
 	
 	
 	//검색---------------------------------------------------------------------------------------------------
