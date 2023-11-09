@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 /*
  * 관리자 모드, 회원관리, 가게관리, 상품관리, 공지사항 등등
  */
-
+@Slf4j
 @RestController
 @RequestMapping("/manager")
 @RequiredArgsConstructor
@@ -88,7 +88,7 @@ public class ManagerController {
 	public List<Map<String, Object>> getNoticeAlarm(){
 		List<Map<String, Object>> notices = managerService.noticeGetAlarm();
 
-		
+		log.info("notice = {}", notices);
 		return notices;
 	}
 	

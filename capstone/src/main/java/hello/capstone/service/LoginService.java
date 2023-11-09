@@ -60,7 +60,7 @@ public class LoginService {
 	/*
      * 관리자 페이지 로그인
      */
-    public Member admin_login(String id, String pw) {
+    public Member adminLogin(String id, String pw) {
        
        Member AdminMember = memberRepository.findById(id,"normal");
        passwordCheck(AdminMember, pw);

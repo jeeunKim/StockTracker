@@ -154,7 +154,7 @@ public class MemberController {
 	
 	
 	/*
-	 * 알람 가져오기
+	 * 알림 가져오기
 	 */
 	@GetMapping("/getAlarm")
 	public List<Map<String, Object>> getAlarm(HttpSession session){
@@ -165,7 +165,7 @@ public class MemberController {
 	}
 	
 	/*
-	 * 읽은 알람 삭제
+	 * 읽은 알림 삭제
 	 */
 	@DeleteMapping("deleteReadAlarm")
 	public void deleteReadAlarm(@RequestBody Shop shop, HttpSession session) {

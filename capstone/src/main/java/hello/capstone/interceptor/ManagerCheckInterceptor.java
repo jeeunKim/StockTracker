@@ -18,7 +18,7 @@ public class ManagerCheckInterceptor implements HandlerInterceptor{
       
       HttpSession session = request.getSession(false);
       
-      if(((Member)session.getAttribute("member") == null || !(((Member)session.getAttribute("member")).getRole().equals("관리자")))) {
+      if(((Member)session.getAttribute("admin") == null || !(((Member)session.getAttribute("admin")).getRole().equals("관리자")))) {
          log.info("미인증 사용자 요청");
          
          response.getWriter().write("{\"redirect\": \"/home_user\"}");

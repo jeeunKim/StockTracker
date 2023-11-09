@@ -48,7 +48,12 @@
 		order by noticedate;
 	</select>
 	
-	
+		
+	<select id ="noticeGetAlarm" resultType ="Map">
+		select * from  notice
+		where noticedate &gt;= DATE_SUB(NOW(), INTERVAL 24 HOUR);
+	</select>
+   
 	<select id = "getMemeberCountBySocial">
 		select count(*)
 		
@@ -197,10 +202,6 @@
 		order by i.itemname asc, i.starttime asc;
 	
 	</select>
-	
-	<select id ="noticeGetAlarm" resultType ="Map">
-		select * from  notice
-		where noticedate &gt;= DATE_SUB(NOW(), INTERVAL 24 HOUR);;
-	</select>
+
 	
 </mapper>
