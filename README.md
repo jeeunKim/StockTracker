@@ -20,3 +20,13 @@
     - 즐겨찾기한 가게, 공지사항 알림 기능
     - Scheduled를 이용한 아이템 자동삭제
     - 관리자 페이지
+
+  <br>
+
+  ## 시연 영상
+   [StockTracker](https://www.youtube.com/watch?v=KaBPVHFWDTw)
+
+   <br>
+   
+   ## 시퀀스 다이어그램
+   
