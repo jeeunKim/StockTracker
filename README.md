@@ -32,4 +32,4 @@
    <br>
    
    ## 시퀀스 다이어그램
-   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="800" height="700"/>
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
