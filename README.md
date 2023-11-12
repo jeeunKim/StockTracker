@@ -1,4 +1,7 @@
  # 지도 위의 떨이 마켓   *StockTracker* 
+
+<br>
+ 
    ## 개발기간 
    ### 23.09 ~ 23.11 
 
@@ -29,4 +32,4 @@
    <br>
    
    ## 시퀀스 다이어그램
-   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="700" height="700"/>
