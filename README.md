@@ -38,15 +38,12 @@
    <br>
    
    ## 코드 리팩토링
-    ### 단일 책임
+    - 단일 책임   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/1a7a398e-d2d6-43f6-8b5b-58913d536ab8"  width="700" height="300"/>
     
-    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/1a7a398e-d2d6-43f6-8b5b-58913d536ab8"  width="700" height="300"/>
+    - 중복코드 최소화 
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/21b9a4ad-03d6-4873-87b1-9f21284733f9"  width="700" height="300"/>
     
-    ### 중복코드 최소화
-    
-    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/21b9a4ad-03d6-4873-87b1-9f21284733f9"  width="700" height="300"/>
-    
-    ### 긴 메소드 분해
-    
-    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/0bd9a276-4d09-4428-b12f-8ec4361f8962"  width="700" height="300"/>
+    - 긴 메소드 분해   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/0bd9a276-4d09-4428-b12f-8ec4361f8962"  width="700" height="300"/>
     
