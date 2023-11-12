@@ -33,3 +33,10 @@
    
    ## 시퀀스 다이어그램
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
+
+
+   <br>
+
+    - 단일 책임
+    - 중복코드 최소화
+    - 긴 메소드 분해
