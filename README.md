@@ -1,6 +1,6 @@
  # 지도 위의 떨이 마켓   *StockTracker* 
  
-<img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/1e28bd7f-1311-4176-9a23-f8c588629406"  width="420" height="250"/>
+<img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/1e28bd7f-1311-4176-9a23-f8c588629406"  width="652" height="300"/>
 
 <br>
  
