@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -274,26 +275,54 @@ public class ItemService {
         return response;
 	}
 	
+//	/*
+//	 * 1분마다 실행되는 cron표현식 item들에 마감시간을 확인하여 member의 trust 변경
+//	 */
+//	@Scheduled(cron ="0 * * * * *")
+//    public void checkItemEndtime() {
+//       log.info("item @Scheduled 실행");
+//       LocalDateTime now = LocalDateTime.now();
+//       Timestamp timestamp = Timestamp.valueOf(now);
+//
+//       // 현재 시간보다 이전인 아이템 
+//       itemRepository.checkTrust(timestamp);
+//    }
+//	
+//	/*
+//	 * 1분마다 실행되는 cron표현식 24시간만 유지되는 알림쪽지 
+//	 */
+//	@Scheduled(cron ="0 * * * * *")
+//	public void deleteTimeoutAlarm() {
+//		log.info("alarm @Scheduled 실행");
+//		itemRepository.deleteTimeoutAlarm();
+//	}
+	
+	
+	// 동기적으로 실행되는 스케줄링이 서버에 과부화를 줄것으로 판단하여 비동기적으로 처리하고 쓰레드 수를 지정함.
 	/*
 	 * 1분마다 실행되는 cron표현식 item들에 마감시간을 확인하여 member의 trust 변경
 	 */
 	@Scheduled(cron ="0 * * * * *")
+	@Async("threadPoolTaskExecutor")
     public void checkItemEndtime() {
-       log.info("item @Scheduled 실행");
+
+	   log.info("Async itemDelete started");
        LocalDateTime now = LocalDateTime.now();
        Timestamp timestamp = Timestamp.valueOf(now);
 
-       // 현재 시간보다 이전인 아이템 
        itemRepository.checkTrust(timestamp);
+	   log.info("Async itemDelete finished");
     }
 	
 	/*
 	 * 1분마다 실행되는 cron표현식 24시간만 유지되는 알림쪽지 
 	 */
 	@Scheduled(cron ="0 * * * * *")
+	@Async("threadPoolTaskExecutor")
 	public void deleteTimeoutAlarm() {
-		log.info("alarm @Scheduled 실행");
+		log.info("Async alarm started");
 		itemRepository.deleteTimeoutAlarm();
+		log.info("Async alarm finished");
 	}
 	
 	
