@@ -53,30 +53,7 @@ public class ShopService {
 	String kakaoLocalKey;
 	String uri = "https://dapi.kakao.com/v2/local/search/address.json";
 	
-//	public boolean saveShop(Shop shop, String method) {
-//		
-//		if(method.equals("register")) {
-//			//.ifPresent()는 memberRepository.findById 실행 시 오류 던져주기 위함
-//			Optional.ofNullable(shopRepository.findByAddress(shop.getShopAddress()))
-//				.ifPresent(user->{
-//					throw new SaveShopException(ErrorCode.DUPLICATED_SHOP,null);
-//				});
-//			
-//			long miliseconds = System.currentTimeMillis();
-//			Date registrationDate = new Date(miliseconds);
-//			shop.setRegistrationDate(registrationDate);
-//		}
-//
-//		
-//		//주소로 경도, 위도 뽑아서 shop에 저장
-//		String shop_address = shop.getShopAddress();
-//		Coordinates cor = getCoordinate(shop_address);
-//		shop.setLongitude(cor.getX());
-//		shop.setLatitude(cor.getY());
-//		
-//		
-//		return shopRepository.saveShop(shop,method);
-//	}
+
 	
 	/*
 	 * 가게등록

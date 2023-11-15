@@ -46,35 +46,6 @@ public class ItemService {
 	@Value("${itemfile.dir}")
     private String fileDir;
 	
-	/*
-	 * 아이템 등록
-	 */
-//	public boolean itemsave(Item item, String method) {
-//		
-//		if(method.equals("register")) {
-//			
-//		}
-//		
-//		
-//		//MySql의 Timestamp는 타임존을 반영하기 때문에 9시간 전으로 저장이 됨. 그걸 맞추기위해 9시간을 더해줌
-//		Timestamp startTimeForSeoul = new Timestamp(item.getStarttime().getTime() + (9 * 60 * 60 * 1000));
-//		Timestamp endTimeForSeoul = new Timestamp(item.getEndtime().getTime() + (9 * 60 * 60 * 1000));
-//		item.setStarttime(startTimeForSeoul);
-//		item.setEndtime(endTimeForSeoul);
-//		
-//		int timeOut = startTimeForSeoul.compareTo(endTimeForSeoul);
-//		if(timeOut >= 0) {
-//			throw new TimeSettingException(ErrorCode.TIME_SETTING_ERROR,null);
-//		}
-//		
-//		log.info("service_item = {}", item);
-//		
-//		itemRepository.saveitem(item, method);
-//		
-//		itemRepository.pushAlarm(item.getShopidx());
-//		
-//		return true;
-//	}
 	
 	/*
 	 * 아이템 저장 / 이미지 저장같은 경우 예를 들어 디스크가 꽉 차는 상황에서 다양한 입출력 동작이 있을 수 있기 때문에 IOException
