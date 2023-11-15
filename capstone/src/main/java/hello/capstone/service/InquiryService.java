@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hello.capstone.dto.Inquiry;
 import hello.capstone.exception.InquiryException;
+import hello.capstone.exception.NullContentException;
+import hello.capstone.exception.NullTitleException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.InquiryRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +60,7 @@ public class InquiryService {
 	/*
 	 * 1:1문의 수정
 	 */
+	@Transactional(rollbackFor = InquiryException.class)
 	public void update(int inquiryidx, String content_inquiry) {
 		
 		String status = inquiryRepository.getStatusByInquiryidx(inquiryidx);
@@ -74,6 +78,7 @@ public class InquiryService {
 	/*
 	 * 1:1문의 답변 등록
 	 */
+	@Transactional
 	public void inquiryAnswer(Inquiry inquiry) {
 		inquiryRepository.inquiryAnswer(inquiry);
 	}
@@ -81,6 +86,7 @@ public class InquiryService {
 	/*
 	 * 1:1문의 답변 삭제
 	 */
+	@Transactional
 	public void inquiryAnswerDelete(int inquiryidx, int adminidx) {
 		inquiryRepository.inquiryAnswerDelete(inquiryidx,adminidx);
 	}
@@ -88,6 +94,7 @@ public class InquiryService {
 	/*
 	 * 1:1문의 답변 수정
 	 */
+	@Transactional
 	public void inquiryAnswerUpdate(int inquiryidx, int adminidx, String content_answer) {
 		
 		long miliseconds = System.currentTimeMillis();

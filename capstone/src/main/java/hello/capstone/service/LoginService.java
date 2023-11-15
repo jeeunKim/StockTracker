@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hello.capstone.dto.Member;
 import hello.capstone.exception.AdminLoginException;
@@ -36,6 +37,7 @@ public class LoginService {
 	/*
 	 * 회원가입 - 마지막 수정 09/20/ 23시 20분
 	 * */
+	@Transactional(rollbackFor = SignUpException.class)
 	public boolean signUp(Member member) {
 		
 		//중복ID 검사

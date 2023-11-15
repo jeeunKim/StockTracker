@@ -13,6 +13,7 @@ import hello.capstone.exception.FindPwException;
 import hello.capstone.exception.InvalidPhoneNumberException;
 import hello.capstone.exception.LogInException;
 import hello.capstone.exception.NicknameException;
+import hello.capstone.exception.SignUpException;
 import hello.capstone.exception.errorcode.ErrorCode;
 import hello.capstone.repository.MemberRepository;
 import hello.capstone.repository.ShopRepository;
@@ -38,6 +39,7 @@ public class MemberService {
 	/*
 	 * 즐겨찾기 등록
 	 */
+	@Transactional(rollbackFor = AlreadyBookmarkedShopException.class)
 	public void bookmarkRegistration(int memberIdx, int shopIdx) {
 		
 		List<Shop> MyBookmarkedShops = memberRepository.getMyBookmarkedShop(memberIdx);
@@ -54,6 +56,7 @@ public class MemberService {
 	/*
 	 * 즐겨찾기 취소
 	 */
+	@Transactional
 	public void bookmarkDelete(int memberIdx, int shopIdx) {
 		memberRepository.bookmarkDelete(memberIdx, shopIdx);
 	}
@@ -70,6 +73,7 @@ public class MemberService {
 	/*
 	 * 닉네임 변경
 	 */
+	@Transactional(rollbackFor = NicknameException.class)
 	public Member updateNickname(Member member, String nickname) {
 		//닉네임이 15글자 이상은 수정x
 		if( nickname.length() > 15) {
@@ -84,6 +88,7 @@ public class MemberService {
 	/*
 	 * 회원 탈퇴
 	 */
+	@Transactional
 	public void deleteMember(Member member) {
 		memberRepository.deleteMember(member);
 	}
@@ -92,6 +97,7 @@ public class MemberService {
 	/*
 	 * 회원정보 수정
 	 */
+	@Transactional
 	public Member updateMember(Member oldMember, Member newMember) {
 		
 		memberRepository.updateMember(oldMember, newMember);

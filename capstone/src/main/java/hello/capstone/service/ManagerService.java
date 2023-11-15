@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Member;
 import hello.capstone.dto.Notice;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.NicknameException;
 import hello.capstone.exception.NullContentException;
 import hello.capstone.exception.NullTitleException;
 import hello.capstone.exception.errorcode.ErrorCode;
@@ -26,6 +28,7 @@ public class ManagerService {
     /*
 	 * 공지사항 CREATE
 	 */
+	@Transactional(rollbackFor = {NullTitleException.class,NullContentException.class})
 	public void noticeCreate(Notice notice) {
 		
 		if(notice.getTitle() == null || notice.getTitle().isEmpty()) {
@@ -54,6 +57,7 @@ public class ManagerService {
 	/*
 	 * 공지사항 UPDATE
 	 */
+	@Transactional(rollbackFor = {NullTitleException.class,NullContentException.class})
 	public void noticeUpdate(Notice newNotice) {
 		if(newNotice.getTitle() == null || newNotice.getTitle().isEmpty()) {
 			throw new NullTitleException(ErrorCode.NULL_TITLE,null);
@@ -76,6 +80,7 @@ public class ManagerService {
 	/*
 	 * 공지사항 DELETE
 	 */
+	@Transactional
 	public void noticeDelete(int noticeIdx) {
 		managerRepository.noticeDelete(noticeIdx);
 	}

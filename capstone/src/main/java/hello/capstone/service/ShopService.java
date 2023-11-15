@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
@@ -26,6 +27,7 @@ import hello.capstone.dto.Coordinates;
 import hello.capstone.dto.Item;
 import hello.capstone.dto.Ratings;
 import hello.capstone.dto.Shop;
+import hello.capstone.exception.QuantityException;
 import hello.capstone.exception.SaveItemException;
 import hello.capstone.exception.SaveShopException;
 import hello.capstone.exception.errorcode.ErrorCode;
@@ -79,6 +81,7 @@ public class ShopService {
 	/*
 	 * 가게등록
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void saveShop(Shop shop) throws IllegalStateException, IOException {
 		
 		duplicateShopCheck(shop);
@@ -109,6 +112,7 @@ public class ShopService {
 	/*
 	 * 가게 수정
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void updateShop(Shop shop, MultipartFile imageFile, String address) throws IllegalStateException, IOException {
 		
 		Shop oldShop = shopRepository.getShopByIdx(shop.getShopidx());
@@ -243,6 +247,7 @@ public class ShopService {
     /*
      * 별점 추가하기
      */
+	@Transactional
     public void setRating(Ratings ratings) {
    	 
 	   	 int shopIdx = ratings.getShopidx();

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -76,8 +77,9 @@ public class ItemService {
 //	}
 	
 	/*
-	 * 아이템 저장
+	 * 아이템 저장 / 이미지 저장같은 경우 예를 들어 디스크가 꽉 차는 상황에서 다양한 입출력 동작이 있을 수 있기 때문에 IOException
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void saveItem(Item item) 
 			throws IllegalStateException, IOException{
 		
@@ -97,6 +99,7 @@ public class ItemService {
 	/*
 	 * 아이템 수정
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void updateItem(Item item, MultipartFile imageFile, Item oldItem) 
 			throws IllegalStateException, IOException {
 		
@@ -168,6 +171,7 @@ public class ItemService {
 	/*
 	 * 아이템 삭제
 	 */
+	@Transactional(rollbackFor = ExistReservationException.class)
 	public void itemDelete(Item item) {
 		// 아이템을 예약한 사람이 있는지 확인
 		if(itemRepository.reservationCheck(item) != 0){
@@ -190,8 +194,7 @@ public class ItemService {
 		return alarms;
 	}
 	
-	/*
-	 * 
+	/* 
 	 * 읽은 알람 삭제
 	 */
 	public void deleteReadAlarm(Shop shop, Member member) {
@@ -201,6 +204,7 @@ public class ItemService {
 	/*
 	 *  상품 예약
 	 */
+	@Transactional(rollbackFor = QuantityException.class)
 	public void reservation(Reservation reservation, String shopName, String itemName, String name, String phone) {
 		
 		int number = reservation.getNumber();
@@ -229,6 +233,7 @@ public class ItemService {
 	/*
 	 * 상품 예약 취소
 	 */
+	@Transactional
 	public void reservationCancel(List<Map<String, Object>> reservationInfo, String name, String phone) {
 		
 		for(Map<String, Object> info : reservationInfo) {
@@ -251,6 +256,7 @@ public class ItemService {
     /*
      * 상품 예약 취소,거부 (상업자)
      */
+    @Transactional
     public void reservationCancelBusiness(int reservationIdx) {
     	itemRepository.reservationCancelBusiness(reservationIdx);
     }
@@ -302,6 +308,7 @@ public class ItemService {
 	/*
 	 * 1분마다 실행되는 cron표현식 item들에 마감시간을 확인하여 member의 trust 변경
 	 */
+	@Transactional
 	@Scheduled(cron ="0 * * * * *")
 	@Async("threadPoolTaskExecutor")
     public void checkItemEndtime() {
@@ -317,6 +324,7 @@ public class ItemService {
 	/*
 	 * 1분마다 실행되는 cron표현식 24시간만 유지되는 알림쪽지 
 	 */
+	@Transactional
 	@Scheduled(cron ="0 * * * * *")
 	@Async("threadPoolTaskExecutor")
 	public void deleteTimeoutAlarm() {
