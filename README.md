@@ -87,11 +87,26 @@
    
    <br>
    <br>
+
+   ### 회원정보수정
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/ffd9264d-e944-4282-a230-cee3494bf2ef"  width="556" height="472"/>
+   
+   <br>
+   <br>
+
+   ### 관리자 페이지 일부 (가게분)
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/01c98f91-d106-46b3-9d48-cbc33d2c5f98"  width="873" height="638"/>
+   
+   <br>
+   <br>
    
    ## 시퀀스 다이어그램
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
 
 
+   <br>
    <br>
    
    ## 코드 리팩토링
@@ -103,4 +118,6 @@
     
     - 긴 메소드 분해   
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/0bd9a276-4d09-4428-b12f-8ec4361f8962"  width="700" height="300"/>
-    
+
+    <br>
+    <br>
