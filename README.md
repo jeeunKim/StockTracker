@@ -10,8 +10,8 @@
    <br>
 
    ## 개발 인원
-    - BE-2인, FE-2인 
-    - 총 4인 팀프로젝트
+    BE-2인, FE-2인 
+    총 4인 팀프로젝트
 
   <br>
   
@@ -34,8 +34,9 @@
 
    <br>
    
-   ## 시퀀스 다이어그램
-   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
+   <h1> 결과물 소개 </h1>
+   ### 메인페이지
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/330c0abf-2aab-4825-bf78-128fbe88ba51"  width="850" height="700"/>
    
    <br>
    
