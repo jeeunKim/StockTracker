@@ -35,8 +35,10 @@
    <br>
    
    <h1> 결과물 소개 </h1>
+   
    ### 메인페이지
-   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/330c0abf-2aab-4825-bf78-128fbe88ba51"  width="850" height="700"/>
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/330c0abf-2aab-4825-bf78-128fbe88ba51"  width="652" height="300"/>
    
    <br>
    
