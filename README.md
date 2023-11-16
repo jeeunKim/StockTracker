@@ -1,6 +1,6 @@
  # 지도 위의 떨이 마켓   *StockTracker* 
  
-## 지도로 한눈에 보는 위치와 필터링을 통해 원하는 상품을 만나보세요 !
+## 지도로 한눈에 보는 매장 위치와 필터링을 통해 원하는 상품을 만나보세요 !
 
 <br>
  
@@ -29,9 +29,14 @@
 
   <br>
 
-  ## 시연 영상
+   ## 시연 영상
    [StockTracker](https://www.youtube.com/watch?v=KaBPVHFWDTw)
 
+   <br>
+   
+   ## 시퀀스 다이어그램
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
+   
    <br>
    
    ## 시퀀스 다이어그램
