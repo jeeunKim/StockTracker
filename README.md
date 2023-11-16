@@ -102,9 +102,20 @@
    
    <br>
    <br>
+   <hr>
+   <br>
+   <br>
    
    ## 시퀀스 다이어그램
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
+
+
+   <br>
+   <br>
+
+   ## API명세서
+   ### [Postman](https://documenter.getpostman.com/view/29112916/2s9YXe6NtP)
+   ### [Notion](https://silk-cirrus-f59.notion.site/ae9a9b864d8c4687b8bdf0e58959929d?v=6bcdc2bcb6de4c2faf2d35cdcf1652fa)
 
 
    <br>
@@ -122,3 +133,32 @@
 
     <br>
     <br>
+
+   ## 배운점
+   - React와 협업하며 스프링에 대한 깊이와 Axios에 대해 깊이 이해하게 되었다.
+   - 소통과 협업 관리도구의 중요성
+   - MyBatis의 표기법에 따른 객체매핑
+   - 비동기적 함수실행과 쓰레드관리
+   - 예외처리의 중요성
+   - 클린 코딩의 중요성
+
+<hr>
+<br>
+
+   ## 다음 프로젝트의 목표
+   - 클린 코딩과 개발 약속
+   - 개발 관리 도구를 사용하여 작업의 문서화
+   - Spring Data JPA 사용
+   - AWS 배포해보기
+
+
+
+
+
+
+
+
+
+
+
+
