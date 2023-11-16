@@ -39,6 +39,7 @@
    ### 메인페이지
    
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/330c0abf-2aab-4825-bf78-128fbe88ba51"  width="700" height="325"/>
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/568b0442-33c0-47d0-9283-f766daad1189"  width="700" height="325"/>
    
    <br>
    
