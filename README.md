@@ -42,6 +42,14 @@
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/568b0442-33c0-47d0-9283-f766daad1189"  width="700" height="325"/>
    
    <br>
+
+   ### 로그인 및 회원가입
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/027bb56b-3ad5-4aa4-aaba-d65a8ccebcf2"  width="873" height="463"/>
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/a18d7b7b-bbe1-4091-a5ca-3afa256d7157"  width="873" height="463"/>
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/d36ddcaa-4f9f-46ea-8a5e-b09806e45e2d"  width="700" height="456"/>
+   
+   <br>
    
    ## 시퀀스 다이어그램
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
