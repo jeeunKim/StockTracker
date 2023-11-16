@@ -50,6 +50,37 @@
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/d36ddcaa-4f9f-46ea-8a5e-b09806e45e2d"  width="700" height="456"/>
    
    <br>
+
+   ### 아이디 비밀번호 찾기
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/0c5bbf99-4bf5-45ee-9b5a-51fceb6b8ff2"  width="873" height="668"/>
+   
+   <br>
+
+   ### 매장 및 상품 등록, 수정, 삭제
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/4ad9ebc6-fd50-49e1-a849-ea80a935e49e"  width="873" height="474"/>
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/76a54237-ca42-4f33-9c00-26b52d56706d"  width="873" height="474"/>
+   
+   <br>
+
+   ### 상품 예약 및 확인문자
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/7ace8a98-785b-4a54-b3c4-2b12832ad649"  width="873" height="381"/>
+   
+   <br>
+
+   ### 즐겨찾기 및 알림
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/f01c8e48-ae9e-4e76-b311-8d5b673d922d"  width="500" height="258"/>
+   
+   <br>
+
+   ### 문의
+   
+   <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/1feea77d-696f-4b70-b4d8-1bab233529fc"  width="873" height="293"/>
+   
+   <br>
    
    ## 시퀀스 다이어그램
    <img src="https://github.com/jeeunKim/jeeunKim/assets/115774268/352c41ac-3483-4749-8a25-2c493849b88d"  width="850" height="700"/>
