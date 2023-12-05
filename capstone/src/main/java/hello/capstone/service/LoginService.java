@@ -157,7 +157,7 @@ public class LoginService {
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01077359350");
         message.setTo(phone);
-        message.setText("[재고30]인증번호 " + code + "를 입력하세요.");
+        message.setText("[StockTracker]인증번호 " + code + "를 입력하세요.");
 
         SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
         log.info("sendMessageResponse={}", response);
